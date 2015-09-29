@@ -588,6 +588,8 @@ namespace QL_BanDayNit
             return dsTongTien.Tables[0].Rows[0]["TongTien"].ToString();
         }
 
+        // http://www.mikesdotnetting.com/article/86/itextsharp-introducing-tables
+        // http://tutorials.jenkov.com/java-itext/table.html
         private void btnInHD_Click(object sender, EventArgs e)
         {
             BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -596,16 +598,29 @@ namespace QL_BanDayNit
             // Creating iTextSharp Table from title data
             PdfPTable pdfTableTitle = new PdfPTable(2);
             pdfTableTitle.WidthPercentage = 95;
-            pdfTableTitle.DefaultCell.Border = 0;
-            // Create Cell
-            PdfPCell cellTitle = new PdfPCell(new Phrase("HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 22)));
+            pdfTableTitle.DefaultCell.BorderWidth = 0;
+
+            // Create Cell Title
+            PdfPCell cellTitle;
+            cellTitle = new PdfPCell(new Phrase("HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 22)));
             cellTitle.Colspan = 3;
             cellTitle.HorizontalAlignment = 1;
-
+            cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
-            pdfTableTitle.AddCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
-            pdfTableTitle.AddCell(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+
+            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
+            cellTitle.Border = 0;
+            cellTitle.PaddingBottom = 0;
+            cellTitle.FixedHeight = 0;
+            pdfTableTitle.AddCell(cellTitle);
+            //
+            cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+            cellTitle.Border = 0;
+            cellTitle.HorizontalAlignment = 2;
+            pdfTableTitle.AddCell(cellTitle);
+            //
             pdfTableTitle.AddCell(new Paragraph("Khách Hàng : " + cbxKhachHang.Text, new iTextSharp.text.Font(arialCustomer)));
+            pdfTableTitle.AddCell(new Paragraph("", new iTextSharp.text.Font(arialCustomer)));
 
             //Creating iTextSharp Table from the DataTable data
             PdfPTable pdfTable = new PdfPTable(grdXuatHang.ColumnCount);
@@ -657,7 +672,7 @@ namespace QL_BanDayNit
                 pdfDoc.Add(pdfTableTitle);
                 pdfDoc.Add(pdfTable);
                 pdfDoc.Add(new Paragraph("    Số Mặt Hàng: " + lblSoMatHang.Text + "                                      Tổng SL: " + lblTongSL.Text + "       Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
-                pdfDoc.Add(new Paragraph("\n    Cộng Thành Tiền (Viết bằng chữ) :" + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
+                pdfDoc.Add(new Paragraph("\n    Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
                 pdfDoc.Close();
                 stream.Close(); 
             }
