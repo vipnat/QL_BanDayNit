@@ -15,7 +15,7 @@ namespace QL_BanDayNit
             InitializeComponent();
         }
         protected override void OnPaint(PaintEventArgs pea)
-        {
+        { 
             Graphics grfx = pea.Graphics;
             Brush brush = new SolidBrush(ForeColor);
             int y = 20;
