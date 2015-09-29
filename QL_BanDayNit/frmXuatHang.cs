@@ -55,7 +55,7 @@ namespace QL_BanDayNit
             cboMaNhanVien.DataSource = dsNhanVien.Tables[0];
             cboMaNhanVien.DisplayMember = "TenNhanVien";
             cboMaNhanVien.ValueMember = "MaNhanVien";
-            if (cboMaNhanVien.ValueMember != null)
+            if (dsNhanVien.Tables[0].Rows.Count > 0)
                 values2 = dsNhanVien.Tables[0].Rows[cboMaNhanVien.SelectedIndex][0].ToString();
             HienThi();
         }
@@ -68,7 +68,7 @@ namespace QL_BanDayNit
             cbxMaMatH.DataSource = dsMatHang.Tables[0];
             cbxMaMatH.DisplayMember = "MaMatH";
             cbxMaMatH.ValueMember = "TenMatH";
-            if (cbxMaMatH.ValueMember != null)
+            if (dsMatHang.Tables[0].Rows.Count > 0)
             {
                 values1 = dsMatHang.Tables[0].Rows[cbxMaMatH.SelectedIndex][0].ToString();
                 cbxTenMatHang.Text = cbxMaMatH.SelectedValue.ToString();
