@@ -17,7 +17,7 @@ namespace QL_BanDayNit
         }
 
         private void btnThongTin_Click(object sender, EventArgs e)
-        {
+        {a
             string select = "select mh.MaMatH Mã_hàng,TenMatH Tên_hàng,SoLuong Số_lượng,DonGia Đơn_giá,gb.GiaBan Giá_bán from tblMatHang mh, tblGiaBan gb where mh.MaMatH = gb.MaMatH and mh.MaMatH=N'" + values + "' and gb.MaKH = N'" + maKH + "'";
             //string select = "select MaMatH Mã_hàng,TenMatH Tên_hàng,SoLuong Số_lượng,DonGia Đơn_giá from tblMatHang";
             //string select = "select * from v_GiaBan where [Tên mặt hàng]=N'" + cboMaMatH.Text + "'";
