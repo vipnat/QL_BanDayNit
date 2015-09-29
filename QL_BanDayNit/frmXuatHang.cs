@@ -659,7 +659,7 @@ namespace QL_BanDayNit
                 pdfDoc.Add(new Paragraph("    Số Mặt Hàng: " + lblSoMatHang.Text + "                                      Tổng SL: " + lblTongSL.Text + "       Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
                 pdfDoc.Add(new Paragraph("\n    Cộng Thành Tiền (Viết bằng chữ) :" + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
                 pdfDoc.Close();
-                stream.Close();
+                stream.Close(); 
             }
 
             if (Directory.Exists(namePDF))
