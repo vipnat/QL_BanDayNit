@@ -14,11 +14,26 @@ namespace QL_BanDayNit
         private static SqlCommand cmd;
         private static SqlDataAdapter da;
         private static DataSet ds;
+        // Tên Database trong CSDL
+        private static string strTenDB = "BanHang";
+        // Add Tên Computer của bạn ở đây.
+        //private static string strPC_Name = "ANHTUAN-PC";
+        private static string strPC_Name = "MINHTU-PC";
+        private static string fileDB = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak";
+        private static string strKetNoiAdmin = "Data Source="+strPC_Name+";Integrated Security=True;";
+        private static SqlConnection adConn = new SqlConnection(strKetNoiAdmin);
+        private static string strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + fileDB + "' WITH REPLACE";
+
         static DataConn()
         {
-            source = "Data Source=ANHTUAN-PC;Integrated Security=True;database=BanDayNit";
-            //source = "server=(local);uid=sa;database=qlbh;pwd=sa";
-            //Data Source=ANHTUAN-PC;Integrated Security=True
+
+            adConn.Open();
+
+            adConn.Close();
+            // Kiểm Tra Database
+            KiemTraTonTaiDatabase(strTenDB);
+            
+            source = strKetNoiAdmin + "database=" + strTenDB;
             con = new SqlConnection(source);
             try
             {
@@ -29,6 +44,85 @@ namespace QL_BanDayNit
                 MessageBox.Show("Lỗi cơ sở dữ liệu! Hãy xem trợ giúp!");
             }
         }
+
+        public static bool KiemTraTonTaiDatabase(string strDbName)
+        {
+            string sqlSelectIdDB;
+            bool result = false;
+            try
+            {
+                sqlSelectIdDB = string.Format("SELECT database_id FROM sys.databases WHERE Name = '" + strDbName + "'");
+                using (adConn)
+                {
+                    using (SqlCommand sqlCmd = new SqlCommand(sqlSelectIdDB, adConn))
+                    {
+                        adConn.Open();
+                        object resultObj = sqlCmd.ExecuteScalar();
+                        int databaseID = 0;
+                        if (resultObj != null)
+                        {
+                            int.TryParse(resultObj.ToString(), out databaseID);
+                        }
+                        if (databaseID <= 0)
+                        {
+                            if (MessageBox.Show("Chưa có Database tên " + strTenDB + " trong CSDL!.\nBạn muốn thêm vào không?.", "Lỗi Database", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            {
+                                string getLocationFileDB = "";
+                                if (!System.IO.File.Exists(strBackup))
+                                {
+                                    MessageBox.Show("Không Tìm Thấy File Database!\nHãy Chọn File Database.");
+                                    getLocationFileDB = LayFileDBTuOpenShowdialog();
+                                }
+                                strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + getLocationFileDB + "' WITH REPLACE";
+
+                                SqlCommand sqlCmdBackup = new SqlCommand(strBackup, adConn);
+                                try
+                                {                                    
+                                    sqlCmdBackup.ExecuteNonQuery();
+                                    MessageBox.Show("Thêm Thành Công Database Mới !\nThêm Dữ Liệu Trước Khi Sử Dụng.");
+                                    //if (!System.IO.File.Exists(strBackup))
+                                    //{
+                                    //    // Tạo 1 bản backup Database vào thư mục ...\bin\Debug
+                                    //    // USE MASTER BACKUP DATABASE BanHang TO DISK = 'C:\DB_BanHang.bak' WITH INIT
+                                    //}
+                                    return true;
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Không Add Được Database!\nHãy Thêm Từ MS-SQL.\nError: " + ex);
+                                    Application.Exit();
+                                }
+                            }
+                            else Application.Exit();
+                        }
+                        adConn.Close();
+                        result = (databaseID > 0);
+                        
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return result;
+        }
+
+        private static string LayFileDBTuOpenShowdialog()
+        {
+            OpenFileDialog openD = new OpenFileDialog();
+            //Filter lọc ra các file để bạn dễ dàng lựa chọn (ví dụ các fiel MP3, hay WMA,....) 
+            openD.Filter="Database File|*.bak";
+            //Tên của hộp thoại hiện lên - Không có thì sẽ là mặc định 
+            openD.Title="Chọn Database";
+            //Không phép chọn nhiều file cùng lúc - Mặc định là false 
+            openD.Multiselect= false;
+            //Mở hộp thoại 
+            openD.ShowDialog();
+
+            return openD.FileName;
+        }
+
         public static void DongKetNoi()
         {
             cmd.Dispose();
@@ -76,7 +170,19 @@ namespace QL_BanDayNit
             {
                 return null;
             }
-        } 
-        
+        }
+        internal static void ThucHienCmd_Backup()
+        {
+            cmd = new SqlCommand(strBackup, con);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException se)
+            {
+                MessageBox.Show("Lỗi cơ sở dữ liệu!");
+                MessageBox.Show("" + se.Message);
+            }
+        }
     }
 }

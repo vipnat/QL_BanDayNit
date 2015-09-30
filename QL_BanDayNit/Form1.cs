@@ -55,12 +55,8 @@ namespace QL_BanDayNit
             cbxKhachHang.DisplayMember = "TenKH";
             cbxKhachHang.ValueMember = "MaKH";
 
-            //txtMaMatH.Text = "";
-
             //Ẩn 1 số Menu khi không phải admin
             mặtHàngToolStripMenuItem.Enabled = false;
-            //hóaĐơnNhậpToolStripMenuItem.Enabled = false;
-            //hoáĐơnToolStripMenuItem.Enabled = false;
             nhânVienToolStripMenuItem.Enabled = false;
             nhàCungCấpToolStripMenuItem.Enabled = false;
             đăngNhậpToolStripMenuItem.Enabled = true;
@@ -151,18 +147,6 @@ namespace QL_BanDayNit
             path = path.Substring(0, path.LastIndexOf(@"\")) + @"\BanHang-Help.chm";
             Help.ShowHelp(this, path);
         }
-
-        //private void nhậpHàngToolStripMenuItem1_Click(object sender, EventArgs e)
-        //{
-        //    frmBaocaoHDN baocaoHDN = new frmBaocaoHDN();
-        //    baocaoHDN.ShowDialog();
-        //}
-
-        //private void xuấtHàngToolStripMenuItem1_Click(object sender, EventArgs e)
-        //{
-        //    frmBaocaoHDX baocaoHDX = new frmBaocaoHDX();
-        //    baocaoHDX.ShowDialog();
-        //}
 
         private void tồnKhoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -281,13 +265,11 @@ namespace QL_BanDayNit
 
         private void khôiPhụcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             try
-            {
-                string backup = "USE MASTER RESTORE DATABASE qlbh FROM DISK=N'"+ System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak" + "' WITH REPLACE";
+            {                
                 if (MessageBox.Show("Khi khôi phục dữ liệu, tất cả các dữ liệu đã bị thay đổi sẽ trở lại như cũ. Bạn có chắc chắn muốn khôi phục dữ liệu không?", "Chú ý!", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    DataConn.ThucHienCmd(backup);
+                    DataConn.ThucHienCmd_Backup();
                     MessageBox.Show("Đã khôi phục dữ liệu!","Thông báo");
                 }
             }
