@@ -281,9 +281,10 @@ namespace QL_BanDayNit
 
         private void khôiPhụcToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             try
             {
-                string backup = "USE Northwind RESTORE DATABASE qlbh FROM DISK=N'D:\\qlbh_saoluu' WITH REPLACE";
+                string backup = "USE MASTER RESTORE DATABASE qlbh FROM DISK=N'"+ System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak" + "' WITH REPLACE";
                 if (MessageBox.Show("Khi khôi phục dữ liệu, tất cả các dữ liệu đã bị thay đổi sẽ trở lại như cũ. Bạn có chắc chắn muốn khôi phục dữ liệu không?", "Chú ý!", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     DataConn.ThucHienCmd(backup);
