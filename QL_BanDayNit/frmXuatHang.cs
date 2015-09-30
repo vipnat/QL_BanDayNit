@@ -55,8 +55,8 @@ namespace QL_BanDayNit
             cboMaNhanVien.DataSource = dsNhanVien.Tables[0];
             cboMaNhanVien.DisplayMember = "TenNhanVien";
             cboMaNhanVien.ValueMember = "MaNhanVien";
-            if (cboMaNhanVien.ValueMember != null)
-                values2 = dsNhanVien.Tables[0].Rows[cboMaNhanVien.SelectedIndex][0].ToString();
+            if (dsNhanVien.Tables[0].Rows.Count > 0)
+                strMaNhanVien = dsNhanVien.Tables[0].Rows[cboMaNhanVien.SelectedIndex][0].ToString();
             HienThi();
         }
 
@@ -68,7 +68,7 @@ namespace QL_BanDayNit
             cbxMaMatH.DataSource = dsMatHang.Tables[0];
             cbxMaMatH.DisplayMember = "MaMatH";
             cbxMaMatH.ValueMember = "TenMatH";
-            if (cbxMaMatH.ValueMember != null)
+            if (dsMatHang.Tables[0].Rows.Count > 0)
             {
                 values1 = dsMatHang.Tables[0].Rows[cbxMaMatH.SelectedIndex][0].ToString();
                 cbxTenMatHang.Text = cbxMaMatH.SelectedValue.ToString();
@@ -168,12 +168,12 @@ namespace QL_BanDayNit
             return DonGia;
         }
 
-        string values2 = "";
+        string strMaNhanVien = "";
         private void cboMaNhanVien_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboMaNhanVien.ValueMember != null)
             {
-                values2 = cboMaNhanVien.SelectedValue.ToString();
+                strMaNhanVien = cboMaNhanVien.SelectedValue.ToString();
             }
         }
 
@@ -219,11 +219,12 @@ namespace QL_BanDayNit
                     cbxKhachHang.Select();
                     return;
                 }
+                if (!KiemTraNhanVienTonTai(strMaNhanVien)) return;
+
                 // Khóa Combobox Chọn Khách Hàng
                 cbxKhachHang.Enabled = false;
                 // Khóa Combobox Chọn Nhân Viên
                 cboMaNhanVien.Enabled = false;
-
 
                 string select1 = "select MaHD FROM tblHoaDonXuat";
                 SqlDataReader sqlData = DataConn.ThucHienReader(select1);
@@ -233,7 +234,6 @@ namespace QL_BanDayNit
                     {
                         if (sqlData.GetString(0) == txtMaHD.Text)
                         {
-                            //MessageBox.Show("2");
                             sqlData.Close();
                             sqlData.Dispose();
                             throw new SameKeyException();
@@ -245,7 +245,8 @@ namespace QL_BanDayNit
                     sqlData.Close();
                     sqlData.Dispose();
                 }
-                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + values2 + "',N'" + pckNgayXuat.Text + "',N'" + txtGhiChu.Text + "')";
+
+                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + strMaNhanVien + "',N'" + pckNgayXuat.Text + "',N'" + txtGhiChu.Text + "')";
                 DataConn.ThucHienCmd(select);
                 HienThi();
                 groupChiTietHDX.Enabled = true;
@@ -263,6 +264,15 @@ namespace QL_BanDayNit
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private bool KiemTraNhanVienTonTai(string strMaNhanVien)
+        {
+            // Kiểm Tra Nhân Viên
+            string selectNhanVien = "SELECT* FROM tblNhanVien WHERE MaNhanVien = '" + strMaNhanVien + "'";
+            DataSet dsNhanVien = DataConn.GrdSource(selectNhanVien);
+            if (dsNhanVien.Tables[0].Rows.Count > 0) return true;
+            return false;
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -526,7 +536,7 @@ namespace QL_BanDayNit
 
         private void btnTinhTien_Click(object sender, EventArgs e)
         {
-            if (grdXuatHang.RowCount <= 0)
+            if (grdXuatHang.RowCount < 0)
             {
                 btnXoa.Enabled = false;
                 btnInHD.Enabled = false;
@@ -588,6 +598,8 @@ namespace QL_BanDayNit
             return dsTongTien.Tables[0].Rows[0]["TongTien"].ToString();
         }
 
+        // http://www.mikesdotnetting.com/article/86/itextsharp-introducing-tables
+        // http://tutorials.jenkov.com/java-itext/table.html
         private void btnInHD_Click(object sender, EventArgs e)
         {
             BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -596,16 +608,26 @@ namespace QL_BanDayNit
             // Creating iTextSharp Table from title data
             PdfPTable pdfTableTitle = new PdfPTable(2);
             pdfTableTitle.WidthPercentage = 95;
-            pdfTableTitle.DefaultCell.Border = 0;
-            // Create Cell
-            PdfPCell cellTitle = new PdfPCell(new Phrase("HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 22)));
+            pdfTableTitle.DefaultCell.BorderWidth = 0;
+
+            // Create Cell Title
+            PdfPCell cellTitle;
+            cellTitle = new PdfPCell(new Phrase("HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 22)));
             cellTitle.Colspan = 3;
             cellTitle.HorizontalAlignment = 1;
-
+            cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
-            pdfTableTitle.AddCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
-            pdfTableTitle.AddCell(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
-            pdfTableTitle.AddCell(new Paragraph("Khách Hàng : " + cbxKhachHang.Text, new iTextSharp.text.Font(arialCustomer)));
+
+            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + "\n\nKhách Hàng : " + cbxKhachHang.Text + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+            cellTitle.Border = 0;
+            pdfTableTitle.AddCell(cellTitle);
+            //
+            cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+            cellTitle.Border = 0;
+            cellTitle.HorizontalAlignment = 2;
+            pdfTableTitle.AddCell(cellTitle);
+            //
+            pdfTableTitle.AddCell(new Paragraph("", new iTextSharp.text.Font(arialCustomer)));
 
             //Creating iTextSharp Table from the DataTable data
             PdfPTable pdfTable = new PdfPTable(grdXuatHang.ColumnCount);
@@ -639,10 +661,22 @@ namespace QL_BanDayNit
                 Directory.CreateDirectory(folderPath);
             }
 
-            string namePDF = folderPath + txtMaHD.Text + ".pdf";            
+            string namePDF = folderPath + txtMaHD.Text + ".pdf";
             double dbTongTienBan = double.Parse(lblTongTien.Text) * 1000;
             string intTongTienBan = String.Format("{0:0,0}", dbTongTienBan);
 
+            if (System.IO.File.Exists(namePDF))
+            {
+                try
+                {
+                    System.IO.File.Delete(namePDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Tập Tin PDF Đã Có Và Đang Được Sử Dụng ! \nTắt Tập Tin Để Tạo Lại.");
+                    return;
+                }
+            }
             using (FileStream stream = new FileStream(namePDF, FileMode.Create))
             {
                 Document pdfDoc = new Document(PageSize.A5, 10f, 10f, 10f, 0f);
@@ -650,24 +684,39 @@ namespace QL_BanDayNit
                 PdfWriter.GetInstance(pdfDoc, stream);
                 pdfDoc.Open();
                 //pdfDoc.Add(new Paragraph("                                     HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 22)));
-                //pdfDoc.Add(new Paragraph("Người Bán  : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
+                //pdfDoc.Add(new Paragraph("Người Bán   : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
                 //pdfDoc.Add(new Paragraph("Khách Hàng : " + cbxKhachHang.Text, new iTextSharp.text.Font(arialCustomer)));
                 //pdfDoc.Add(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
                 pdfDoc.AddAuthor("Anh Tuan");
                 pdfDoc.Add(pdfTableTitle);
                 pdfDoc.Add(pdfTable);
-                pdfDoc.Add(new Paragraph("    Số Mặt Hàng: " + lblSoMatHang.Text + "                                      Tổng SL: " + lblTongSL.Text + "       Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
-                pdfDoc.Add(new Paragraph("\n    Cộng Thành Tiền (Viết bằng chữ) :" + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
+                //pdfDoc.Add(new Paragraph("    Số Mặt Hàng: " + lblSoMatHang.Text + "                                      Tổng SL: " + lblTongSL.Text + "       Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
+
+
+                // Creating iTextSharp Table from data
+                PdfPTable pdfTableTongTien = new PdfPTable(3);
+                pdfTableTongTien.WidthPercentage = 95;
+                pdfTableTongTien.DefaultCell.BorderWidth = 0;
+
+                // Create Cell Title
+                PdfPCell cellTongTien;
+                cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
+                cellTongTien.Colspan = 3;
+                cellTongTien.HorizontalAlignment = 0;
+                cellTongTien.Border = 0;
+
+                pdfTableTongTien.AddCell(new Phrase("Số Mặt Hàng: " + lblSoMatHang.Text, new iTextSharp.text.Font(arialCustomer, 16)));
+                pdfTableTongTien.AddCell(new Phrase("Tổng SL: " + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 16)));
+                pdfTableTongTien.AddCell(new Phrase("Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
+                pdfTableTongTien.AddCell(cellTongTien);
+
+                pdfDoc.Add(pdfTableTongTien);
+
                 pdfDoc.Close();
                 stream.Close();
             }
 
-            if (Directory.Exists(namePDF))
-            {
-                Directory.Delete(namePDF);
-            }
             System.Diagnostics.Process.Start(@"" + namePDF);
-
         }
 
         private void lblDonGia_Click(object sender, EventArgs e)
@@ -736,7 +785,6 @@ namespace QL_BanDayNit
             string[] cs = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
             string strChuoiKetQua;
             int i, j, k, n, len, found, ddv, rd;
-
             len = number.Length;
             number += "ss";
             strChuoiKetQua = "";
@@ -830,11 +878,16 @@ namespace QL_BanDayNit
             }
             if (len == 1)
                 if (number[0] == '0' || number[0] == '5') return cs[(int)number[0] - 48];
-            //Viết hoa chữ đầu:
+            /* Admin add 
+                //Viết hoa chữ đầu:
+            */
             if (strChuoiKetQua.Length > 0)
             {
                 strChuoiKetQua = strChuoiKetQua.Substring(0, 1).ToUpper() + strChuoiKetQua.Substring(1).ToLower();
-                strChuoiKetQua.Replace("  ", " ");
+                // Xóa khoảng trắng thừa.
+                strChuoiKetQua = strChuoiKetQua.Replace("  ", " ");
+                // Đổi Năm thành Lăm
+                strChuoiKetQua = strChuoiKetQua.Replace("i năm", "i lăm");
             }
             return strChuoiKetQua;
         }
