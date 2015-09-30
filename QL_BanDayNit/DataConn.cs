@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace QL_BanDayNit
 {
@@ -19,20 +20,18 @@ namespace QL_BanDayNit
         // Add Tên Computer của bạn ở đây.
         //private static string strPC_Name = "ANHTUAN-PC";
         private static string strPC_Name = "MINHTU-PC";
-        private static string fileDB = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak";
-        private static string strKetNoiAdmin = "Data Source="+strPC_Name+";Integrated Security=True;";
+        private static string fileDB_bak = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak";
+        private static string fileDB_sql = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.sql";
+
+        private static string strKetNoiAdmin = "Data Source=" + strPC_Name + ";Integrated Security=True;";
         private static SqlConnection adConn = new SqlConnection(strKetNoiAdmin);
-        private static string strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + fileDB + "' WITH REPLACE";
+        private static string strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + fileDB_bak + "' WITH REPLACE";
 
         static DataConn()
         {
-
-            adConn.Open();
-
-            adConn.Close();
             // Kiểm Tra Database
             KiemTraTonTaiDatabase(strTenDB);
-            
+
             source = strKetNoiAdmin + "database=" + strTenDB;
             con = new SqlConnection(source);
             try
@@ -68,16 +67,34 @@ namespace QL_BanDayNit
                             if (MessageBox.Show("Chưa có Database tên " + strTenDB + " trong CSDL!.\nBạn muốn thêm vào không?.", "Lỗi Database", MessageBoxButtons.OKCancel) == DialogResult.OK)
                             {
                                 string getLocationFileDB = "";
-                                if (!System.IO.File.Exists(strBackup))
+                                if (!System.IO.File.Exists(fileDB_bak))  // Nếu Không Tìm Thấy File Backup .bak
                                 {
-                                    MessageBox.Show("Không Tìm Thấy File Database!\nHãy Chọn File Database.");
-                                    getLocationFileDB = LayFileDBTuOpenShowdialog();
+                                    if (!System.IO.File.Exists(fileDB_sql))  // Nếu Không Tìm Thấy File Scrip .spl
+                                    {
+                                        MessageBox.Show("Không Tìm Thấy File Database\nHãy Chọn File Database.");
+                                        // Lấy File Use Select
+                                        getLocationFileDB = LayFileDBTuOpenShowdialog();
+                                        if (Path.GetExtension(getLocationFileDB) == ".sql") // Kiểm Tra Nếu Là .sql
+                                        {
+                                            FileInfo getFileDB = new FileInfo(getLocationFileDB);
+                                            strBackup = getFileDB.OpenText().ReadToEnd();
+                                            strBackup = strBackup.Replace("GO", "");  // Xóa GO Trong Scrip
+                                        }
+                                        else // Kiểm Tra Nếu Là .bak
+                                        {
+                                            strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + getLocationFileDB + "' WITH REPLACE";
+                                        }
+                                    }
+                                    else  // Tìm Thấy File Scrip .sql
+                                    {
+                                        FileInfo getFileDB = new FileInfo(fileDB_sql);
+                                        strBackup = getFileDB.OpenText().ReadToEnd();
+                                        strBackup = strBackup.Replace("GO", "");  // Xóa GO Trong Scrip
+                                    }
                                 }
-                                strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + getLocationFileDB + "' WITH REPLACE";
-
                                 SqlCommand sqlCmdBackup = new SqlCommand(strBackup, adConn);
                                 try
-                                {                                    
+                                {
                                     sqlCmdBackup.ExecuteNonQuery();
                                     MessageBox.Show("Thêm Thành Công Database Mới !\nThêm Dữ Liệu Trước Khi Sử Dụng.");
                                     //if (!System.IO.File.Exists(strBackup))
@@ -90,14 +107,16 @@ namespace QL_BanDayNit
                                 catch (Exception ex)
                                 {
                                     MessageBox.Show("Không Add Được Database!\nHãy Thêm Từ MS-SQL.\nError: " + ex);
-                                    Application.Exit();
+                                    Environment.Exit(1);
                                 }
                             }
-                            else Application.Exit();
+                            else  // Không Add Database
+                            {
+                                Environment.Exit(1);
+                            }
                         }
                         adConn.Close();
                         result = (databaseID > 0);
-                        
                     }
                 }
             }
@@ -112,11 +131,11 @@ namespace QL_BanDayNit
         {
             OpenFileDialog openD = new OpenFileDialog();
             //Filter lọc ra các file để bạn dễ dàng lựa chọn (ví dụ các fiel MP3, hay WMA,....) 
-            openD.Filter="Database File|*.bak";
+            openD.Filter = "Database File|*.bak|Scrip File|*.sql";
             //Tên của hộp thoại hiện lên - Không có thì sẽ là mặc định 
-            openD.Title="Chọn Database";
+            openD.Title = "Chọn Database";
             //Không phép chọn nhiều file cùng lúc - Mặc định là false 
-            openD.Multiselect= false;
+            openD.Multiselect = false;
             //Mở hộp thoại 
             openD.ShowDialog();
 
@@ -184,5 +203,39 @@ namespace QL_BanDayNit
                 MessageBox.Show("" + se.Message);
             }
         }
+
+
+        public static string ChinhSuaScript(string filePath)
+        {
+            StringBuilder sql = new StringBuilder();
+            using (StreamReader file = new StreamReader(filePath))
+            {
+                string line;
+                bool demCreateDb = false; // Tạo biến kiểm tra Lệnh CREATE DATABASE
+                while ((line = file.ReadLine()) != null)
+                {
+                    // replace GO with semi-colon
+                    if (line == "GO")
+                    {
+                        if (line.IndexOf("CREATE DATABASE") > -1)  // Kiểm Tra GO sau câu lệnh SQL
+                            demCreateDb = true;
+                        if (!demCreateDb)
+                        {
+                            sql.Append(";");
+                        }
+                        else
+                        {
+                            demCreateDb = false;
+                        }                        
+                    }
+                    else
+                        sql.AppendFormat(" {0} ", line);
+                }
+
+            }
+
+            return sql.ToString();
+        }
+
     }
 }
