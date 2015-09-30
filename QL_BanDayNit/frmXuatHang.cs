@@ -526,7 +526,7 @@ namespace QL_BanDayNit
 
         private void btnTinhTien_Click(object sender, EventArgs e)
         {
-            if (grdXuatHang.RowCount <= 0)
+            if (grdXuatHang.RowCount < 0)
             {
                 btnXoa.Enabled = false;
                 btnInHD.Enabled = false;
@@ -608,10 +608,8 @@ namespace QL_BanDayNit
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
 
-            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
+            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + "\n\nKhách Hàng : " + cbxKhachHang.Text + "\n\n", new iTextSharp.text.Font(arialCustomer)));
             cellTitle.Border = 0;
-            cellTitle.PaddingBottom = 0;
-            cellTitle.FixedHeight = 0;
             pdfTableTitle.AddCell(cellTitle);
             //
             cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
@@ -619,7 +617,6 @@ namespace QL_BanDayNit
             cellTitle.HorizontalAlignment = 2;
             pdfTableTitle.AddCell(cellTitle);
             //
-            pdfTableTitle.AddCell(new Paragraph("Khách Hàng : " + cbxKhachHang.Text, new iTextSharp.text.Font(arialCustomer)));
             pdfTableTitle.AddCell(new Paragraph("", new iTextSharp.text.Font(arialCustomer)));
 
             //Creating iTextSharp Table from the DataTable data
@@ -654,10 +651,22 @@ namespace QL_BanDayNit
                 Directory.CreateDirectory(folderPath);
             }
 
-            string namePDF = folderPath + txtMaHD.Text + ".pdf";            
+            string namePDF = folderPath + txtMaHD.Text + ".pdf";
             double dbTongTienBan = double.Parse(lblTongTien.Text) * 1000;
             string intTongTienBan = String.Format("{0:0,0}", dbTongTienBan);
 
+            if (System.IO.File.Exists(namePDF))
+            {
+                try
+                {
+                    System.IO.File.Delete(namePDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Tập Tin PDF Đã Có Và Đang Được Sử Dụng ! \nTắt Tập Tin Để Tạo Lại.");
+                    return;
+                }
+            }
             using (FileStream stream = new FileStream(namePDF, FileMode.Create))
             {
                 Document pdfDoc = new Document(PageSize.A5, 10f, 10f, 10f, 0f);
@@ -665,24 +674,39 @@ namespace QL_BanDayNit
                 PdfWriter.GetInstance(pdfDoc, stream);
                 pdfDoc.Open();
                 //pdfDoc.Add(new Paragraph("                                     HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 22)));
-                //pdfDoc.Add(new Paragraph("Người Bán  : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
+                //pdfDoc.Add(new Paragraph("Người Bán   : " + cboMaNhanVien.Text, new iTextSharp.text.Font(arialCustomer)));
                 //pdfDoc.Add(new Paragraph("Khách Hàng : " + cbxKhachHang.Text, new iTextSharp.text.Font(arialCustomer)));
                 //pdfDoc.Add(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
                 pdfDoc.AddAuthor("Anh Tuan");
                 pdfDoc.Add(pdfTableTitle);
                 pdfDoc.Add(pdfTable);
-                pdfDoc.Add(new Paragraph("    Số Mặt Hàng: " + lblSoMatHang.Text + "                                      Tổng SL: " + lblTongSL.Text + "       Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
-                pdfDoc.Add(new Paragraph("\n    Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
+                //pdfDoc.Add(new Paragraph("    Số Mặt Hàng: " + lblSoMatHang.Text + "                                      Tổng SL: " + lblTongSL.Text + "       Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
+
+
+                // Creating iTextSharp Table from data
+                PdfPTable pdfTableTongTien = new PdfPTable(3);
+                pdfTableTongTien.WidthPercentage = 95;
+                pdfTableTongTien.DefaultCell.BorderWidth = 0;
+
+                // Create Cell Title
+                PdfPCell cellTongTien;
+                cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
+                cellTongTien.Colspan = 3;
+                cellTongTien.HorizontalAlignment = 0;
+                cellTongTien.Border = 0;
+
+                pdfTableTongTien.AddCell(new Phrase("Số Mặt Hàng: " + lblSoMatHang.Text, new iTextSharp.text.Font(arialCustomer, 16)));
+                pdfTableTongTien.AddCell(new Phrase("Tổng SL: " + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 16)));
+                pdfTableTongTien.AddCell(new Phrase("Tổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
+                pdfTableTongTien.AddCell(cellTongTien);
+
+                pdfDoc.Add(pdfTableTongTien);
+                
                 pdfDoc.Close();
-                stream.Close(); 
+                stream.Close();
             }
 
-            if (Directory.Exists(namePDF))
-            {
-                Directory.Delete(namePDF);
-            }
             System.Diagnostics.Process.Start(@"" + namePDF);
-
         }
 
         private void lblDonGia_Click(object sender, EventArgs e)
@@ -751,7 +775,6 @@ namespace QL_BanDayNit
             string[] cs = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
             string strChuoiKetQua;
             int i, j, k, n, len, found, ddv, rd;
-
             len = number.Length;
             number += "ss";
             strChuoiKetQua = "";
@@ -845,11 +868,16 @@ namespace QL_BanDayNit
             }
             if (len == 1)
                 if (number[0] == '0' || number[0] == '5') return cs[(int)number[0] - 48];
-            //Viết hoa chữ đầu:
+            /* Admin add 
+                //Viết hoa chữ đầu:
+            */
             if (strChuoiKetQua.Length > 0)
             {
                 strChuoiKetQua = strChuoiKetQua.Substring(0, 1).ToUpper() + strChuoiKetQua.Substring(1).ToLower();
-                strChuoiKetQua.Replace("  ", " ");
+                // Xóa khoảng trắng thừa.
+                strChuoiKetQua = strChuoiKetQua.Replace("  ", " ");
+                // Đổi Năm thành Lăm
+                strChuoiKetQua = strChuoiKetQua.Replace("i năm", "i lăm");
             }
             return strChuoiKetQua;
         }
