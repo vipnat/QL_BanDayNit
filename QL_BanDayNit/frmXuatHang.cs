@@ -56,7 +56,7 @@ namespace QL_BanDayNit
             cboMaNhanVien.DisplayMember = "TenNhanVien";
             cboMaNhanVien.ValueMember = "MaNhanVien";
             if (dsNhanVien.Tables[0].Rows.Count > 0)
-                values2 = dsNhanVien.Tables[0].Rows[cboMaNhanVien.SelectedIndex][0].ToString();
+                strMaNhanVien = dsNhanVien.Tables[0].Rows[cboMaNhanVien.SelectedIndex][0].ToString();
             HienThi();
         }
 
@@ -168,12 +168,12 @@ namespace QL_BanDayNit
             return DonGia;
         }
 
-        string values2 = "";
+        string strMaNhanVien = "";
         private void cboMaNhanVien_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboMaNhanVien.ValueMember != null)
             {
-                values2 = cboMaNhanVien.SelectedValue.ToString();
+                strMaNhanVien = cboMaNhanVien.SelectedValue.ToString();
             }
         }
 
@@ -219,11 +219,12 @@ namespace QL_BanDayNit
                     cbxKhachHang.Select();
                     return;
                 }
+                if (!KiemTraNhanVienTonTai(strMaNhanVien)) return;
+
                 // Khóa Combobox Chọn Khách Hàng
                 cbxKhachHang.Enabled = false;
                 // Khóa Combobox Chọn Nhân Viên
                 cboMaNhanVien.Enabled = false;
-
 
                 string select1 = "select MaHD FROM tblHoaDonXuat";
                 SqlDataReader sqlData = DataConn.ThucHienReader(select1);
@@ -233,7 +234,6 @@ namespace QL_BanDayNit
                     {
                         if (sqlData.GetString(0) == txtMaHD.Text)
                         {
-                            //MessageBox.Show("2");
                             sqlData.Close();
                             sqlData.Dispose();
                             throw new SameKeyException();
@@ -245,7 +245,8 @@ namespace QL_BanDayNit
                     sqlData.Close();
                     sqlData.Dispose();
                 }
-                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + values2 + "',N'" + pckNgayXuat.Text + "',N'" + txtGhiChu.Text + "')";
+
+                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + strMaNhanVien + "',N'" + pckNgayXuat.Text + "',N'" + txtGhiChu.Text + "')";
                 DataConn.ThucHienCmd(select);
                 HienThi();
                 groupChiTietHDX.Enabled = true;
@@ -263,6 +264,15 @@ namespace QL_BanDayNit
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private bool KiemTraNhanVienTonTai(string strMaNhanVien)
+        {
+            // Kiểm Tra Nhân Viên
+            string selectNhanVien = "SELECT* FROM tblNhanVien WHERE MaNhanVien = '" + strMaNhanVien + "'";
+            DataSet dsNhanVien = DataConn.GrdSource(selectNhanVien);
+            if (dsNhanVien.Tables[0].Rows.Count > 0) return true;
+            return false;
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -701,7 +711,7 @@ namespace QL_BanDayNit
                 pdfTableTongTien.AddCell(cellTongTien);
 
                 pdfDoc.Add(pdfTableTongTien);
-                
+
                 pdfDoc.Close();
                 stream.Close();
             }

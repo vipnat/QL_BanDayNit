@@ -39,7 +39,7 @@ namespace QL_BanDayNit
                 cboMaMatH.DataSource = ds.Tables[0];
                 cboMaMatH.DisplayMember = "TenMatH";
                 cboMaMatH.ValueMember = "MaMatH";
-                if (cboMaMatH.ValueMember != null)
+                if (ds.Tables[0].Rows.Count > 0)
                     maMatHang = ds.Tables[0].Rows[cboMaMatH.SelectedIndex][0].ToString();
                 HienThi();
                 //btnNhap_Click(sender, e);
