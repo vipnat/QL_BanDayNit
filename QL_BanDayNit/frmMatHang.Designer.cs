@@ -158,6 +158,7 @@
             this.txtMaHang.Name = "txtMaHang";
             this.txtMaHang.Size = new System.Drawing.Size(171, 26);
             this.txtMaHang.TabIndex = 1;
+            this.txtMaHang.Text = "0";
             this.txtMaHang.Leave += new System.EventHandler(this.txtMaHang_Leave);
             // 
             // txtTenHang

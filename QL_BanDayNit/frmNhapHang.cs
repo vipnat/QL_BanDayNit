@@ -31,25 +31,37 @@ namespace QL_BanDayNit
             btnThem.Enabled = false;
             txtGhiChu.Select();
 
-            string selectMatHang = "select* from tblMatHang";
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxMaMatH,"");
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxDauKhoa, "DAU");
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxDay, "DAY");
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxDai, "DAI");
+            // Function hiển thị.
+            HienThi();
+
+        }
+
+        private void LoadComboboxLoaiMatHangTheoMaSanPham(ComboBox cbxLoad, string strTienToMaMatHang)
+        {
+            string selectMatHang = "";
+            if(strTienToMaMatHang == "")
+                selectMatHang = "SELECT* FROM tblMatHang";
+            else
+                selectMatHang = "SELECT* FROM tblMatHang WHERE SUBSTRING(tblMatHang.MaMatH,1,3) = '" + strTienToMaMatHang + "'";
             try
             {
                 DataSet ds = DataConn.GrdSource(selectMatHang);
                 ds = DataConn.GrdSource(selectMatHang);
-                cboMaMatH.DataSource = ds.Tables[0];
-                cboMaMatH.DisplayMember = "TenMatH";
-                cboMaMatH.ValueMember = "MaMatH";
-                if (ds.Tables[0].Rows.Count > 0)
-                    maMatHang = ds.Tables[0].Rows[cboMaMatH.SelectedIndex][0].ToString();
-                HienThi();
-                //btnNhap_Click(sender, e);
+                cbxLoad.DataSource = ds.Tables[0];
+                cbxLoad.DisplayMember = "TenMatH";
+                cbxLoad.ValueMember = "MaMatH";
+                if (ds.Tables[0].Rows.Count > 0 && strTienToMaMatHang == "")
+                    maMatHang = ds.Tables[0].Rows[cbxLoad.SelectedIndex][0].ToString();                
             }
             catch (FormatException)
             {
                 MessageBox.Show("Không đúng định dạng dữ liệu cần thiết! Hãy xem trợ giúp!");
             }
         }
-
 
         private string LayMaHoaDonTheoNgay(string ngayText)
         {
@@ -98,9 +110,10 @@ namespace QL_BanDayNit
         //string v = "";
         private void cboMaMatH_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboMaMatH.ValueMember != null)
+            if (cbxMaMatH.SelectedIndex >= 0)
             {
-                if (cboMaMatH.SelectedValue.ToString().Substring(3) == "MSP")
+                maMatHang = cbxMaMatH.SelectedValue.ToString();
+                if (maMatHang.Substring(0,3) == "MSP")
                 {
                     cbxDay.Enabled = true;
                     cbxDauKhoa.Enabled = true;
@@ -118,9 +131,9 @@ namespace QL_BanDayNit
                     txtSoLuongDau.Enabled = false;
                     txtSoLuongDai.Enabled = false;
                 }
-                maMatHang = cboMaMatH.SelectedValue.ToString();
+                
                 //v = cboMaMatH.SelectedValue.ToString();
-                string select1 = "select dongia from tblmathang where MaMatH =N'" + cboMaMatH.SelectedValue.ToString() + "'";
+                string select1 = "select dongia from tblmathang where MaMatH =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
                 SqlDataReader sqlData = DataConn.ThucHienReader(select1);
                 try
                 {
@@ -237,7 +250,6 @@ namespace QL_BanDayNit
 
         private void btnGhi_Click(object sender, EventArgs e)
         {
-            string select;
             if (KiemTraTonTaiMatHangDaThem())
             {
                 if (MessageBox.Show("Đã Thêm Mặt Hàng Này!\nBạn Muốn Sửa Lại Không?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
@@ -248,42 +260,29 @@ namespace QL_BanDayNit
                 {
                     CapNhapThongTinMatHang(sender, e);
                 }
-
             }
             else
             {
                 try
                 {
                     //Exception khi không đủ dữ liệu
-                    if (cboMaMatH.Text == "")
+                    if (cbxMaMatH.Text == "")
                     {
                         MessageBox.Show("Hãy chọn mặt hàng!", "Chú ý!");
-                        cboMaMatH.Select();
-                        return;
-                    }
-                    if (txtSoLuong.Text == "")
-                    {
-                        MessageBox.Show("Hãy nhập số lượng!", "Chú ý!");
-                        txtSoLuong.Select();
-                        return;
-                    }
-                    if (txtDonGia.Text == "")
-                    {
-                        MessageBox.Show("Hãy nhập đơn giá!", "Chú ý!");
-                        txtDonGia.Select();
+                        cbxMaMatH.Select();
                         return;
                     }
 
                     if (!KiemTraDuLieuNhapSo()) return;
 
-
+                    string sqlQuery;
                     //Thêm vào bảng tblChiTietHDN
-                    select = "insert into tblChiTietHDN(MaHD,MaMatH,SoLuong,DonGia) values(N'" + txtMaHoaDon.Text + "',N'" + maMatHang + "'," + txtSoLuong.Text + "," + txtDonGia.Text + ")";
-                    DataConn.ThucHienCmd(select);
+                    sqlQuery = "insert into tblChiTietHDN(MaHD,MaMatH,SoLuong,DonGia) values(N'" + txtMaHoaDon.Text + "',N'" + maMatHang + "'," + txtSoLuong.Text + "," + txtDonGia.Text + ")";
+                    DataConn.ThucHienCmd(sqlQuery);
 
                     //Cập nhật lại Số Lượng cho bảng tblMatHang (thêm số lượng mặt hàng)
-                    select = "update tblMatHang set SoLuong=SoLuong+" + txtSoLuong.Text + ",DonGia='" + txtDonGia.Text + "' where MaMatH=N'" + maMatHang + "'";
-                    DataConn.ThucHienCmd(select);
+                    sqlQuery = "update tblMatHang set SoLuong=SoLuong+" + txtSoLuong.Text + ",DonGia='" + txtDonGia.Text + "' where MaMatH=N'" + maMatHang + "'";
+                    DataConn.ThucHienCmd(sqlQuery);
 
                     listMatHangOld.Add(maMatHang, (double.Parse(txtSoLuong.Text)));
 
@@ -293,7 +292,7 @@ namespace QL_BanDayNit
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("Không đúng định dạng dữ liệu cần thiết! Hãy xem trợ giúp!");
+                    MessageBox.Show("Không đúng định dạng dữ liệu cần thiết! Hãy xem lại!");
                 }
                 catch (SameKeyException)
                 {
@@ -318,17 +317,35 @@ namespace QL_BanDayNit
                 txtSoLuong.Select();
                 return false;
             }
-            if (double.Parse(txtDonGia.Text) <= 0)
-            {
-                MessageBox.Show("Đơn giá phải lớn hơn 0!");
-                txtSoLuong.Select();
-                return false;
-            }
             if (!KiemTraSoNguyenText(txtSoLuong.Text)) return false;
-            if (!KiemTraSoNguyenText(txtSoLuongDau.Text)) return false;
-            if (!KiemTraSoNguyenText(txtSoLuongDay.Text)) return false;
-            if (!KiemTraSoNguyenText(txtSoLuongDai.Text)) return false;
+            
+            // Nếu Mặt Hàng Là Sản Phẩm
+            if (maMatHang.Substring(0, 3) == "MSP")
+            {
+                if (double.Parse(txtSoLuongDau.Text) <= 0)
+                {
+                    MessageBox.Show("Số lượng Đầu phải lớn hơn 0!");
+                    txtSoLuongDau.Select();
+                    return false;
+                }
+                if (!KiemTraSoNguyenText(txtSoLuongDau.Text)) return false;
 
+                if (double.Parse(txtSoLuongDay.Text) <= 0)
+                {
+                    MessageBox.Show("Số lượng Dây phải lớn hơn 0!");
+                    txtSoLuongDay.Select();
+                    return false;
+                }
+                if (!KiemTraSoNguyenText(txtSoLuongDay.Text)) return false;
+
+                if (double.Parse(txtSoLuongDai.Text) <= 0)
+                {
+                    MessageBox.Show("Số lượng Đai phải lớn hơn 0!");
+                    txtSoLuongDai.Select();
+                    return false;
+                }
+                if (!KiemTraSoNguyenText(txtSoLuongDai.Text)) return false;
+            }
             return true;
         }
 
@@ -371,10 +388,9 @@ namespace QL_BanDayNit
 
         private void CapNhapThongTinMatHang(object sender, EventArgs e)
         {
-            string update = "";
             try
             {
-                if (cboMaMatH.Text == "" && txtDonGia.Text == "" && txtSoLuong.Text == "")
+                if (cbxMaMatH.Text == "" && txtDonGia.Text == "" && txtSoLuong.Text == "")
                     throw new NotEnoughInfoException();
                 if (double.Parse(txtSoLuong.Text) <= 0)
                 {
@@ -382,38 +398,31 @@ namespace QL_BanDayNit
                     txtSoLuong.Select();
                     return;
                 }
-                if (double.Parse(txtDonGia.Text) <= 0)
+
+                if(KiemTraTonTaiMatHangDaThem())
                 {
-                    MessageBox.Show("Đơn giá không được nhỏ hơn 0!");
-                    txtDonGia.Select();
-                    return;
-                }
-                string select1 = "select MaMatH from tblChiTietHDN WHERE MaHD='" + txtMaHoaDon.Text + "'";
-                SqlDataReader sqlData = DataConn.ThucHienReader(select1);
-                try
-                {
-                    while (sqlData.Read())
+                    if (SoSanhSoLuongTrongListOld(maMatHang, txtSoLuong.Text))
                     {
-                        if (sqlData.GetString(0) == maMatHang)
-                        {
-                            sqlData.Close();
-                            sqlData.Dispose();
-                            throw new SameKeyException();
-                        }
+                        return;
                     }
-                }
-                finally
-                {
-                    sqlData.Close();
-                    sqlData.Dispose();
-                }
+                    else
+                    {
+                        string updateQuery = "";
+                        // Trừ đi số lượng đã thêm trước đó.
+                        updateQuery = "UPDATE tblMatHang SET SoLuong=SoLuong-" + double.Parse(listMatHangOld[maMatHang].ToString()) + " WHERE MaMatH=N'" + maMatHang + "'";
+                        DataConn.ThucHienCmd(updateQuery);
 
-                //string v = maMatHang;
-                update = "UPDATE tblChiTietHDN SET MaMatH='" + maMatHang + "' WHERE MaHD='" + txtMaHoaDon.Text + "' AND MaMatH=N'" + txtMaH.Text + "'";
-                DataConn.ThucHienCmd(update);
+                        //Cập nhật lại Số Lượng cho bảng tblMatHang (thêm số lượng mặt hàng)
+                        updateQuery = "update tblMatHang set SoLuong=SoLuong+" + txtSoLuong.Text + ",DonGia='" + txtDonGia.Text + "' where MaMatH=N'" + maMatHang + "'";
+                        DataConn.ThucHienCmd(updateQuery);
 
+                        // Cập nhập lại số lượng mới.
+                        updateQuery = "UPDATE tblChiTietHDN SET SoLuong=" + txtSoLuong.Text + ",DonGia=" + txtDonGia.Text + " WHERE MaHD='" + txtMaHoaDon.Text + "' AND MaMatH=N'" + maMatHang + "'";
+                        DataConn.ThucHienCmd(updateQuery);
+                    }
+                }                  
+                                
                 CapNhapLaiSoLuongTrongListOld(maMatHang);
-
                 HienThi();
                 btnTongTien_Click(sender, e);
             }
@@ -427,28 +436,7 @@ namespace QL_BanDayNit
             }
             catch (SameKeyException)
             {
-                if (SoSanhSoLuongTrongListOld(maMatHang, txtSoLuong.Text))
-                {
-                    return;
-                }
-                else
-                {
-                    // Trừ đi số lượng đã thêm trước đó.
-                    update = "UPDATE tblMatHang SET SoLuong=SoLuong-" + double.Parse(listMatHangOld[maMatHang].ToString()) + " WHERE MaMatH=N'" + maMatHang + "'";
-                    DataConn.ThucHienCmd(update);
-
-                    //Cập nhật lại Số Lượng cho bảng tblMatHang (thêm số lượng mặt hàng)
-                    string select = "update tblMatHang set SoLuong=SoLuong+" + txtSoLuong.Text + ",DonGia='" + txtDonGia.Text + "' where MaMatH=N'" + maMatHang + "'";
-                    DataConn.ThucHienCmd(select);
-
-                    // Cập nhập lại số lượng mới.
-                    update = "UPDATE tblChiTietHDN SET SoLuong=" + txtSoLuong.Text + ",DonGia=" + txtDonGia.Text + " WHERE MaHD='" + txtMaHoaDon.Text + "' AND MaMatH=N'" + maMatHang + "'";
-                    DataConn.ThucHienCmd(update);
-                }
-
-                CapNhapLaiSoLuongTrongListOld(maMatHang);
-                HienThi();
-                btnTongTien_Click(sender, e);
+                
             }
         }
 
@@ -477,7 +465,7 @@ namespace QL_BanDayNit
                         DataSet ds = DataConn.GrdSource(select);
 
                         txtMaH.Text = ds.Tables[0].Rows[0]["MaMatH"].ToString();
-                        cboMaMatH.Text = ds.Tables[0].Rows[0]["TenMatH"].ToString();
+                        cbxMaMatH.Text = ds.Tables[0].Rows[0]["TenMatH"].ToString();
                         txtMaHoaDon.Text = ds.Tables[0].Rows[0]["MaHD"].ToString();
                         txtSoLuong.Text = ds.Tables[0].Rows[0]["SoLuong"].ToString();
                         pckNgayNhap.Text = ds.Tables[0].Rows[0]["NgayNhap"].ToString();
@@ -592,7 +580,7 @@ namespace QL_BanDayNit
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            cboMaMatH.Text = "";
+            cbxMaMatH.Text = "";
             txtDonGia.Text = "0";
             txtSoLuong.Text = "0";
         }
@@ -626,6 +614,18 @@ namespace QL_BanDayNit
         {
             // DateTime.Today.Day.ToString() 
             txtMaHoaDon.Text = LayMaHoaDonTheoNgay(pckNgayNhap.Value.Day.ToString() + pckNgayNhap.Value.Month.ToString() + pckNgayNhap.Value.Year.ToString());
+        }
+
+        private void txtSoLuong_Leave(object sender, EventArgs e)
+        {
+            if (maMatHang.Substring(0, 3) == "MSP")
+            {
+                int int0 = 0;
+                if (int.TryParse(txtSoLuong.Text, out int0))
+                {
+                    txtSoLuongDau.Text = txtSoLuongDay.Text = txtSoLuong.Text;
+                }
+            }
         }
     }
 }

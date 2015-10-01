@@ -57,29 +57,12 @@ namespace QL_BanDayNit
                     txtNhacLai.Select();
                     return;
                 }
-                //Exception khi trùng tên đăng nhập
-                string select = "SELECT TaiKhoan FROM tblDangNhap";
-                SqlDataReader sqlData = DataConn.ThucHienReader(select);
-                try
-                {
-                    while (sqlData.Read())
-                    {
-                        if (sqlData.GetString(0) == txtTenDN.Text)
-                        {
-                            sqlData.Close();
-                            sqlData.Dispose();
-                            throw new SameKeyException();
-                        }
-                    }
-                }
-                finally
-                {
-                    sqlData.Close();
-                    sqlData.Dispose();
-                }
 
-                string insert = "INSERT INTO tblDangNhap VALUES(N'"+txtTenDN.Text.Trim()+"',N'"+txtMatKhau.Text.Trim()+"',N'"+txtDiaChi.Text.Trim()+"',N'"+txtDienThoai.Text.Trim()+"')";
-                DataConn.ThucHienCmd(insert);
+                if(KiemTraTrungTaiKhoan(txtTenDN.Text))
+                    throw new SameKeyException();                
+
+                AddUseFunction(txtTenDN.Text.Trim(), txtMatKhau.Text.Trim(), txtDiaChi.Text.Trim(), txtDienThoai.Text.Trim());
+                
                 MessageBox.Show("Đã thêm "+txtTenDN.Text+" vào danh sách người dùng!");
                 this.Close();
             }
@@ -87,6 +70,37 @@ namespace QL_BanDayNit
             {
                 MessageBox.Show("Đã có tài khoản đăng nhập với tên này!","Thông báo!");
             }
+        }
+
+        public bool KiemTraTrungTaiKhoan(string strTenDangNhap)
+        {
+            //Exception khi trùng tên đăng nhập
+            string select = "SELECT TaiKhoan FROM tblDangNhap";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select);
+            try
+            {
+                while (sqlData.Read())
+                {
+                    if (sqlData.GetString(0) == strTenDangNhap)
+                    {
+                        sqlData.Close();
+                        sqlData.Dispose();
+                        return true;
+                    }
+                }
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            return false;
+        }
+
+        public void AddUseFunction(string strTenUse, string strPass, string strDiaChi, string strDienThoai)
+        {
+            string insert = "INSERT INTO tblDangNhap VALUES(N'" + txtTenDN.Text.Trim() + "',N'" + txtMatKhau.Text.Trim() + "',N'" + txtDiaChi.Text.Trim() + "',N'" + txtDienThoai.Text.Trim() + "')";
+            DataConn.ThucHienCmd(insert);
         }
 
         private void btnThoat_Click(object sender, EventArgs e)

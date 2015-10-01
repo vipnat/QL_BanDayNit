@@ -56,7 +56,7 @@
             this.txtTenDangNhap.Name = "txtTenDangNhap";
             this.txtTenDangNhap.Size = new System.Drawing.Size(194, 26);
             this.txtTenDangNhap.TabIndex = 1;
-            this.txtTenDangNhap.Text = "anhtuan";
+            this.txtTenDangNhap.Text = "admin";
             // 
             // txtMatKhau
             // 
@@ -66,7 +66,7 @@
             this.txtMatKhau.PasswordChar = '*';
             this.txtMatKhau.Size = new System.Drawing.Size(194, 26);
             this.txtMatKhau.TabIndex = 2;
-            this.txtMatKhau.Text = "09090121";
+            this.txtMatKhau.Text = "admin";
             // 
             // label2
             // 

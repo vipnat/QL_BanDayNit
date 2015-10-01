@@ -18,8 +18,8 @@ namespace QL_BanDayNit
         // Tên Database trong CSDL
         private static string strTenDB = "BanHang";
         // Add Tên Computer của bạn ở đây.
-        //private static string strPC_Name = "ANHTUAN-PC";
-        private static string strPC_Name = "MINHTU-PC";
+        private static string strPC_Name = "ANHTUAN-PC";
+        //private static string strPC_Name = "MINHTU-PC";
         private static string fileDB_bak = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak";
         private static string fileDB_sql = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.sql";
 
@@ -138,7 +138,6 @@ namespace QL_BanDayNit
             openD.Multiselect = false;
             //Mở hộp thoại 
             openD.ShowDialog();
-
             return openD.FileName;
         }
 
@@ -203,8 +202,7 @@ namespace QL_BanDayNit
                 MessageBox.Show("" + se.Message);
             }
         }
-
-
+        
         public static string ChinhSuaScript(string filePath)
         {
             StringBuilder sql = new StringBuilder();
@@ -231,11 +229,8 @@ namespace QL_BanDayNit
                     else
                         sql.AppendFormat(" {0} ", line);
                 }
-
             }
-
             return sql.ToString();
         }
-
     }
 }
