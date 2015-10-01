@@ -64,7 +64,7 @@
             this.grvHienThiList.ReadOnly = true;
             this.grvHienThiList.Size = new System.Drawing.Size(621, 188);
             this.grvHienThiList.TabIndex = 11;
-            this.grvHienThiList.CurrentCellChanged += new System.EventHandler(this.grdKq_CurrentCellChanged);
+            this.grvHienThiList.CurrentCellChanged += new System.EventHandler(this.grvHienThiList_CurrentCellChanged);
             // 
             // lblMatHang
             // 

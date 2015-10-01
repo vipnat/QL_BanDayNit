@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace QL_BanDayNit
 {
-    public partial class frmMatHang : Form
+    public partial class frmTonKho : Form
     {
-        public frmMatHang()
+        public frmTonKho()
         {
             InitializeComponent();
         }
         
-        private void frmMatHang_Load(object sender, EventArgs e)
+        private void frmTonKho_Load(object sender, EventArgs e)
         {
             HienThi();
         }

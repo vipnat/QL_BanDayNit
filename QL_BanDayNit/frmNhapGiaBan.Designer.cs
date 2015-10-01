@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNhapGiaBan));
             this.btnNhapGia = new System.Windows.Forms.Button();
             this.cbxKhachHang = new System.Windows.Forms.ComboBox();
             this.lblKhachHang = new System.Windows.Forms.Label();
@@ -38,6 +39,8 @@
             // 
             // btnNhapGia
             // 
+            this.btnNhapGia.Image = ((System.Drawing.Image)(resources.GetObject("btnNhapGia.Image")));
+            this.btnNhapGia.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnNhapGia.Location = new System.Drawing.Point(160, 68);
             this.btnNhapGia.Name = "btnNhapGia";
             this.btnNhapGia.Size = new System.Drawing.Size(86, 35);
@@ -84,6 +87,8 @@
             // 
             // btnThoat
             // 
+            this.btnThoat.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.Image")));
+            this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnThoat.Location = new System.Drawing.Point(261, 68);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(86, 35);
