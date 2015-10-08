@@ -57,22 +57,22 @@ namespace QL_BanDayNit
 
             //Ẩn 1 số Menu khi không phải admin
             mặtHàngToolStripMenuItem.Enabled = false;
-            nhânVienToolStripMenuItem.Enabled = false;
+            mnuNhanVien.Enabled = false;
             nhàCungCấpToolStripMenuItem.Enabled = false;
-            đăngNhậpToolStripMenuItem.Enabled = true;
-            nhậpHàngToolStripMenuItem1.Enabled = false;
-            xuấtHàngToolStripMenuItem1.Enabled = false;
-            doanhThuToolStripMenuItem.Enabled = false;
-            tồnKhoToolStripMenuItem.Enabled = false;
-            đăngXuấtToolStripMenuItem.Enabled = false;
-            đổiMậtKhẩuToolStripMenuItem.Enabled = false;
-            thêmNgườiDùngToolStripMenuItem.Enabled = false;
-            khôiPhụcToolStripMenuItem.Enabled = false;
+            mnuDangNhap.Enabled = true;
+            mnuBCNhapHang.Enabled = false;
+            mnuBCXuatHang.Enabled = false;
+            mnuDoanhThu.Enabled = false;
+            mnuBCTonKho.Enabled = false;
+            mnuDangXuat.Enabled = false;
+            mnuDoiMatKhau.Enabled = false;
+            mnuThemNguoiDung.Enabled = false;
+            mnuKhoiPhuc.Enabled = false;
 
-            hóaĐơnNhậpToolStripMenuItem.Enabled = true;
-            danhSáchHóaĐơnToolStripMenuItem.Enabled = false;
-            hóaĐơnXuấtToolStripMenuItem.Enabled = true;
-            danhSáchHóađơnToolStripMenuItem1.Enabled = false;
+            mnuHoaDonNhap.Enabled = true;
+            mnuDanhSachHoaDonNhap.Enabled = false;
+            mnuHoaDonXuat.Enabled = true;
+            mnuDanhSachHDXuat.Enabled = false;
         }
 
         string values = "";
@@ -150,8 +150,7 @@ namespace QL_BanDayNit
 
         private void tồnKhoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmBaocaoTonkho baocaoTK = new frmBaocaoTonkho();
-            baocaoTK.ShowDialog();
+            
         }
 
         private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
@@ -187,22 +186,22 @@ namespace QL_BanDayNit
             mặtHàngToolStripMenuItem.Enabled = true;
             //hóaĐơnNhậpToolStripMenuItem.Enabled = true;
             //hoáĐơnToolStripMenuItem.Enabled = true;
-            nhânVienToolStripMenuItem.Enabled = true;
+            mnuNhanVien.Enabled = true;
             nhàCungCấpToolStripMenuItem.Enabled = true;
-            đăngNhậpToolStripMenuItem.Enabled = true;
-            nhậpHàngToolStripMenuItem1.Enabled = true;
-            xuấtHàngToolStripMenuItem1.Enabled = true;
-            doanhThuToolStripMenuItem.Enabled = true;
-            tồnKhoToolStripMenuItem.Enabled = true;
-            đăngXuấtToolStripMenuItem.Enabled = true;
-            đổiMậtKhẩuToolStripMenuItem.Enabled = true;
-            thêmNgườiDùngToolStripMenuItem.Enabled = true;
-            khôiPhụcToolStripMenuItem.Enabled = true;
+            mnuDangNhap.Enabled = true;
+            mnuBCNhapHang.Enabled = true;
+            mnuBCXuatHang.Enabled = true;
+            mnuDoanhThu.Enabled = true;
+            mnuBCTonKho.Enabled = true;
+            mnuDangXuat.Enabled = true;
+            mnuDoiMatKhau.Enabled = true;
+            mnuThemNguoiDung.Enabled = true;
+            mnuKhoiPhuc.Enabled = true;
 
-            hóaĐơnNhậpToolStripMenuItem.Enabled = true;
-            danhSáchHóaĐơnToolStripMenuItem.Enabled = true;
-            hóaĐơnXuấtToolStripMenuItem.Enabled = true;
-            danhSáchHóađơnToolStripMenuItem1.Enabled = true;
+            mnuHoaDonNhap.Enabled = true;
+            mnuDanhSachHoaDonNhap.Enabled = true;
+            mnuHoaDonXuat.Enabled = true;
+            mnuDanhSachHDXuat.Enabled = true;
         }
 
         public void NotDisplayAll()
@@ -210,22 +209,22 @@ namespace QL_BanDayNit
             mặtHàngToolStripMenuItem.Enabled = false;
             //hóaĐơnNhậpToolStripMenuItem.Enabled = false;
             //hoáĐơnToolStripMenuItem.Enabled = false;
-            nhânVienToolStripMenuItem.Enabled = false;
+            mnuNhanVien.Enabled = false;
             nhàCungCấpToolStripMenuItem.Enabled = false;
-            đăngNhậpToolStripMenuItem.Enabled = true;
-            nhậpHàngToolStripMenuItem1.Enabled = false;
-            xuấtHàngToolStripMenuItem1.Enabled = false;
-            doanhThuToolStripMenuItem.Enabled = false;
-            tồnKhoToolStripMenuItem.Enabled = false;
-            đăngXuấtToolStripMenuItem.Enabled = false;
-            đổiMậtKhẩuToolStripMenuItem.Enabled = false;
-            thêmNgườiDùngToolStripMenuItem.Enabled = false;
-            khôiPhụcToolStripMenuItem.Enabled = false;
+            mnuDangNhap.Enabled = true;
+            mnuBCNhapHang.Enabled = false;
+            mnuBCXuatHang.Enabled = false;
+            mnuDoanhThu.Enabled = false;
+            mnuBCTonKho.Enabled = false;
+            mnuDangXuat.Enabled = false;
+            mnuDoiMatKhau.Enabled = false;
+            mnuThemNguoiDung.Enabled = false;
+            mnuKhoiPhuc.Enabled = false;
 
-            hóaĐơnNhậpToolStripMenuItem.Enabled = true;
-            danhSáchHóaĐơnToolStripMenuItem.Enabled = false;
-            hóaĐơnXuấtToolStripMenuItem.Enabled = true;
-            danhSáchHóađơnToolStripMenuItem1.Enabled = false;
+            mnuHoaDonNhap.Enabled = true;
+            mnuDanhSachHoaDonNhap.Enabled = false;
+            mnuHoaDonXuat.Enabled = true;
+            mnuDanhSachHDXuat.Enabled = false;
         }
 
         private void DangNhaptoolStripMenuItem_Click(object sender, EventArgs e)

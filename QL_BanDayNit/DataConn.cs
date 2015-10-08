@@ -127,6 +127,29 @@ namespace QL_BanDayNit
             return result;
         }
 
+        public static int Lay1GiaTriSoDung_ExecuteScalar(string sqlQuery)
+        {
+            int _number = 0;
+            try
+            {
+                cmd = new SqlCommand(sqlQuery, con);
+                object resultObj = cmd.ExecuteScalar();
+
+                if (resultObj != null)
+                {
+                    int.TryParse(resultObj.ToString(), out _number);
+                }
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            if (_number > 0)
+                return _number;
+            else
+                return 0;
+        }
         private static string LayFileDBTuOpenShowdialog()
         {
             OpenFileDialog openD = new OpenFileDialog();
@@ -202,7 +225,7 @@ namespace QL_BanDayNit
                 MessageBox.Show("" + se.Message);
             }
         }
-        
+
         public static string ChinhSuaScript(string filePath)
         {
             StringBuilder sql = new StringBuilder();
@@ -224,7 +247,7 @@ namespace QL_BanDayNit
                         else
                         {
                             demCreateDb = false;
-                        }                        
+                        }
                     }
                     else
                         sql.AppendFormat(" {0} ", line);
