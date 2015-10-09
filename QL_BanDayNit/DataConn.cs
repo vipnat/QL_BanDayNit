@@ -255,5 +255,23 @@ namespace QL_BanDayNit
             }
             return sql.ToString();
         }
+
+        internal static void ThucHienInsertSqlParameter(string sqlQuery,string prName,float parameter)
+        {
+            cmd = new SqlCommand(sqlQuery, con);
+            SqlParameter sqlParameter = new SqlParameter();
+            sqlParameter.ParameterName = prName;
+            sqlParameter.Value = parameter;
+            cmd.Parameters.Add(sqlParameter);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException se)
+            {
+                MessageBox.Show("Lỗi cơ sở dữ liệu!");
+                MessageBox.Show("" + se.Message);
+            }
+        }
     }
 }
