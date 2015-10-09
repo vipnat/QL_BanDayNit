@@ -177,7 +177,6 @@
             this.lblDonGia.Size = new System.Drawing.Size(56, 19);
             this.lblDonGia.TabIndex = 11;
             this.lblDonGia.Text = "Đơn giá";
-            this.lblDonGia.Click += new System.EventHandler(this.lblDonGia_Click);
             // 
             // cboMaNhanVien
             // 
@@ -258,7 +257,7 @@
             this.btnGhi.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGhi.Image = ((System.Drawing.Image)(resources.GetObject("btnGhi.Image")));
             this.btnGhi.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnGhi.Location = new System.Drawing.Point(467, 439);
+            this.btnGhi.Location = new System.Drawing.Point(283, 435);
             this.btnGhi.Margin = new System.Windows.Forms.Padding(4);
             this.btnGhi.Name = "btnGhi";
             this.btnGhi.Size = new System.Drawing.Size(84, 32);
@@ -272,7 +271,7 @@
             this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThoat.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.Image")));
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(701, 439);
+            this.btnThoat.Location = new System.Drawing.Point(517, 435);
             this.btnThoat.Margin = new System.Windows.Forms.Padding(4);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(98, 32);
@@ -298,7 +297,7 @@
             this.btnInHD.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInHD.Image = ((System.Drawing.Image)(resources.GetObject("btnInHD.Image")));
             this.btnInHD.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnInHD.Location = new System.Drawing.Point(562, 439);
+            this.btnInHD.Location = new System.Drawing.Point(378, 435);
             this.btnInHD.Margin = new System.Windows.Forms.Padding(4);
             this.btnInHD.Name = "btnInHD";
             this.btnInHD.Size = new System.Drawing.Size(132, 32);
@@ -312,7 +311,7 @@
             this.btnXoa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXoa.Image = ((System.Drawing.Image)(resources.GetObject("btnXoa.Image")));
             this.btnXoa.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnXoa.Location = new System.Drawing.Point(365, 439);
+            this.btnXoa.Location = new System.Drawing.Point(181, 435);
             this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(94, 32);
@@ -363,6 +362,7 @@
             // 
             // cbxKhachHang
             // 
+            this.cbxKhachHang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKhachHang.FormattingEnabled = true;
             this.cbxKhachHang.Items.AddRange(new object[] {
             "Bán Lẻ",

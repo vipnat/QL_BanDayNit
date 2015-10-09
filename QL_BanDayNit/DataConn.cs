@@ -140,16 +140,18 @@ namespace QL_BanDayNit
                     int.TryParse(resultObj.ToString(), out _number);
                 }
             }
-            finally
+            catch (Exception e)
             {
-                con.Close();
-                con.Dispose();
+                MessageBox.Show("" + e);
             }
+
+
             if (_number > 0)
                 return _number;
             else
                 return 0;
         }
+
         private static string LayFileDBTuOpenShowdialog()
         {
             OpenFileDialog openD = new OpenFileDialog();
@@ -256,7 +258,7 @@ namespace QL_BanDayNit
             return sql.ToString();
         }
 
-        internal static void ThucHienInsertSqlParameter(string sqlQuery,string prName,float parameter)
+        internal static void ThucHienInsertSqlParameter(string sqlQuery, string prName, float parameter)
         {
             cmd = new SqlCommand(sqlQuery, con);
             SqlParameter sqlParameter = new SqlParameter();

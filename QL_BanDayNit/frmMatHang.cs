@@ -76,7 +76,7 @@ namespace QL_BanDayNit
 
         public void HienThi()
         {
-            string select = "SELECT mh.MaMatH [Mã hàng],TenMatH [Tên hàng],SoLuong [Số lượng],DonGia [Đơn giá],gb.GiaBan [Giá Bán],gb.MaKH [Mã KH]" +
+            string select = "SELECT mh.MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá],gb.GiaBan [Giá Bán],gb.MaKH [Mã KH]" +
                             "FROM tblMatHang mh, tblGiaBan gb "+
                             "WHERE mh.MaMatH = gb.MaMatH AND SUBSTRING(mh.MaMatH,1,3) ='" + maLoaiHang + "' ORDER BY mh.MaMatH DESC";
             DataSet ds = DataConn.GrdSource(select);
@@ -84,7 +84,15 @@ namespace QL_BanDayNit
             grvHienThiList.Refresh();
             if (ds.Tables[0].Rows.Count > 0)
             {
+
                 grvHienThiList.CurrentCell = grvHienThiList.Rows[intSelectIntem].Cells[0];
+
+                grvHienThiList.Columns[0].Width = 100;
+                grvHienThiList.Columns[1].Width = 280;
+                grvHienThiList.Columns[2].Width = 105;
+                grvHienThiList.Columns[3].Width = 95;
+                grvHienThiList.Columns[4].Width = 95;
+                grvHienThiList.Columns[5].Width = 90;
                 grvHienThiList.FirstDisplayedScrollingRowIndex = intSelectIntem;
             }
         }

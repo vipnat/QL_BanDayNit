@@ -47,6 +47,8 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.groupHoaDonNhap = new System.Windows.Forms.GroupBox();
             this.groupChiTietHDN = new System.Windows.Forms.GroupBox();
+            this.cbDai = new System.Windows.Forms.CheckBox();
+            this.cbDauDay = new System.Windows.Forms.CheckBox();
             this.cbxDai = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbxDay = new System.Windows.Forms.ComboBox();
@@ -55,8 +57,6 @@
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
             this.txtMaH = new System.Windows.Forms.TextBox();
-            this.cbDauDay = new System.Windows.Forms.CheckBox();
-            this.cbDai = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdNhapHang)).BeginInit();
             this.groupHoaDonNhap.SuspendLayout();
             this.groupChiTietHDN.SuspendLayout();
@@ -65,7 +65,7 @@
             // lblMaMatH
             // 
             this.lblMaMatH.AutoSize = true;
-            this.lblMaMatH.Location = new System.Drawing.Point(8, 21);
+            this.lblMaMatH.Location = new System.Drawing.Point(24, 21);
             this.lblMaMatH.Name = "lblMaMatH";
             this.lblMaMatH.Size = new System.Drawing.Size(66, 19);
             this.lblMaMatH.TabIndex = 2;
@@ -94,7 +94,7 @@
             // 
             this.txtSoLuong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtSoLuong.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSoLuong.Location = new System.Drawing.Point(320, 20);
+            this.txtSoLuong.Location = new System.Drawing.Point(336, 20);
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(60, 26);
             this.txtSoLuong.TabIndex = 7;
@@ -103,7 +103,7 @@
             // lblSoLuong
             // 
             this.lblSoLuong.AutoSize = true;
-            this.lblSoLuong.Location = new System.Drawing.Point(255, 21);
+            this.lblSoLuong.Location = new System.Drawing.Point(273, 21);
             this.lblSoLuong.Name = "lblSoLuong";
             this.lblSoLuong.Size = new System.Drawing.Size(64, 19);
             this.lblSoLuong.TabIndex = 6;
@@ -122,7 +122,7 @@
             // 
             this.txtDonGia.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtDonGia.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDonGia.Location = new System.Drawing.Point(457, 20);
+            this.txtDonGia.Location = new System.Drawing.Point(473, 20);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.ReadOnly = true;
             this.txtDonGia.Size = new System.Drawing.Size(65, 26);
@@ -159,7 +159,7 @@
             this.cbxMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxMaMatH.FormattingEnabled = true;
             this.cbxMaMatH.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbxMaMatH.Location = new System.Drawing.Point(75, 19);
+            this.cbxMaMatH.Location = new System.Drawing.Point(91, 19);
             this.cbxMaMatH.Name = "cbxMaMatH";
             this.cbxMaMatH.Size = new System.Drawing.Size(173, 27);
             this.cbxMaMatH.TabIndex = 6;
@@ -265,11 +265,31 @@
             this.groupChiTietHDN.Controls.Add(this.txtSoLuong);
             this.groupChiTietHDN.Controls.Add(this.lblSoLuong);
             this.groupChiTietHDN.Controls.Add(this.lblMaMatH);
-            this.groupChiTietHDN.Location = new System.Drawing.Point(73, 138);
+            this.groupChiTietHDN.Location = new System.Drawing.Point(58, 138);
             this.groupChiTietHDN.Name = "groupChiTietHDN";
-            this.groupChiTietHDN.Size = new System.Drawing.Size(572, 96);
+            this.groupChiTietHDN.Size = new System.Drawing.Size(605, 96);
             this.groupChiTietHDN.TabIndex = 27;
             this.groupChiTietHDN.TabStop = false;
+            // 
+            // cbDai
+            // 
+            this.cbDai.AutoSize = true;
+            this.cbDai.Location = new System.Drawing.Point(419, 61);
+            this.cbDai.Name = "cbDai";
+            this.cbDai.Size = new System.Drawing.Size(15, 14);
+            this.cbDai.TabIndex = 21;
+            this.cbDai.UseVisualStyleBackColor = true;
+            this.cbDai.CheckedChanged += new System.EventHandler(this.cbDai_CheckedChanged);
+            // 
+            // cbDauDay
+            // 
+            this.cbDauDay.AutoSize = true;
+            this.cbDauDay.Location = new System.Drawing.Point(9, 61);
+            this.cbDauDay.Name = "cbDauDay";
+            this.cbDauDay.Size = new System.Drawing.Size(15, 14);
+            this.cbDauDay.TabIndex = 20;
+            this.cbDauDay.UseVisualStyleBackColor = true;
+            this.cbDauDay.CheckedChanged += new System.EventHandler(this.cbDauDay_CheckedChanged);
             // 
             // cbxDai
             // 
@@ -278,15 +298,16 @@
             this.cbxDai.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDai.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDai.FormattingEnabled = true;
-            this.cbxDai.Location = new System.Drawing.Point(390, 52);
+            this.cbxDai.Location = new System.Drawing.Point(462, 52);
             this.cbxDai.Name = "cbxDai";
-            this.cbxDai.Size = new System.Drawing.Size(104, 27);
+            this.cbxDai.Size = new System.Drawing.Size(137, 27);
             this.cbxDai.TabIndex = 18;
+            this.cbxDai.SelectedIndexChanged += new System.EventHandler(this.cbxDai_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(353, 54);
+            this.label4.Location = new System.Drawing.Point(431, 58);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(30, 19);
             this.label4.TabIndex = 17;
@@ -299,9 +320,9 @@
             this.cbxDay.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDay.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDay.FormattingEnabled = true;
-            this.cbxDay.Location = new System.Drawing.Point(223, 52);
+            this.cbxDay.Location = new System.Drawing.Point(267, 52);
             this.cbxDay.Name = "cbxDay";
-            this.cbxDay.Size = new System.Drawing.Size(104, 27);
+            this.cbxDay.Size = new System.Drawing.Size(145, 27);
             this.cbxDay.TabIndex = 14;
             this.cbxDay.SelectedIndexChanged += new System.EventHandler(this.cbxDay_SelectedIndexChanged);
             // 
@@ -312,16 +333,16 @@
             this.cbxDauKhoa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDauKhoa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDauKhoa.FormattingEnabled = true;
-            this.cbxDauKhoa.Location = new System.Drawing.Point(114, 52);
+            this.cbxDauKhoa.Location = new System.Drawing.Point(92, 52);
             this.cbxDauKhoa.Name = "cbxDauKhoa";
-            this.cbxDauKhoa.Size = new System.Drawing.Size(104, 27);
+            this.cbxDauKhoa.Size = new System.Drawing.Size(173, 27);
             this.cbxDauKhoa.TabIndex = 12;
             this.cbxDauKhoa.SelectedIndexChanged += new System.EventHandler(this.cbxDauKhoa_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(34, 54);
+            this.label2.Location = new System.Drawing.Point(22, 58);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 19);
             this.label2.TabIndex = 11;
@@ -360,26 +381,6 @@
             this.txtMaH.Size = new System.Drawing.Size(55, 26);
             this.txtMaH.TabIndex = 31;
             this.txtMaH.Visible = false;
-            // 
-            // cbDauDay
-            // 
-            this.cbDauDay.AutoSize = true;
-            this.cbDauDay.Location = new System.Drawing.Point(19, 57);
-            this.cbDauDay.Name = "cbDauDay";
-            this.cbDauDay.Size = new System.Drawing.Size(15, 14);
-            this.cbDauDay.TabIndex = 20;
-            this.cbDauDay.UseVisualStyleBackColor = true;
-            this.cbDauDay.CheckedChanged += new System.EventHandler(this.cbDauDay_CheckedChanged);
-            // 
-            // cbDai
-            // 
-            this.cbDai.AutoSize = true;
-            this.cbDai.Location = new System.Drawing.Point(336, 57);
-            this.cbDai.Name = "cbDai";
-            this.cbDai.Size = new System.Drawing.Size(15, 14);
-            this.cbDai.TabIndex = 21;
-            this.cbDai.UseVisualStyleBackColor = true;
-            this.cbDai.CheckedChanged += new System.EventHandler(this.cbDai_CheckedChanged);
             // 
             // frmNhap
             // 
