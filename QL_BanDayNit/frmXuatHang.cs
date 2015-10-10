@@ -337,8 +337,8 @@ namespace QL_BanDayNit
                     }
 
                     //Thêm vào bảng tblChiTietHDX
-                    selectSQL = "insert into tblChiTietHDX(MaMatH,MaHD,SoLuong,DonGia) values(N'" + _strMaMatHang + "',N'" + txtMaHD.Text + "'," + txtSoLuong.Text + "," + txtDonGia.Text + ")";
-                    DataConn.ThucHienCmd(selectSQL);
+                    selectSQL = "insert into tblChiTietHDX(MaMatH,MaHD,SoLuong,DonGia) values(N'" + _strMaMatHang + "',N'" + txtMaHD.Text + "'," + txtSoLuong.Text + ",@DonGia)";
+                    DataConn.ThucHienInsertSqlParameter(selectSQL, "@DonGia",float.Parse(txtDonGia.Text));
 
                     //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
                     selectSQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
@@ -437,8 +437,8 @@ namespace QL_BanDayNit
                         DataConn.ThucHienCmd(updateQuery);
 
                         // Cập Nhập Lại Chi Tiết Hóa Đơn
-                        updateQuery = "UPDATE tblChiTietHDX SET SoLuong=" + txtSoLuong.Text + ",DonGia=" + txtDonGia.Text + " WHERE MaHD='" + txtMaHD.Text + "' AND MaMatH=N'" + _strMaMatHang + "'";
-                        DataConn.ThucHienCmd(updateQuery);
+                        updateQuery = "UPDATE tblChiTietHDX SET SoLuong=" + txtSoLuong.Text + ",DonGia=@DonGia WHERE MaHD='" + txtMaHD.Text + "' AND MaMatH=N'" + _strMaMatHang + "'";
+                        DataConn.ThucHienInsertSqlParameter(updateQuery, "@DonGia", float.Parse(txtDonGia.Text));
 
                         //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
                         updateQuery = "UPDATE tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " WHERE MaMatH=N'" + _strMaMatHang + "'";
@@ -506,6 +506,13 @@ namespace QL_BanDayNit
 
         private bool KiemTraDuLieuNhapSo()
         {
+            int int0 = 0;
+            if (!int.TryParse(this.txtSoLuong.Text, out int0))
+            {
+                MessageBox.Show("Số lượng là số nguyên !");
+                txtSoLuong.Select();
+                return false;
+            }
             if (double.Parse(txtSoLuong.Text) <= 0)
             {
                 MessageBox.Show("Số lượng không được nhỏ hơn 0!");
@@ -518,13 +525,7 @@ namespace QL_BanDayNit
                 txtSoLuong.Select();
                 return false;
             }
-            int int0 = 0;
-            if (!int.TryParse(this.txtSoLuong.Text, out int0))
-            {
-                MessageBox.Show("Số lượng là số nguyên !");
-                txtSoLuong.Select();
-                return false;
-            }
+           
             return true;
         }
 
@@ -602,8 +603,8 @@ namespace QL_BanDayNit
 
                         lblTongTien.Text = LayTongTienCuaMaHoaDon(txtMaHD.Text);
 
-                        string update = "UPDATE tblHoaDonXuat SET TongTien=" + lblTongTien.Text + " WHERE MaHD='" + txtMaHD.Text + "'";
-                        DataConn.ThucHienCmd(update);
+                        string update = "UPDATE tblHoaDonXuat SET TongTien=@TongTien WHERE MaHD='" + txtMaHD.Text + "'";
+                        DataConn.ThucHienInsertSqlParameter(update,"@TongTien", float.Parse(lblTongTien.Text));
 
                         btnInHD.Enabled = true;
                     }
@@ -637,7 +638,11 @@ namespace QL_BanDayNit
             }
             else
             {
-                BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                //BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                string sylfaenpath = Environment.GetEnvironmentVariable("SystemRoot") + "\\fonts\\VHTIME.TTF";
+
+                BaseFont arialCustomer = BaseFont.CreateFont(sylfaenpath, BaseFont.CP1252, false);
+
                 string ngayBan = pckNgayXuat.Value.Day.ToString("00") + "/" + pckNgayXuat.Value.Month.ToString("00") + "/" + pckNgayXuat.Value.Year.ToString();
 
                 // Creating iTextSharp Table from title data
@@ -750,6 +755,8 @@ namespace QL_BanDayNit
                 }
 
                 System.Diagnostics.Process.Start(@"" + namePDF);
+                // Thoát Sau Khi In Hóa Đơn
+                btnThoat_Click(sender,e);
             }
         }
 

@@ -414,12 +414,13 @@
             // 
             // bntTinhTien
             // 
-            this.bntTinhTien.Location = new System.Drawing.Point(771, 275);
+            this.bntTinhTien.Location = new System.Drawing.Point(765, 376);
             this.bntTinhTien.Name = "bntTinhTien";
-            this.bntTinhTien.Size = new System.Drawing.Size(62, 71);
+            this.bntTinhTien.Size = new System.Drawing.Size(10, 10);
             this.bntTinhTien.TabIndex = 30;
             this.bntTinhTien.Text = "Tinh Tiền";
             this.bntTinhTien.UseVisualStyleBackColor = true;
+            this.bntTinhTien.Visible = false;
             this.bntTinhTien.Click += new System.EventHandler(this.btnTinhTien_Click);
             // 
             // rdbSanPham
