@@ -1,6 +1,8 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html;
+using iTextSharp.text.xml;
+using iTextSharp.text.xml.simpleparser;
 using iTextSharp.text.html.simpleparser;
 using System;
 using System.Collections.Generic;
@@ -329,7 +331,6 @@ namespace QL_BanDayNit
                         return;
                     }
 
-
                     if (!KiemTraSoLuongTrongKhoTheoMaMH(_strMaMatHang))
                     {
                         MessageBox.Show("Số lượng hàng trong kho không đủ để xuất!");
@@ -338,11 +339,15 @@ namespace QL_BanDayNit
 
                     //Thêm vào bảng tblChiTietHDX
                     selectSQL = "insert into tblChiTietHDX(MaMatH,MaHD,SoLuong,DonGia) values(N'" + _strMaMatHang + "',N'" + txtMaHD.Text + "'," + txtSoLuong.Text + ",@DonGia)";
-                    DataConn.ThucHienInsertSqlParameter(selectSQL, "@DonGia",float.Parse(txtDonGia.Text));
+                    DataConn.ThucHienInsertSqlParameter(selectSQL, "@DonGia", float.Parse(txtDonGia.Text));
 
                     //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
                     selectSQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
                     DataConn.ThucHienCmd(selectSQL);
+
+                    // Lấy Tổng Số Lượng
+                    string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
+                    lblTongSL.Text = DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSL).ToString();
 
                     listMatHangOld.Add(_strMaMatHang, (double.Parse(txtSoLuong.Text)));
 
@@ -368,27 +373,6 @@ namespace QL_BanDayNit
                 {
                     MessageBox.Show(ex.Message);
                 }
-                string selectSL = "SELECT SoLuong FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
-
-                SqlDataReader sqlDataSL = DataConn.ThucHienReader(selectSL);
-                double tongsoluong = 0;
-                double so_luong = 0;
-
-                try
-                {
-                    while (sqlDataSL.Read())
-                    {
-                        so_luong = sqlDataSL.GetDouble(0);
-                        tongsoluong += so_luong;
-                    }
-                }
-                finally
-                {
-                    sqlDataSL.Close();
-                    sqlDataSL.Dispose();
-                }
-
-                lblTongSL.Text = tongsoluong.ToString();
             }
         }
 
@@ -401,7 +385,7 @@ namespace QL_BanDayNit
             {
                 _intSLDaXuat = int.Parse(listMatHangOld[_strMaMatHang].ToString());
             }
-            if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSoLuong)+_intSLDaXuat < double.Parse(txtSoLuong.Text))
+            if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSoLuong) + _intSLDaXuat < double.Parse(txtSoLuong.Text))
             {
                 _kiemTra = false;
             }
@@ -410,7 +394,6 @@ namespace QL_BanDayNit
 
         private void CapNhapMatHangDaBan(object sender, EventArgs e)
         {
-
             try
             {
                 if (cbxMaMatH.Text == "" && txtSoLuong.Text == "" && txtDonGia.Text == "")
@@ -443,14 +426,18 @@ namespace QL_BanDayNit
                         //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
                         updateQuery = "UPDATE tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " WHERE MaMatH=N'" + _strMaMatHang + "'";
                         DataConn.ThucHienCmd(updateQuery);
-                        
 
+                        // Lấy Tổng Số Lượng
+                        string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
+                        lblTongSL.Text = DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSL).ToString();
+                        
+                        CapNhapLaiSoLuongTrongListOld(_strMaMatHang);
+                        HienThi();
+                        btnTinhTien_Click(sender, e);
                     }
                 }
 
-                CapNhapLaiSoLuongTrongListOld(_strMaMatHang);
-                HienThi();
-                btnTinhTien_Click(sender, e);
+               
             }
             catch (FormatException)
             {
@@ -525,7 +512,7 @@ namespace QL_BanDayNit
                 txtSoLuong.Select();
                 return false;
             }
-           
+
             return true;
         }
 
@@ -604,7 +591,7 @@ namespace QL_BanDayNit
                         lblTongTien.Text = LayTongTienCuaMaHoaDon(txtMaHD.Text);
 
                         string update = "UPDATE tblHoaDonXuat SET TongTien=@TongTien WHERE MaHD='" + txtMaHD.Text + "'";
-                        DataConn.ThucHienInsertSqlParameter(update,"@TongTien", float.Parse(lblTongTien.Text));
+                        DataConn.ThucHienInsertSqlParameter(update, "@TongTien", float.Parse(lblTongTien.Text));
 
                         btnInHD.Enabled = true;
                     }
@@ -639,11 +626,27 @@ namespace QL_BanDayNit
             else
             {
                 //BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                string sylfaenpath = Environment.GetEnvironmentVariable("SystemRoot") + "\\fonts\\VHTIME.TTF";
+                string _timesBin = System.IO.Directory.GetCurrentDirectory() + @"/times.ttf";
+                string __timesWinFonts = Environment.GetEnvironmentVariable("SystemRoot") + "\\fonts\\times.ttf";
 
-                BaseFont arialCustomer = BaseFont.CreateFont(sylfaenpath, BaseFont.CP1252, false);
+                try
+                {
+                    if (!File.Exists(__timesWinFonts))
+                    {
+                        File.Copy(_timesBin, __timesWinFonts);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Thiếu Font Chữ Tiếng Việt ! times.ttf \nTải về và Copy vào thư mục \n" + __timesWinFonts + "" + ex);
+                }
+
+                BaseFont arialCustomer = BaseFont.CreateFont(__timesWinFonts, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
                 string ngayBan = pckNgayXuat.Value.Day.ToString("00") + "/" + pckNgayXuat.Value.Month.ToString("00") + "/" + pckNgayXuat.Value.Year.ToString();
+
+                byte[] utf16String = Encoding.Unicode.GetBytes("");
+
 
                 // Creating iTextSharp Table from title data
                 PdfPTable pdfTableTitle = new PdfPTable(2);
@@ -742,7 +745,7 @@ namespace QL_BanDayNit
 
                     // Create Cell Footter
                     PdfPCell cellTongTien;
-                    cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()) + ".", new iTextSharp.text.Font(arialCustomer, 15)));
+                    cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()), new iTextSharp.text.Font(arialCustomer, 15)));
                     cellTongTien.Colspan = 3;
                     cellTongTien.HorizontalAlignment = 0;
                     cellTongTien.Border = 0;
@@ -756,7 +759,7 @@ namespace QL_BanDayNit
 
                 System.Diagnostics.Process.Start(@"" + namePDF);
                 // Thoát Sau Khi In Hóa Đơn
-                btnThoat_Click(sender,e);
+                btnThoat_Click(sender, e);
             }
         }
 
@@ -775,7 +778,7 @@ namespace QL_BanDayNit
                 // Lấy hàng được chọn để xóa
                 intSelectIntem = grdXuatHang.CurrentCell.RowIndex;
                 // Đưa con trỏ lên 1 hàng sau khi xóa
-                intSelectIntem = intSelectIntem > 0 ? intSelectIntem -1 : 0;
+                intSelectIntem = intSelectIntem > 0 ? intSelectIntem - 1 : 0;
                 HienThi();
                 btnTinhTien_Click(sender, e);
             }
@@ -934,6 +937,8 @@ namespace QL_BanDayNit
                 strChuoiKetQua = strChuoiKetQua.Replace("  ", " ");
                 // Đổi Năm thành Lăm
                 strChuoiKetQua = strChuoiKetQua.Replace("i năm", "i lăm");
+                // Thêm đơn vị tiền tệ.
+                strChuoiKetQua = strChuoiKetQua + "đồng.";
             }
             return strChuoiKetQua;
         }

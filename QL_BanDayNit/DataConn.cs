@@ -18,8 +18,8 @@ namespace QL_BanDayNit
         // Tên Database trong CSDL
         private static string strTenDB = "BanHang";
         // Add Tên Computer của bạn ở đây.
-        //private static string strPC_Name = "ANHTUAN-PC";
-        private static string strPC_Name = "MINHTU-PC";
+        private static string strPC_Name = "ANHTUAN-PC";
+        //private static string strPC_Name = "MINHTU-PC";
         private static string fileDB_bak = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.bak";
         private static string fileDB_sql = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default.sql";
 
