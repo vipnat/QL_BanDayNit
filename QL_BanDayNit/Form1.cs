@@ -262,22 +262,6 @@ namespace QL_BanDayNit
             themuser.ShowDialog();
         }
 
-        private void khôiPhụcToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {                
-                if (MessageBox.Show("Khi khôi phục dữ liệu, tất cả các dữ liệu đã bị thay đổi sẽ trở lại như cũ. Bạn có chắc chắn muốn khôi phục dữ liệu không?", "Chú ý!", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    DataConn.ThucHienCmd_Backup();
-                    MessageBox.Show("Đã khôi phục dữ liệu!","Thông báo");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(""+ex.Message);
-            }
-        }
-
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmAbout about = new frmAbout();
@@ -336,6 +320,23 @@ namespace QL_BanDayNit
         private void btnLoad_Click(object sender, EventArgs e)
         {
             frmMain_Load(sender, e);
+        }
+
+        private void KhoiPhucToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Khi khôi phục dữ liệu, tất cả các dữ liệu đã bị thay đổi sẽ trở lại như cũ. Bạn có chắc chắn muốn khôi phục dữ liệu không?", "Chú ý!", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    DataConn.ThucHienCmd_Backup();
+                    MessageBox.Show("Đã khôi phục dữ liệu!", "Thông báo");
+                }
+                frmMain_Load(sender, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("" + ex.Message);
+            }
         }
     }
     public class NotEnoughInfoException : ApplicationException

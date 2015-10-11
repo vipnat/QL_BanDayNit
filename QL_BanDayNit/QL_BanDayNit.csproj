@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QL_BanDayNit</RootNamespace>
     <AssemblyName>QL_BanDayNit</AssemblyName>
-    <ApplicationIcon>management.ico</ApplicationIcon>
+    <ApplicationIcon>image\management.ico</ApplicationIcon>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -235,10 +235,10 @@
     <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="generic_messenger.ico" />
-    <Content Include="Home.ico" />
+    <Content Include="image\generic_messenger.ico" />
+    <Content Include="image\Home.ico" />
     <None Include="image\exit.ico" />
-    <Content Include="management.ico" />
+    <Content Include="image\management.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="stdole">
