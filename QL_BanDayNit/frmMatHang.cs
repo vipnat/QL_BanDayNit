@@ -100,7 +100,7 @@ namespace QL_BanDayNit
         private void btnGhi_Click(object sender, EventArgs e)
         {
             if(!KiemTraDuLieuNhap()) return;
-            if (KiemTraTrungMaMatHang(lblMaHang.Text + txtMaHang.Text))
+            if (KiemTraTrungMaMatHangTrongTable(lblMaHang.Text + txtMaHang.Text, "tblMatHang"))
             {
                 if (MessageBox.Show("Đã Có Mặt Hàng Này!\nBạn Muốn Sửa Lại Không?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
@@ -252,10 +252,10 @@ namespace QL_BanDayNit
             }
         }
 
-        private bool KiemTraTrungMaMatHang(string text)
+        private bool KiemTraTrungMaMatHangTrongTable(string strMaMH,string tableName)
         {
             //Exception khi trùng Mã mặt hàng (trùng khóa chính)
-            string select1 = "select MaMatH from tblMatHang";
+            string select1 = "select MaMatH from "+ tableName;
             SqlDataReader sqlData = DataConn.ThucHienReader(select1);
             try
             {
@@ -306,46 +306,20 @@ namespace QL_BanDayNit
         {
             try
             {
-                string select1 = "select MaMatH from tblChiTietHDN";
-                SqlDataReader sqlData = DataConn.ThucHienReader(select1);
-                try
+                // Kiểm Tra Mặt Hàng Có Trong Hóa Đơn Nhập
+                if (KiemTraTrungMaMatHangTrongTable(lblMaHang.Text + txtMaHang.Text, "tblChiTietHDN"))
                 {
-                    while (sqlData.Read())
-                    {
-                        if (sqlData.GetString(0) == lblMaHang.Text + txtMaHang.Text)
-                        {
-                            sqlData.Close();
-                            sqlData.Dispose();
-                            throw new SameKeyException();
-                        }
-                    }
-                }
-                finally
-                {
-                    sqlData.Close();
-                    sqlData.Dispose();
+                    MessageBox.Show("Có Hóa Đơn Nhập Liên Quan Mặt Hàng Này!\nBạn hãy xóa hóa đơn liên quan trước!", "Chú ý!");
+                    return;
                 }
 
-                select1 = "select MaMatH from tblChiTietHDX";
-                SqlDataReader sqlData1 = DataConn.ThucHienReader(select1);
-                try
+                // Kiểm Tra Mặt Hàng Có Trong Hóa Đơn Xuất
+                if (KiemTraTrungMaMatHangTrongTable(lblMaHang.Text + txtMaHang.Text, "tblChiTietHDX"))
                 {
-                    while (sqlData1.Read())
-                    {
-                        if (sqlData1.GetString(0) == lblMaHang.Text + txtMaHang.Text)
-                        {
-                            sqlData1.Close();
-                            sqlData1.Dispose();
-                            throw new SameKeyException();
-                        }
-                    }
+                    MessageBox.Show("Có Hóa Đơn Xuất Liên Quan Mặt Hàng Này!\nBạn hãy xóa hóa đơn liên quan trước!", "Chú ý!");
+                    return;
                 }
-                finally
-                {
-                    sqlData1.Close();
-                    sqlData1.Dispose();
-                }
-                
+
                 string deleteGb = "DELETE tblGiaBan WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
                 DataConn.ThucHienCmd(deleteGb);
 

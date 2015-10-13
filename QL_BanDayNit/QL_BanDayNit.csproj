@@ -66,11 +66,11 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="DataConn.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="frmBanHang.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="frmBanHang.Designer.cs">
+      <DependentUpon>frmBanHang.cs</DependentUpon>
     </Compile>
     <Compile Include="frmDangNhap.cs">
       <SubType>Form</SubType>
@@ -107,6 +107,12 @@
     </Compile>
     <Compile Include="frmHoTroThongBaoDoanhThu.Designer.cs">
       <DependentUpon>frmHoTroThongBaoDoanhThu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKhachHang.Designer.cs">
+      <DependentUpon>frmKhachHang.cs</DependentUpon>
     </Compile>
     <Compile Include="frmTonKho.cs">
       <SubType>Form</SubType>
@@ -150,9 +156,9 @@
       <DependentUpon>About.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="frmBanHang.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>Form1.cs</DependentUpon>
+      <DependentUpon>frmBanHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDangNhap.resx">
       <SubType>Designer</SubType>
@@ -177,6 +183,9 @@
     <EmbeddedResource Include="frmHoTroThongBaoDoanhThu.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmHoTroThongBaoDoanhThu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmKhachHang.resx">
+      <DependentUpon>frmKhachHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTonKho.resx">
       <DependentUpon>frmTonKho.cs</DependentUpon>

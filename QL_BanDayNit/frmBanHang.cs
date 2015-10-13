@@ -56,9 +56,9 @@ namespace QL_BanDayNit
             cbxKhachHang.ValueMember = "MaKH";
 
             //Ẩn 1 số Menu khi không phải admin
-            mặtHàngToolStripMenuItem.Enabled = false;
+            mnuMatHang.Enabled = false;
             mnuNhanVien.Enabled = false;
-            nhàCungCấpToolStripMenuItem.Enabled = false;
+            mnuKhachHang.Enabled = false;
             mnuDangNhap.Enabled = true;
             mnuBCNhapHang.Enabled = false;
             mnuBCXuatHang.Enabled = false;
@@ -183,11 +183,11 @@ namespace QL_BanDayNit
 
         public void DisplayAll()
         {
-            mặtHàngToolStripMenuItem.Enabled = true;
+            mnuMatHang.Enabled = true;
             //hóaĐơnNhậpToolStripMenuItem.Enabled = true;
             //hoáĐơnToolStripMenuItem.Enabled = true;
             mnuNhanVien.Enabled = true;
-            nhàCungCấpToolStripMenuItem.Enabled = true;
+            mnuKhachHang.Enabled = true;
             mnuDangNhap.Enabled = true;
             mnuBCNhapHang.Enabled = true;
             mnuBCXuatHang.Enabled = true;
@@ -206,11 +206,11 @@ namespace QL_BanDayNit
 
         public void NotDisplayAll()
         {
-            mặtHàngToolStripMenuItem.Enabled = false;
+            mnuMatHang.Enabled = false;
             //hóaĐơnNhậpToolStripMenuItem.Enabled = false;
             //hoáĐơnToolStripMenuItem.Enabled = false;
             mnuNhanVien.Enabled = false;
-            nhàCungCấpToolStripMenuItem.Enabled = false;
+            mnuKhachHang.Enabled = false;
             mnuDangNhap.Enabled = true;
             mnuBCNhapHang.Enabled = false;
             mnuBCXuatHang.Enabled = false;
@@ -337,6 +337,11 @@ namespace QL_BanDayNit
             {
                 MessageBox.Show("" + ex.Message);
             }
+        }
+
+        private void mnuKhachHang_Click(object sender, EventArgs e)
+        {
+
         }
     }
     public class NotEnoughInfoException : ApplicationException
