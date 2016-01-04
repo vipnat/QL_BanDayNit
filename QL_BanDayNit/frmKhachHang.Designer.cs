@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmKhachHang));
             this.grdKhachHang = new System.Windows.Forms.DataGridView();
-            this.txtMaKH = new System.Windows.Forms.TextBox();
             this.lblNhanVien = new System.Windows.Forms.Label();
             this.txtDiaChiKH = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,6 +41,8 @@
             this.btnGhi = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
+            this.lblMaKH = new System.Windows.Forms.Label();
+            this.txtMaKH = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdKhachHang)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,20 +61,11 @@
             this.grdKhachHang.TabIndex = 11;
             this.grdKhachHang.CurrentCellChanged += new System.EventHandler(this.grdKhachHang_CurrentCellChanged);
             // 
-            // txtMaKH
-            // 
-            this.txtMaKH.AcceptsReturn = true;
-            this.txtMaKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaKH.Location = new System.Drawing.Point(161, 36);
-            this.txtMaKH.Name = "txtMaKH";
-            this.txtMaKH.Size = new System.Drawing.Size(165, 26);
-            this.txtMaKH.TabIndex = 1;
-            // 
             // lblNhanVien
             // 
             this.lblNhanVien.AutoSize = true;
             this.lblNhanVien.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNhanVien.Location = new System.Drawing.Point(43, 39);
+            this.lblNhanVien.Location = new System.Drawing.Point(15, 39);
             this.lblNhanVien.Name = "lblNhanVien";
             this.lblNhanVien.Size = new System.Drawing.Size(120, 19);
             this.lblNhanVien.TabIndex = 9;
@@ -82,16 +74,16 @@
             // txtDiaChiKH
             // 
             this.txtDiaChiKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDiaChiKH.Location = new System.Drawing.Point(412, 36);
+            this.txtDiaChiKH.Location = new System.Drawing.Point(386, 36);
             this.txtDiaChiKH.Name = "txtDiaChiKH";
-            this.txtDiaChiKH.Size = new System.Drawing.Size(149, 26);
+            this.txtDiaChiKH.Size = new System.Drawing.Size(175, 26);
             this.txtDiaChiKH.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(350, 39);
+            this.label1.Location = new System.Drawing.Point(320, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 19);
             this.label1.TabIndex = 18;
@@ -100,9 +92,9 @@
             // txtDienThoaiKH
             // 
             this.txtDienThoaiKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDienThoaiKH.Location = new System.Drawing.Point(412, 69);
+            this.txtDienThoaiKH.Location = new System.Drawing.Point(386, 69);
             this.txtDienThoaiKH.Name = "txtDienThoaiKH";
-            this.txtDienThoaiKH.Size = new System.Drawing.Size(149, 26);
+            this.txtDienThoaiKH.Size = new System.Drawing.Size(175, 26);
             this.txtDienThoaiKH.TabIndex = 4;
             this.txtDienThoaiKH.Leave += new System.EventHandler(this.txtDienThoaiKH_Leave);
             // 
@@ -110,7 +102,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(330, 72);
+            this.label2.Location = new System.Drawing.Point(300, 72);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 19);
             this.label2.TabIndex = 20;
@@ -119,7 +111,7 @@
             // txtTenKH
             // 
             this.txtTenKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTenKH.Location = new System.Drawing.Point(161, 69);
+            this.txtTenKH.Location = new System.Drawing.Point(133, 69);
             this.txtTenKH.Name = "txtTenKH";
             this.txtTenKH.Size = new System.Drawing.Size(165, 26);
             this.txtTenKH.TabIndex = 2;
@@ -128,7 +120,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(43, 72);
+            this.label3.Location = new System.Drawing.Point(15, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(122, 19);
             this.label3.TabIndex = 28;
@@ -186,12 +178,37 @@
             this.btnThem.UseVisualStyleBackColor = true;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
             // 
+            // lblMaKH
+            // 
+            this.lblMaKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.lblMaKH.ForeColor = System.Drawing.Color.Red;
+            this.lblMaKH.Location = new System.Drawing.Point(132, 39);
+            this.lblMaKH.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMaKH.Name = "lblMaKH";
+            this.lblMaKH.Size = new System.Drawing.Size(46, 22);
+            this.lblMaKH.TabIndex = 34;
+            this.lblMaKH.Text = "KH";
+            this.lblMaKH.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtMaKH
+            // 
+            this.txtMaKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaKH.Location = new System.Drawing.Point(174, 37);
+            this.txtMaKH.Margin = new System.Windows.Forms.Padding(4);
+            this.txtMaKH.Name = "txtMaKH";
+            this.txtMaKH.Size = new System.Drawing.Size(107, 26);
+            this.txtMaKH.TabIndex = 35;
+            this.txtMaKH.Text = "0";
+            this.txtMaKH.Leave += new System.EventHandler(this.txtMaHang_Leave);
+            // 
             // frmKhachHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(611, 370);
+            this.Controls.Add(this.txtMaKH);
+            this.Controls.Add(this.lblMaKH);
             this.Controls.Add(this.txtTenKH);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtDienThoaiKH);
@@ -199,7 +216,6 @@
             this.Controls.Add(this.txtDiaChiKH);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.grdKhachHang);
-            this.Controls.Add(this.txtMaKH);
             this.Controls.Add(this.lblNhanVien);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnGhi);
@@ -220,7 +236,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView grdKhachHang;
-        private System.Windows.Forms.TextBox txtMaKH;
         private System.Windows.Forms.Label lblNhanVien;
         private System.Windows.Forms.TextBox txtDiaChiKH;
         private System.Windows.Forms.Label label1;
@@ -232,5 +247,7 @@
         private System.Windows.Forms.Button btnGhi;
         private System.Windows.Forms.Button btnXoa;
         private System.Windows.Forms.Button btnThem;
+        private System.Windows.Forms.Label lblMaKH;
+        private System.Windows.Forms.TextBox txtMaKH;
     }
 }

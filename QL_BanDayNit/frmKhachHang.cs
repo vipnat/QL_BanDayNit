@@ -121,5 +121,16 @@ namespace QL_BanDayNit
             return Regex.IsMatch(value, pattern);
         }
 
+        private void txtMaHang_Leave(object sender, EventArgs e)
+        {
+            int int0 = 0;
+            if (!int.TryParse(this.txtMaKH.Text, out int0))
+            {
+                MessageBox.Show("Nhập Số Nguyên Cho Mã KH !");
+                txtMaKH.Select();
+                return;
+            }
+            txtMaKH.Text = String.Format("{0:000}", double.Parse(txtMaKH.Text));
+        }
     }
 }
