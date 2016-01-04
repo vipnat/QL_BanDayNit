@@ -65,6 +65,7 @@
             this.mnuTroGiup = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCachSuDung = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.DoiTenFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.nhToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xuấtHàngToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -281,31 +282,31 @@
             // mnuMatHang
             // 
             this.mnuMatHang.Name = "mnuMatHang";
-            this.mnuMatHang.Size = new System.Drawing.Size(152, 22);
+            this.mnuMatHang.Size = new System.Drawing.Size(139, 22);
             this.mnuMatHang.Text = "&Mặt hàng";
             this.mnuMatHang.Click += new System.EventHandler(this.mặtHàngToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(136, 6);
             // 
             // mnuNhanVien
             // 
             this.mnuNhanVien.Name = "mnuNhanVien";
-            this.mnuNhanVien.Size = new System.Drawing.Size(152, 22);
+            this.mnuNhanVien.Size = new System.Drawing.Size(139, 22);
             this.mnuNhanVien.Text = "N&hân viên";
             this.mnuNhanVien.Click += new System.EventHandler(this.nhânVienToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(136, 6);
             // 
             // mnuKhachHang
             // 
             this.mnuKhachHang.Name = "mnuKhachHang";
-            this.mnuKhachHang.Size = new System.Drawing.Size(152, 22);
+            this.mnuKhachHang.Size = new System.Drawing.Size(139, 22);
             this.mnuKhachHang.Text = "&Khách Hàng";
             this.mnuKhachHang.Click += new System.EventHandler(this.mnuKhachHang_Click);
             // 
@@ -363,7 +364,8 @@
             // 
             this.mnuTroGiup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuCachSuDung,
-            this.mnuAbout});
+            this.mnuAbout,
+            this.DoiTenFileToolStripMenuItem});
             this.mnuTroGiup.Image = ((System.Drawing.Image)(resources.GetObject("mnuTroGiup.Image")));
             this.mnuTroGiup.Name = "mnuTroGiup";
             this.mnuTroGiup.Size = new System.Drawing.Size(80, 20);
@@ -374,16 +376,23 @@
             this.mnuCachSuDung.Image = ((System.Drawing.Image)(resources.GetObject("mnuCachSuDung.Image")));
             this.mnuCachSuDung.Name = "mnuCachSuDung";
             this.mnuCachSuDung.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.mnuCachSuDung.Size = new System.Drawing.Size(197, 22);
+            this.mnuCachSuDung.Size = new System.Drawing.Size(222, 22);
             this.mnuCachSuDung.Text = "&Cách sử dụng";
             this.mnuCachSuDung.Click += new System.EventHandler(this.cáchSửDụngToolStripMenuItem_Click);
             // 
             // mnuAbout
             // 
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(197, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(222, 22);
             this.mnuAbout.Text = "&Giới thiệu chương trình";
             this.mnuAbout.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // DoiTenFileToolStripMenuItem
+            // 
+            this.DoiTenFileToolStripMenuItem.Name = "DoiTenFileToolStripMenuItem";
+            this.DoiTenFileToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.DoiTenFileToolStripMenuItem.Text = "&Đổi Tên File Trong Thư Mục";
+            this.DoiTenFileToolStripMenuItem.Click += new System.EventHandler(this.DoiTenFileToolStripMenuItem_Click);
             // 
             // contextMenuStrip1
             // 
@@ -484,7 +493,7 @@
             this.MinimizeBox = false;
             this.Name = "frmMain";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "QL_BanDayNit";
             this.Load += new System.EventHandler(this.frmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.grdKetQua)).EndInit();
@@ -541,6 +550,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuDanhSachHDXuat;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.ComboBox cbxKhachHang;
+        private System.Windows.Forms.ToolStripMenuItem DoiTenFileToolStripMenuItem;
     }
 }
 

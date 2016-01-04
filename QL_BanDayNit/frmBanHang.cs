@@ -343,6 +343,12 @@ namespace QL_BanDayNit
         {
 
         }
+
+        private void DoiTenFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmDoiTenFile doiten = new frmDoiTenFile();
+            doiten.ShowDialog();
+        }
     }
     public class NotEnoughInfoException : ApplicationException
     {
