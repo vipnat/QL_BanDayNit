@@ -313,7 +313,7 @@ namespace QL_BanDayNit
                     return;
                 }
 
-                // Kiểm Tra Mặt Hàng Có Trong Hóa Đơn Xuất
+                // Kiểm cra Mặt Hàng Có Trong Hóa Đơn Xuất
                 if (KiemTraTrungMaMatHangTrongTable(lblMaHang.Text + txtMaHang.Text, "tblChiTietHDX"))
                 {
                     MessageBox.Show("Có Hóa Đơn Xuất Liên Quan Mặt Hàng Này!\nBạn hãy xóa hóa đơn liên quan trước!", "Chú ý!");
