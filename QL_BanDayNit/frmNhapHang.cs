@@ -122,7 +122,7 @@ namespace QL_BanDayNit
 
         //string v = "";
         private void cboMaMatH_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {       
             cbDauDay.Checked = false;
             cbDai.Checked = false;
 
@@ -147,20 +147,24 @@ namespace QL_BanDayNit
                 }
 
                 //v = cboMaMatH.SelectedValue.ToString();
-                string select1 = "select dongia from tblmathang where MaMatH =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
-                SqlDataReader sqlData = DataConn.ThucHienReader(select1);
-                try
+                if (groupChiTietHDN.Enabled)
                 {
-                    while (sqlData.Read())
+                    string select1 = "select DonGia from tblMatHang where MaMatH =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
+                    SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+                    try
                     {
-                        txtDonGia.Text = sqlData.GetDecimal(0).ToString();
+                        while (sqlData.Read())
+                        {
+                            txtDonGia.Text = sqlData.GetDecimal(0).ToString();
+                        }
+                    }
+                    finally
+                    {
+                        sqlData.Close();
+                        sqlData.Dispose();
                     }
                 }
-                finally
-                {
-                    sqlData.Close();
-                    sqlData.Dispose();
-                }
+
             }
         }
 
@@ -187,6 +191,7 @@ namespace QL_BanDayNit
                 maDai = cbxDai.SelectedValue.ToString();
             }
         }
+
 
         private void btnNhap_Click(object sender, EventArgs e)
         {
@@ -227,7 +232,7 @@ namespace QL_BanDayNit
                 }
 
                 string select = "";
-                select = "insert into tblHoaDonNhap(MaHD,NgayNhap,GhiChu) values(N'" + txtMaHoaDon.Text + "',N'" + pckNgayNhap.Text + "',N'" + txtGhiChu.Text + "')";
+                select = "insert into tblHoaDonNhap(MaHD,NgayNhap,GhiChu) values(N'" + txtMaHoaDon.Text + "',N'" + pckNgayNhap.Value.ToString("MM/dd/yyyy") + "',N'" + txtGhiChu.Text + "')";
                 DataConn.ThucHienCmd(select);
                 HienThi();
 

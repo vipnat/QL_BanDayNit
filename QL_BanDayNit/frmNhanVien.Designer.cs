@@ -45,6 +45,7 @@
             this.txtTenNV = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.chkListBox = new System.Windows.Forms.CheckedListBox();
+            this.lblMaNV = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grdKq)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,10 +67,11 @@
             // txtMaNV
             // 
             this.txtMaNV.AcceptsReturn = true;
+            this.txtMaNV.Enabled = false;
             this.txtMaNV.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaNV.Location = new System.Drawing.Point(145, 36);
+            this.txtMaNV.Location = new System.Drawing.Point(216, 36);
             this.txtMaNV.Name = "txtMaNV";
-            this.txtMaNV.Size = new System.Drawing.Size(165, 26);
+            this.txtMaNV.Size = new System.Drawing.Size(94, 26);
             this.txtMaNV.TabIndex = 1;
             // 
             // lblNhanVien
@@ -225,6 +227,17 @@
             this.chkListBox.TabIndex = 29;
             this.chkListBox.SelectedIndexChanged += new System.EventHandler(this.chkListBox_SelectedIndexChanged);
             // 
+            // lblMaNV
+            // 
+            this.lblMaNV.AutoSize = true;
+            this.lblMaNV.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaNV.ForeColor = System.Drawing.Color.Red;
+            this.lblMaNV.Location = new System.Drawing.Point(182, 40);
+            this.lblMaNV.Name = "lblMaNV";
+            this.lblMaNV.Size = new System.Drawing.Size(32, 19);
+            this.lblMaNV.TabIndex = 9;
+            this.lblMaNV.Text = "NV";
+            // 
             // frmNhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -246,6 +259,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.grdKq);
             this.Controls.Add(this.txtMaNV);
+            this.Controls.Add(this.lblMaNV);
             this.Controls.Add(this.lblNhanVien);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
@@ -277,5 +291,6 @@
         private System.Windows.Forms.TextBox txtTenNV;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckedListBox chkListBox;
+        private System.Windows.Forms.Label lblMaNV;
     }
 }

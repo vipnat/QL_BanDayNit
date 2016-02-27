@@ -24,7 +24,7 @@ namespace QL_BanDayNit
             chkListBox.Items.Insert(4, "Số lượng");
             chkListBox.Items.Insert(5, "Ngày xuất");
             chkListBox.Items.Insert(6, "Đơn giá");
-            chkListBox.Items.Insert(9, "Ghi chú");
+            chkListBox.Items.Insert(7, "Ghi chú");
             HienThi();
         }
 

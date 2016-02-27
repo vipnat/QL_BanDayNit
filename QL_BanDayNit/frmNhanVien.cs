@@ -44,12 +44,40 @@ namespace QL_BanDayNit
                     string select = "SELECT MaNhanVien,TenNhanVien,DiaChi,DienThoai FROM tblNhanVien WHERE MaNhanVien=N'"+ma+"'";
 
                     DataSet ds = DataConn.GrdSource(select);
-                    txtMaNV.Text = ds.Tables[0].Rows[0]["MaNhanVien"].ToString();
+                    txtMaNV.Text = ds.Tables[0].Rows[0]["MaNhanVien"].ToString().Remove(0,2);
                     txtTenNV.Text = ds.Tables[0].Rows[0]["TenNhanVien"].ToString();
                     txtDiaChi.Text = ds.Tables[0].Rows[0]["DiaChi"].ToString();
                     txtDienThoai.Text = ds.Tables[0].Rows[0]["DienThoai"].ToString();
                 }
             }
+        }
+
+        private int LayMaNV()
+        {
+            int mNV = 1;
+            string select1 = "SELECT [MaNhanVien] from [tblNhanVien]";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+            try
+            {
+                while (sqlData.Read())
+                {
+                    string aa = sqlData.GetString(0);
+                    int getMaKH = Convert.ToInt32(sqlData.GetString(0).Remove(0, 2));
+                    if (getMaKH >= mNV)
+                    {
+                        mNV = getMaKH + 1;
+                    }
+                }
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+
+            return mNV;
         }
 
         private void HienThi()
@@ -58,6 +86,8 @@ namespace QL_BanDayNit
             DataSet ds = DataConn.GrdSource(select);
             grdKq.DataSource = ds.Tables[0];
             grdKq.Refresh();
+            if (grdKq.RowCount <= 0)
+                txtMaNV.Text = LayMaNV().ToString("000");
         }
 
         private void btnSua_Click(object sender, EventArgs e)
@@ -77,6 +107,7 @@ namespace QL_BanDayNit
 
         private void btnGhi_Click(object sender, EventArgs e)
         {
+            string strMaNhanVien = lblMaNV.Text + txtMaNV.Text;
             if (kt == true)//Thêm
             {
                 string select = "";
@@ -104,11 +135,13 @@ namespace QL_BanDayNit
                     //Bắt lỗi nếu trùng mã nhân viên
                     string select1 = "select MaNhanVien from tblNhanVien";
                     SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+
+                    
                     try
                     {
                         while (sqlData.Read())
                         {
-                            if (sqlData.GetString(0) == txtMaNV.Text)
+                            if (sqlData.GetString(0) == strMaNhanVien)
                             {
                                 sqlData.Close();
                                 sqlData.Dispose();
@@ -139,7 +172,7 @@ namespace QL_BanDayNit
                     //dr1.Close();
                     //dr1.Dispose();
 
-                    select = "insert into tblNhanVien values(N'" + txtMaNV.Text + "',N'" + txtTenNV.Text + "',N'" + txtDiaChi.Text + "',N'" + txtDienThoai.Text + "')";
+                    select = "insert into tblNhanVien values(N'" + strMaNhanVien + "',N'" + txtTenNV.Text + "',N'" + txtDiaChi.Text + "',N'" + txtDienThoai.Text + "')";
                     DataConn.ThucHienCmd(select);
                     HienThi();
                 }
@@ -162,7 +195,7 @@ namespace QL_BanDayNit
                 {
                     if (txtMaNV.Text == "" && txtTenNV.Text == "" && txtDienThoai.Text == "" && txtDiaChi.Text == "")
                         throw new NotEnoughInfoException();
-                    string update = "UPDATE tblNhanVien SET TenNhanVien=N'"+txtTenNV.Text+"',DiaChi=N'" + txtDiaChi.Text + "',DienThoai=N'" + txtDienThoai.Text + "' WHERE MaNhanVien=N'" + txtMaNV.Text + "'";
+                    string update = "UPDATE tblNhanVien SET TenNhanVien=N'"+txtTenNV.Text+"',DiaChi=N'" + txtDiaChi.Text + "',DienThoai=N'" + txtDienThoai.Text + "' WHERE MaNhanVien=N'" + strMaNhanVien + "'";
                     DataConn.ThucHienCmd(update);
 
                     HienThi();
@@ -183,15 +216,14 @@ namespace QL_BanDayNit
             btnGhi.Enabled = true;
             btnHoan.Enabled = true;
             btnThoat.Enabled = true;
-            txtMaNV.ReadOnly = false;
             txtTenNV.ReadOnly = false;
             txtDienThoai.ReadOnly = false;
             txtDiaChi.ReadOnly = false;
             txtDiaChi.Text = "";
             txtDienThoai.Text = "";
-            txtMaNV.Text = "";
             txtTenNV.Text = "";
-            txtMaNV.Select();
+            txtMaNV.Text = LayMaNV().ToString("000");
+
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -223,11 +255,13 @@ namespace QL_BanDayNit
                 //Nếu trong hóa đơn xuất có nhân viên này lập -> thông báo phải xóa hóa đơn trước khi xóa nhân viên
                 string select1 = "select MaNhanVien from tblHoaDonXuat";
                 SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+
+                string strMaNhanVien = lblMaNV.Text + txtMaNV.Text;
                 try
                 {
                     while (sqlData.Read())
                     {
-                        if (sqlData.GetString(0) == txtMaNV.Text)
+                        if (sqlData.GetString(0) == strMaNhanVien)
                         {
                             sqlData.Close();
                             sqlData.Dispose();
@@ -241,7 +275,7 @@ namespace QL_BanDayNit
                     sqlData.Dispose();
                 }
                 //Thực hiện xóa nhân viên
-                string delete = "DELETE tblNhanVien WHERE MaNhanVien=N'" + txtMaNV.Text + "'";
+                string delete = "DELETE tblNhanVien WHERE MaNhanVien=N'" + strMaNhanVien + "'";
                 DataConn.ThucHienCmd(delete);
                 HienThi();
             }

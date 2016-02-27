@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,8 +20,34 @@ namespace QL_BanDayNit
         private void frmKhachHang_Load(object sender, EventArgs e)
         {
             HienThi();
-            //Gọi đến nút thêm
-            btnThem_Click(sender, e);
+        }
+
+        private int LayMaKH()
+        {
+            int mKH = 1;
+            string select1 = "select MaKH from tblKhachHang";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+            try
+            {
+                while (sqlData.Read())
+                {
+                    string aa = sqlData.GetString(0);
+                    int getMaKH = Convert.ToInt32(sqlData.GetString(0).Remove(0, 2));
+                    if (getMaKH >= mKH )
+                    {
+                        mKH = getMaKH + 1;
+                    }
+                }
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+
+            return mKH;
         }
 
         private void HienThi()
@@ -29,6 +56,8 @@ namespace QL_BanDayNit
             DataSet ds = DataConn.GrdSource(select);
             grdKhachHang.DataSource = ds.Tables[0];
             grdKhachHang.Refresh();
+            if(grdKhachHang.RowCount <= 0)
+                txtMaKH.Text = LayMaKH().ToString("000");
         }
 
         private void grdKhachHang_CurrentCellChanged(object sender, EventArgs e)
@@ -44,7 +73,7 @@ namespace QL_BanDayNit
                     string select = "SELECT [MaKH],[TenKH],[DiaChi],[SoDT] FROM [tblKhachHang] WHERE [MaKH]=N'" + ma + "'";
 
                     DataSet ds = DataConn.GrdSource(select);
-                    txtMaKH.Text = ds.Tables[0].Rows[0]["MaKH"].ToString();
+                    txtMaKH.Text = ds.Tables[0].Rows[0]["MaKH"].ToString().Remove(0,2);
                     txtTenKH.Text = ds.Tables[0].Rows[0]["TenKH"].ToString();
                     txtDiaChiKH.Text = ds.Tables[0].Rows[0]["DiaChi"].ToString();
                     txtDienThoaiKH.Text = ds.Tables[0].Rows[0]["SoDT"].ToString();
@@ -80,16 +109,36 @@ namespace QL_BanDayNit
                 return;
             }
 
+            string query_SQL = "";
+            query_SQL = "INSERT INTO [tblKhachHang]([MaKH],[TenKH],[DiaChi],[SoDT])VALUES (N'" + lblMaKH.Text + txtMaKH.Text + "',N'" + txtTenKH.Text + "',N'" + txtDiaChiKH.Text + "' ," + txtDienThoaiKH.Text + ")";
+            DataConn.ThucHienCmd(query_SQL);
+
+            HienThi();
         }
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-
+            txtMaKH.Text = LayMaKH().ToString("000");
+            txtDiaChiKH.Clear();
+            txtTenKH.Clear();
+            txtDienThoaiKH.Clear();
+            txtTenKH.Focus();
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                string query_SQL = "DELETE FROM [tblKhachHang] WHERE [MaKH]=N'" + lblMaKH.Text + txtMaKH.Text + "'";
+                DataConn.ThucHienCmd(query_SQL);
+                MessageBox.Show("Xóa Thành Công !");
+                HienThi();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Xóa Không Thành Công !" + ex);
+            }
+            
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -131,6 +180,11 @@ namespace QL_BanDayNit
                 return;
             }
             txtMaKH.Text = String.Format("{0:000}", double.Parse(txtMaKH.Text));
+        }
+
+        private void txtMaKH_Click(object sender, EventArgs e)
+        {
+            txtMaKH.Text = "";
         }
     }
 }

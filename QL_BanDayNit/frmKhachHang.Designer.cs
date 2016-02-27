@@ -192,6 +192,7 @@
             // 
             // txtMaKH
             // 
+            this.txtMaKH.Enabled = false;
             this.txtMaKH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMaKH.Location = new System.Drawing.Point(174, 37);
             this.txtMaKH.Margin = new System.Windows.Forms.Padding(4);
@@ -199,6 +200,7 @@
             this.txtMaKH.Size = new System.Drawing.Size(107, 26);
             this.txtMaKH.TabIndex = 35;
             this.txtMaKH.Text = "0";
+            this.txtMaKH.Click += new System.EventHandler(this.txtMaKH_Click);
             this.txtMaKH.Leave += new System.EventHandler(this.txtMaHang_Leave);
             // 
             // frmKhachHang

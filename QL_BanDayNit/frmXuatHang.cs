@@ -136,8 +136,20 @@ namespace QL_BanDayNit
                 cbxTenMatHang.Text = cbxMaMatH.SelectedValue.ToString();
             }
 
-            string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
-            txtDonGia.Text = strDonGia;
+            try
+            {
+                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
+                if(strDonGia == "")
+                {
+                    strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
+                }
+                txtDonGia.Text = strDonGia;
+            }
+            catch (Exception)
+            {
+                
+            }
+            
 
         }
 
@@ -148,8 +160,19 @@ namespace QL_BanDayNit
             {
                 cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString();
             }
-            string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
-            txtDonGia.Text = strDonGia;
+            try
+            {
+                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
+                if (strDonGia == "")
+                {
+                    strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
+                }
+                txtDonGia.Text = strDonGia;
+            }
+            catch (Exception)
+            {
+            }
+            
         }
 
         private string LayDonGiaTheoMaKhachHang(string maMatHang, string maKhachHang)
@@ -170,6 +193,30 @@ namespace QL_BanDayNit
                 sqlData.Close();
                 sqlData.Dispose();
             }
+            return DonGia;
+        }
+
+        private string LayDonGiaTheoMatHang(string maMatHang)
+        {
+            string DonGia = "";
+            decimal dec = 0;
+            string select = "SELECT [tblMatHang].[DonGia] FROM [tblMatHang] WHERE [tblMatHang].MaMatH = '" + maMatHang + "'";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select);
+            try
+            {
+                //MessageBox.Show("1");
+                while (sqlData.Read())
+                {
+                    dec = sqlData.GetDecimal(0);
+                }
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            dec = dec + 4;
+            DonGia = dec.ToString();
             return DonGia;
         }
 
@@ -253,7 +300,7 @@ namespace QL_BanDayNit
                     sqlData.Dispose();
                 }
 
-                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + strMaNhanVien + "',N'" + pckNgayXuat.Text + "',N'" + txtGhiChu.Text + "')";
+                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + strMaNhanVien + "',N'" + pckNgayXuat.Value.ToString("MM/dd/yyyy") + "',N'" + txtGhiChu.Text + "')";
                 DataConn.ThucHienCmd(select);
 
                 MessageBox.Show("Tạo Thành Công Hóa Đơn Số " + txtMaHD.Text);
@@ -292,7 +339,7 @@ namespace QL_BanDayNit
 
         private void btnGhi_Click(object sender, EventArgs e)
         {
-            string selectSQL;
+            string query_SQL;
             if (!KiemTraDuLieuNhapSo()) return;
             if (KiemTraMatHangDaCo(_strMaMatHang))
             {
@@ -338,12 +385,18 @@ namespace QL_BanDayNit
                     }
 
                     //Thêm vào bảng tblChiTietHDX
-                    selectSQL = "insert into tblChiTietHDX(MaMatH,MaHD,SoLuong,DonGia) values(N'" + _strMaMatHang + "',N'" + txtMaHD.Text + "'," + txtSoLuong.Text + ",@DonGia)";
-                    DataConn.ThucHienInsertSqlParameter(selectSQL, "@DonGia", float.Parse(txtDonGia.Text));
+                    query_SQL = "insert into tblChiTietHDX(MaMatH,MaHD,SoLuong,DonGia) values(N'" + _strMaMatHang + "',N'" + txtMaHD.Text + "'," + txtSoLuong.Text + ",@DonGia)";
+                    DataConn.ThucHienInsertSqlParameter(query_SQL, "@DonGia", float.Parse(txtDonGia.Text));
 
                     //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
-                    selectSQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
-                    DataConn.ThucHienCmd(selectSQL);
+                    query_SQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
+                    DataConn.ThucHienCmd(query_SQL);
+                    query_SQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
+                    DataConn.ThucHienCmd(query_SQL);
+
+                    //Cập nhập giá mới cho khách hàng
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text + " where [MaKH]=N'" + cbxKhachHang.SelectedValue.ToString() + "'";
+                    DataConn.ThucHienCmd(query_SQL);
 
                     // Lấy Tổng Số Lượng
                     string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";

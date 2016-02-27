@@ -73,6 +73,7 @@ namespace QL_BanDayNit
             mnuDanhSachHoaDonNhap.Enabled = false;
             mnuHoaDonXuat.Enabled = true;
             mnuDanhSachHDXuat.Enabled = false;
+
         }
 
         string values = "";
@@ -85,7 +86,7 @@ namespace QL_BanDayNit
             }
         }
 
-        string maKH = "KH001";
+        string maKH = "KH000";
         private void cbxKhachHang_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxKhachHang.ValueMember != null)
@@ -301,8 +302,31 @@ namespace QL_BanDayNit
 
         private void hóaĐơnXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmXuatHang xuathang = new frmXuatHang();
-            xuathang.ShowDialog();
+            // Kiểm Tra Tồn Tại Nhân Viên
+            string strQueryNhanVien = "SELECT COUNT(*) FROM [tblNhanVien]";
+            // Kiểm Tra Tồn Tại Khách Hàng
+            string strQueryKhachHang = "SELECT COUNT(*) FROM [tblKhachHang]";
+            if (!KiemTraTonTaiDuLieu(strQueryNhanVien))
+            {
+                MessageBox.Show("Chưa Có Nhân Viên Bán Hàng.\nHãy thêm nhân viên.");
+            }
+            else if (!KiemTraTonTaiDuLieu(strQueryKhachHang))
+            {
+                MessageBox.Show("Chưa Có Dữ Liệu Khách Hàng.\nHãy thêm khách hàng.");
+            }
+            else
+            {
+                frmXuatHang xuathang = new frmXuatHang();
+                xuathang.ShowDialog();
+            }
+        }
+
+        private bool KiemTraTonTaiDuLieu(string sqlCount)
+        {
+            if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(sqlCount) > 0)
+                return true;
+            else
+                return false;
         }
 
         private void danhSáchHóaĐơnToolStripMenuItem_Click(object sender, EventArgs e)
@@ -341,7 +365,8 @@ namespace QL_BanDayNit
 
         private void mnuKhachHang_Click(object sender, EventArgs e)
         {
-
+            frmKhachHang khachhang = new frmKhachHang();
+            khachhang.ShowDialog();
         }
 
         private void DoiTenFileToolStripMenuItem_Click(object sender, EventArgs e)
