@@ -232,8 +232,8 @@ namespace QL_BanDayNit
         private void HienThi()
         {
             // SQL Select data
-            string select = " SELECT tblMatHang.TenMatH [Mặt Hàng],tblChiTietHDX.SoLuong [Số Lượng],tblChiTietHDX.DonGia [Đơn Giá],tblChiTietHDX.SoLuong * tblChiTietHDX.DonGia as [Thành Tiền]," +
-                            " tblMatHang.MaMatH [Mã MH] FROM tblChiTietHDX INNER JOIN tblHoaDonXuat ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
+            string select = " SELECT tblMatHang.MaMatH [Mã MH], tblMatHang.TenMatH [Mặt Hàng],tblChiTietHDX.SoLuong [Số Lượng],tblChiTietHDX.DonGia [Đơn Giá],tblChiTietHDX.SoLuong * tblChiTietHDX.DonGia as [Thành Tiền]" +
+                            " FROM tblChiTietHDX INNER JOIN tblHoaDonXuat ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                             " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
                             " WHERE tblHoaDonXuat.MaHD='" + txtMaHD.Text + "'";
 
@@ -243,8 +243,8 @@ namespace QL_BanDayNit
             lblSoMatHang.Text = ds.Tables[0].Rows.Count.ToString();
             if (ds.Tables[0].Rows.Count > 0)
             {
-                grdXuatHang.Columns[4].Visible = false;
-                grdXuatHang.Columns[0].Width = 250;
+                // grdXuatHang.Columns[4].Visible = false;
+                grdXuatHang.Columns[1].Width = 250;
                 grdXuatHang.CurrentCell = grdXuatHang.Rows[intSelectIntem].Cells[0];
                 grdXuatHang.FirstDisplayedScrollingRowIndex = intSelectIntem;
             }
@@ -727,7 +727,7 @@ namespace QL_BanDayNit
 
                 //Creating iTextSharp Table from the DataTable data
                 PdfPTable pdfTable = new PdfPTable(grdXuatHang.ColumnCount);
-                float[] widths = new float[] { 5f, 2f, 2f, 2f, 0f };
+                float[] widths = new float[] {2f, 5f, 2f, 2f, 2f };
                 pdfTable.SetWidths(widths);
                 pdfTable.WidthPercentage = 90;
                 pdfTable.DefaultCell.Padding = 3;
@@ -743,14 +743,18 @@ namespace QL_BanDayNit
                     cellHeader.FixedHeight = 20f;
                     pdfTable.AddCell(cellHeader);
                 }
+                int maSP = 0;
                 //Adding DataRow
                 foreach (DataGridViewRow row in grdXuatHang.Rows)
                 {
+                    maSP = 1;
                     foreach (DataGridViewCell cell in row.Cells)
                     {
-                        PdfPCell _cellPDF = new PdfPCell(new Phrase(cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer)));
+                        PdfPCell _cellPDF = new PdfPCell(new Phrase(maSP == 1 ? cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer)));
                         _cellPDF.FixedHeight = 20f;
+                        _cellPDF.HorizontalAlignment = Element.ALIGN_CENTER;
                         pdfTable.AddCell(_cellPDF);
+                        maSP = 0;
                     }
                 }
                 //Exporting to PDF
@@ -850,8 +854,16 @@ namespace QL_BanDayNit
 
         private void grdXuatHang_SelectionChanged(object sender, EventArgs e)
         {
-            int intChon = grdXuatHang.CurrentCell.RowIndex;
-            string maMatHangSelect = grdXuatHang.Rows[intChon].Cells[4].Value.ToString();
+            int intChon;
+            try
+            {
+                intChon = grdXuatHang.CurrentCell.RowIndex;
+            }
+            catch
+            {
+                return;
+            }
+            string maMatHangSelect = grdXuatHang.Rows[intChon].Cells[0].Value.ToString();
             if (cbxTenMatHang.SelectedValue.ToString().Substring(0, 3) != maMatHangSelect.Substring(0, 3))
                 LoadComboboxMatHang(maMatHangSelect.Substring(0, 3));
             LoadDuLieuDuocChonTuGridView(intChon);
@@ -861,9 +873,9 @@ namespace QL_BanDayNit
         {
             try
             {
-                cbxTenMatHang.Text = grdXuatHang.Rows[intHangChon].Cells[0].Value.ToString();
-                txtSoLuong.Text = grdXuatHang.Rows[intHangChon].Cells[1].Value.ToString();
-                txtDonGia.Text = grdXuatHang.Rows[intHangChon].Cells[2].Value.ToString();
+                cbxTenMatHang.Text = grdXuatHang.Rows[intHangChon].Cells[1].Value.ToString();
+                txtSoLuong.Text = grdXuatHang.Rows[intHangChon].Cells[2].Value.ToString();
+                txtDonGia.Text = grdXuatHang.Rows[intHangChon].Cells[3].Value.ToString();
             }
             catch (Exception e)
             {

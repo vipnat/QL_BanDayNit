@@ -72,7 +72,7 @@
             this.SuspendLayout();
             // 
             // lblMaMatH
-            // 
+            
             this.lblMaMatH.AutoSize = true;
             this.lblMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMaMatH.Location = new System.Drawing.Point(23, 22);
