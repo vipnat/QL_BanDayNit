@@ -43,6 +43,8 @@
             this.btnThem = new System.Windows.Forms.Button();
             this.lblMaKH = new System.Windows.Forms.Label();
             this.txtMaKH = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtNoCu = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdKhachHang)).BeginInit();
             this.SuspendLayout();
             // 
@@ -203,6 +205,24 @@
             this.txtMaKH.Click += new System.EventHandler(this.txtMaKH_Click);
             this.txtMaKH.Leave += new System.EventHandler(this.txtMaHang_Leave);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(15, 104);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 19);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "Nợ Cũ";
+            // 
+            // txtNoCu
+            // 
+            this.txtNoCu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNoCu.Location = new System.Drawing.Point(133, 101);
+            this.txtNoCu.Name = "txtNoCu";
+            this.txtNoCu.Size = new System.Drawing.Size(165, 26);
+            this.txtNoCu.TabIndex = 2;
+            // 
             // frmKhachHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,6 +231,8 @@
             this.ClientSize = new System.Drawing.Size(611, 370);
             this.Controls.Add(this.txtMaKH);
             this.Controls.Add(this.lblMaKH);
+            this.Controls.Add(this.txtNoCu);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.txtTenKH);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtDienThoaiKH);
@@ -251,5 +273,7 @@
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.Label lblMaKH;
         private System.Windows.Forms.TextBox txtMaKH;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtNoCu;
     }
 }

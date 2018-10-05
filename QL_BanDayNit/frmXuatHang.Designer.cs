@@ -66,13 +66,14 @@
             this.lblTongSL = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblSoMatHang = new System.Windows.Forms.Label();
+            this.lblNoCu = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grdXuatHang)).BeginInit();
             this.groupHoaDonXuat.SuspendLayout();
             this.groupChiTietHDX.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblMaMatH
-            
+            // 
             this.lblMaMatH.AutoSize = true;
             this.lblMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMaMatH.Location = new System.Drawing.Point(23, 22);
@@ -332,6 +333,7 @@
             // 
             // groupHoaDonXuat
             // 
+            this.groupHoaDonXuat.Controls.Add(this.lblNoCu);
             this.groupHoaDonXuat.Controls.Add(this.label5);
             this.groupHoaDonXuat.Controls.Add(this.cbxKhachHang);
             this.groupHoaDonXuat.Controls.Add(this.txtGhiChu);
@@ -372,6 +374,7 @@
             this.cbxKhachHang.Name = "cbxKhachHang";
             this.cbxKhachHang.Size = new System.Drawing.Size(178, 27);
             this.cbxKhachHang.TabIndex = 31;
+            this.cbxKhachHang.SelectedIndexChanged += new System.EventHandler(this.cbxKhachHang_SelectedIndexChanged);
             // 
             // groupChiTietHDX
             // 
@@ -520,6 +523,16 @@
             this.lblSoMatHang.TabIndex = 42;
             this.lblSoMatHang.Text = "0";
             // 
+            // lblNoCu
+            // 
+            this.lblNoCu.AutoSize = true;
+            this.lblNoCu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoCu.Location = new System.Drawing.Point(309, 108);
+            this.lblNoCu.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNoCu.Name = "lblNoCu";
+            this.lblNoCu.Size = new System.Drawing.Size(0, 19);
+            this.lblNoCu.TabIndex = 32;
+            // 
             // frmXuatHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -604,5 +617,6 @@
         private System.Windows.Forms.Label lblTongSL;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblSoMatHang;
+        private System.Windows.Forms.Label lblNoCu;
     }
 }

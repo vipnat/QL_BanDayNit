@@ -110,7 +110,7 @@ namespace QL_BanDayNit
             }
 
             string query_SQL = "";
-            query_SQL = "INSERT INTO [tblKhachHang]([MaKH],[TenKH],[DiaChi],[SoDT])VALUES (N'" + lblMaKH.Text + txtMaKH.Text + "',N'" + txtTenKH.Text + "',N'" + txtDiaChiKH.Text + "' ," + txtDienThoaiKH.Text + ")";
+            query_SQL = "INSERT INTO [tblKhachHang]([MaKH],[TenKH],[DiaChi],[SoDT],[NoCu])VALUES (N'" + lblMaKH.Text + txtMaKH.Text + "',N'" + txtTenKH.Text + "',N'" + txtDiaChiKH.Text + "' ," + txtDienThoaiKH.Text + "," + txtNoCu.Text + ")";
             DataConn.ThucHienCmd(query_SQL);
 
             HienThi();

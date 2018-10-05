@@ -196,6 +196,29 @@ namespace QL_BanDayNit
             return DonGia;
         }
 
+        private string LayNoCuTheoMaKhachHang(string maKhachHang)
+        {
+            string NoCu = "";
+            string select = "SELECT tblKhachHang.NoCu FROM tblKhachHang WHERE tblKhachHang.MaKH = '" + maKhachHang + "'";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select);
+            try
+            {
+                //if (sqlData.Read() == null) return NoCu;
+                //MessageBox.Show("1");
+                while (sqlData.Read())
+                {
+                    //if (sqlData.GetDecimal(0) == 0) return NoCu;
+                    NoCu = sqlData.GetString(0);
+                }
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            return "Nợ Cũ : " + NoCu;
+        }
+
         private string LayDonGiaTheoMatHang(string maMatHang)
         {
             string DonGia = "";
@@ -231,6 +254,7 @@ namespace QL_BanDayNit
 
         private void HienThi()
         {
+            
             // SQL Select data
             string select = " SELECT tblMatHang.MaMatH [Mã MH], tblMatHang.TenMatH [Mặt Hàng],tblChiTietHDX.SoLuong [Số Lượng],tblChiTietHDX.DonGia [Đơn Giá],tblChiTietHDX.SoLuong * tblChiTietHDX.DonGia as [Thành Tiền]" +
                             " FROM tblChiTietHDX INNER JOIN tblHoaDonXuat ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
@@ -248,6 +272,7 @@ namespace QL_BanDayNit
                 grdXuatHang.CurrentCell = grdXuatHang.Rows[intSelectIntem].Cells[0];
                 grdXuatHang.FirstDisplayedScrollingRowIndex = intSelectIntem;
             }
+            
 
         }
 
@@ -308,6 +333,7 @@ namespace QL_BanDayNit
                 HienThi();
                 groupChiTietHDX.Enabled = true;
                 btnGhi.Enabled = true;
+                lblNoCu.Text = LayNoCuTheoMaKhachHang(cbxKhachHang.SelectedValue.ToString());
             }
             catch (SameKeyException)
             {
@@ -718,7 +744,7 @@ namespace QL_BanDayNit
                 cellTitle.Border = 0;
                 pdfTableTitle.AddCell(cellTitle);
                 //
-                cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+                cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n" + LayNoCuTheoMaKhachHang(cbxKhachHang.SelectedValue.ToString()) + "\n\n", new iTextSharp.text.Font(arialCustomer)));
                 cellTitle.Border = 0;
                 cellTitle.HorizontalAlignment = 2;
                 pdfTableTitle.AddCell(cellTitle);
@@ -766,7 +792,7 @@ namespace QL_BanDayNit
                 }
 
                 string namePDF = folderPath + txtMaHD.Text + ".pdf";
-                double dbTongTienBan = double.Parse(lblTongTien.Text) * 1000;
+                double dbTongTienBan = double.Parse(lblTongTien.Text) * 1;
                 string intTongTienBan = String.Format("{0:0,0}", dbTongTienBan);
 
                 if (System.IO.File.Exists(namePDF))
@@ -800,8 +826,9 @@ namespace QL_BanDayNit
                     pdfTableTongTien.AddCell(new Phrase("\nTổng SL: " + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 16)));
                     pdfTableTongTien.AddCell(new Phrase("\nTổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
 
+                    dbTongTienBan = dbTongTienBan * 1000;
                     // Create Cell Footter
-                    PdfPCell cellTongTien;
+                    PdfPCell cellTongTien; 
                     cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()), new iTextSharp.text.Font(arialCustomer, 15)));
                     cellTongTien.Colspan = 3;
                     cellTongTien.HorizontalAlignment = 0;
@@ -1008,5 +1035,9 @@ namespace QL_BanDayNit
             return strChuoiKetQua;
         }
 
+        private void cbxKhachHang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
