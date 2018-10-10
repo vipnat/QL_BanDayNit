@@ -222,6 +222,8 @@
             this.txtNoCu.Name = "txtNoCu";
             this.txtNoCu.Size = new System.Drawing.Size(165, 26);
             this.txtNoCu.TabIndex = 2;
+            this.txtNoCu.Text = "0";
+            this.txtNoCu.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // frmKhachHang
             // 

@@ -139,7 +139,7 @@ namespace QL_BanDayNit
             try
             {
                 string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
-                if(strDonGia == "")
+                if (strDonGia == "")
                 {
                     strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
                 }
@@ -147,9 +147,9 @@ namespace QL_BanDayNit
             }
             catch (Exception)
             {
-                
+
             }
-            
+
 
         }
 
@@ -172,7 +172,7 @@ namespace QL_BanDayNit
             catch (Exception)
             {
             }
-            
+
         }
 
         private string LayDonGiaTheoMaKhachHang(string maMatHang, string maKhachHang)
@@ -216,7 +216,7 @@ namespace QL_BanDayNit
                 sqlData.Close();
                 sqlData.Dispose();
             }
-            return "Nợ Cũ : " + NoCu;
+            return NoCu;
         }
 
         private string LayDonGiaTheoMatHang(string maMatHang)
@@ -254,7 +254,7 @@ namespace QL_BanDayNit
 
         private void HienThi()
         {
-            
+
             // SQL Select data
             string select = " SELECT tblMatHang.MaMatH [Mã MH], tblMatHang.TenMatH [Mặt Hàng],tblChiTietHDX.SoLuong [Số Lượng],tblChiTietHDX.DonGia [Đơn Giá],tblChiTietHDX.SoLuong * tblChiTietHDX.DonGia as [Thành Tiền]" +
                             " FROM tblChiTietHDX INNER JOIN tblHoaDonXuat ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
@@ -272,7 +272,7 @@ namespace QL_BanDayNit
                 grdXuatHang.CurrentCell = grdXuatHang.Rows[intSelectIntem].Cells[0];
                 grdXuatHang.FirstDisplayedScrollingRowIndex = intSelectIntem;
             }
-            
+
 
         }
 
@@ -333,7 +333,17 @@ namespace QL_BanDayNit
                 HienThi();
                 groupChiTietHDX.Enabled = true;
                 btnGhi.Enabled = true;
-                lblNoCu.Text = LayNoCuTheoMaKhachHang(cbxKhachHang.SelectedValue.ToString());
+
+                string strNoCu = LayNoCuTheoMaKhachHang(cbxKhachHang.SelectedValue.ToString());
+                lblNoCu.Text = "Nợ Cũ : " + strNoCu;
+                if (Convert.ToInt32(strNoCu) > 0)
+                {
+                    lblNoCu.Visible = true;
+                    lblTraNo.Visible = true;
+                    txtTraNo.Visible = true;
+                }
+                else lblNoCu.Visible = false;
+
             }
             catch (SameKeyException)
             {
@@ -360,7 +370,36 @@ namespace QL_BanDayNit
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (MessageBox.Show("Bạn Có Muốn Thoát Ra ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            {
+                // MessageBox.Show("Chỉnh Sửa Lại Hóa Đơn Trước Khi In !");
+                return;
+            }
+            else
+            {
+                XoaHetHoaDon();
+                this.Close();
+            }
+        }
+
+        private void XoaHetHoaDon()
+        {
+            foreach (string strMaMH in listMatHangOld.Keys)
+            {
+                double soLuong = double.Parse(listMatHangOld[strMaMH].ToString());
+
+                // Xoa Chi Tiet Hoa Don
+                string delete = "DELETE tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "' AND MaMatH=N'" + strMaMH + "'";
+                DataConn.ThucHienCmd(delete);
+
+                //Cập nhật lại Số Lượng cho bảng tblMatHang (thêm số lượng mặt hàng)
+                string update = "UPDATE tblMatHang set SoLuong=SoLuong+" + soLuong + " WHERE MaMatH=N'" + strMaMH + "'";
+                DataConn.ThucHienCmd(update);
+
+            }
+            // Xoa Hoa Don
+            string deleteHD = "DELETE tblHoaDonXuat WHERE MaHD='" + txtMaHD.Text + "'";
+            DataConn.ThucHienCmd(deleteHD);
         }
 
         private void btnGhi_Click(object sender, EventArgs e)
@@ -377,6 +416,11 @@ namespace QL_BanDayNit
                 {
                     intSelectIntem = grdXuatHang.CurrentCell.RowIndex;
                     CapNhapMatHangDaBan(sender, e);
+
+                    //Cập nhập giá mới cho khách hàng
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + Convert.ToDouble(txtDonGia.Text) + " where [MaKH]=N'" + cbxKhachHang.SelectedValue.ToString() + "'";
+                    DataConn.ThucHienCmd(query_SQL);
+
                     LoadDuLieuDuocChonTuGridView(intSelectIntem);
                 }
             }
@@ -417,11 +461,9 @@ namespace QL_BanDayNit
                     //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
                     query_SQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
                     DataConn.ThucHienCmd(query_SQL);
-                    query_SQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
-                    DataConn.ThucHienCmd(query_SQL);
 
                     //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text + " where [MaKH]=N'" + cbxKhachHang.SelectedValue.ToString() + "'";
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + Convert.ToDouble(txtDonGia.Text) + " where [MaKH]=N'" + cbxKhachHang.SelectedValue.ToString() + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
                     // Lấy Tổng Số Lượng
@@ -480,43 +522,39 @@ namespace QL_BanDayNit
 
                 if (KiemTraTonTaiMatHangDaThem())
                 {
-                    if (SoSanhSoLuongTrongListOld(_strMaMatHang, txtSoLuong.Text))
+                    //if (SoSanhSoLuongTrongListOld(_strMaMatHang, txtSoLuong.Text))
+
+                    if (!KiemTraSoLuongTrongKhoTheoMaMH(_strMaMatHang))
                     {
+                        MessageBox.Show("Số lượng hàng trong kho không đủ để xuất!");
                         return;
                     }
-                    else
-                    {
-                        if (!KiemTraSoLuongTrongKhoTheoMaMH(_strMaMatHang))
-                        {
-                            MessageBox.Show("Số lượng hàng trong kho không đủ để xuất!");
-                            return;
-                        }
-                        string updateQuery = "";
+                    string updateQuery = "";
 
-                        // Cộng thêm số lượng đã trừ đi trước đó. (thêm)
-                        updateQuery = "UPDATE tblMatHang SET SoLuong=SoLuong+" + double.Parse(listMatHangOld[_strMaMatHang].ToString()) + " " +
-                                      "WHERE MaMatH=N'" + _strMaMatHang + "'";
-                        DataConn.ThucHienCmd(updateQuery);
+                    // Cộng thêm số lượng đã trừ đi trước đó. (thêm)
+                    updateQuery = "UPDATE tblMatHang SET SoLuong=SoLuong+" + double.Parse(listMatHangOld[_strMaMatHang].ToString()) + " " +
+                                  "WHERE MaMatH=N'" + _strMaMatHang + "'";
+                    DataConn.ThucHienCmd(updateQuery);
 
-                        // Cập Nhập Lại Chi Tiết Hóa Đơn
-                        updateQuery = "UPDATE tblChiTietHDX SET SoLuong=" + txtSoLuong.Text + ",DonGia=@DonGia WHERE MaHD='" + txtMaHD.Text + "' AND MaMatH=N'" + _strMaMatHang + "'";
-                        DataConn.ThucHienInsertSqlParameter(updateQuery, "@DonGia", float.Parse(txtDonGia.Text));
+                    // Cập Nhập Lại Chi Tiết Hóa Đơn
+                    updateQuery = "UPDATE tblChiTietHDX SET SoLuong=" + txtSoLuong.Text + ",DonGia=@DonGia WHERE MaHD='" + txtMaHD.Text + "' AND MaMatH=N'" + _strMaMatHang + "'";
+                    DataConn.ThucHienInsertSqlParameter(updateQuery, "@DonGia", float.Parse(txtDonGia.Text));
 
-                        //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
-                        updateQuery = "UPDATE tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " WHERE MaMatH=N'" + _strMaMatHang + "'";
-                        DataConn.ThucHienCmd(updateQuery);
+                    //Cập nhật lại Số Lượng cho bảng tblMatHang (bớt số lượng mặt hàng)
+                    updateQuery = "UPDATE tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " WHERE MaMatH=N'" + _strMaMatHang + "'";
+                    DataConn.ThucHienCmd(updateQuery);
 
-                        // Lấy Tổng Số Lượng
-                        string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
-                        lblTongSL.Text = DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSL).ToString();
-                        
-                        CapNhapLaiSoLuongTrongListOld(_strMaMatHang);
-                        HienThi();
-                        btnTinhTien_Click(sender, e);
-                    }
+                    // Lấy Tổng Số Lượng
+                    string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
+                    lblTongSL.Text = DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSL).ToString();
+
+                    CapNhapLaiSoLuongTrongListOld(_strMaMatHang);
+                    HienThi();
+                    btnTinhTien_Click(sender, e);
+
                 }
 
-               
+
             }
             catch (FormatException)
             {
@@ -753,7 +791,7 @@ namespace QL_BanDayNit
 
                 //Creating iTextSharp Table from the DataTable data
                 PdfPTable pdfTable = new PdfPTable(grdXuatHang.ColumnCount);
-                float[] widths = new float[] {2f, 5f, 2f, 2f, 2f };
+                float[] widths = new float[] { 2f, 5f, 2f, 2f, 2f };
                 pdfTable.SetWidths(widths);
                 pdfTable.WidthPercentage = 90;
                 pdfTable.DefaultCell.Padding = 3;
@@ -828,7 +866,7 @@ namespace QL_BanDayNit
 
                     dbTongTienBan = dbTongTienBan * 1000;
                     // Create Cell Footter
-                    PdfPCell cellTongTien; 
+                    PdfPCell cellTongTien;
                     cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()), new iTextSharp.text.Font(arialCustomer, 15)));
                     cellTongTien.Colspan = 3;
                     cellTongTien.HorizontalAlignment = 0;
@@ -863,6 +901,7 @@ namespace QL_BanDayNit
                 intSelectIntem = grdXuatHang.CurrentCell.RowIndex;
                 // Đưa con trỏ lên 1 hàng sau khi xóa
                 intSelectIntem = intSelectIntem > 0 ? intSelectIntem - 1 : 0;
+
                 HienThi();
                 btnTinhTien_Click(sender, e);
             }

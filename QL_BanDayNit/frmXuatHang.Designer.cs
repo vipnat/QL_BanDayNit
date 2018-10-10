@@ -54,6 +54,7 @@
             this.groupHoaDonXuat = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cbxKhachHang = new System.Windows.Forms.ComboBox();
+            this.lblNoCu = new System.Windows.Forms.Label();
             this.groupChiTietHDX = new System.Windows.Forms.GroupBox();
             this.cbxTenMatHang = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -66,7 +67,8 @@
             this.lblTongSL = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblSoMatHang = new System.Windows.Forms.Label();
-            this.lblNoCu = new System.Windows.Forms.Label();
+            this.txtTraNo = new System.Windows.Forms.TextBox();
+            this.lblTraNo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grdXuatHang)).BeginInit();
             this.groupHoaDonXuat.SuspendLayout();
             this.groupChiTietHDX.SuspendLayout();
@@ -333,7 +335,6 @@
             // 
             // groupHoaDonXuat
             // 
-            this.groupHoaDonXuat.Controls.Add(this.lblNoCu);
             this.groupHoaDonXuat.Controls.Add(this.label5);
             this.groupHoaDonXuat.Controls.Add(this.cbxKhachHang);
             this.groupHoaDonXuat.Controls.Add(this.txtGhiChu);
@@ -375,6 +376,16 @@
             this.cbxKhachHang.Size = new System.Drawing.Size(178, 27);
             this.cbxKhachHang.TabIndex = 31;
             this.cbxKhachHang.SelectedIndexChanged += new System.EventHandler(this.cbxKhachHang_SelectedIndexChanged);
+            // 
+            // lblNoCu
+            // 
+            this.lblNoCu.AutoSize = true;
+            this.lblNoCu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoCu.Location = new System.Drawing.Point(651, 398);
+            this.lblNoCu.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNoCu.Name = "lblNoCu";
+            this.lblNoCu.Size = new System.Drawing.Size(0, 19);
+            this.lblNoCu.TabIndex = 32;
             // 
             // groupChiTietHDX
             // 
@@ -523,15 +534,29 @@
             this.lblSoMatHang.TabIndex = 42;
             this.lblSoMatHang.Text = "0";
             // 
-            // lblNoCu
+            // txtTraNo
             // 
-            this.lblNoCu.AutoSize = true;
-            this.lblNoCu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNoCu.Location = new System.Drawing.Point(309, 108);
-            this.lblNoCu.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblNoCu.Name = "lblNoCu";
-            this.lblNoCu.Size = new System.Drawing.Size(0, 19);
-            this.lblNoCu.TabIndex = 32;
+            this.txtTraNo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTraNo.Location = new System.Drawing.Point(693, 435);
+            this.txtTraNo.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTraNo.Name = "txtTraNo";
+            this.txtTraNo.Size = new System.Drawing.Size(95, 26);
+            this.txtTraNo.TabIndex = 7;
+            this.txtTraNo.Text = "0";
+            this.txtTraNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtTraNo.Visible = false;
+            // 
+            // lblTraNo
+            // 
+            this.lblTraNo.AutoSize = true;
+            this.lblTraNo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTraNo.Location = new System.Drawing.Point(632, 438);
+            this.lblTraNo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTraNo.Name = "lblTraNo";
+            this.lblTraNo.Size = new System.Drawing.Size(60, 19);
+            this.lblTraNo.TabIndex = 32;
+            this.lblTraNo.Text = "Trả Nợ :";
+            this.lblTraNo.Visible = false;
             // 
             // frmXuatHang
             // 
@@ -540,8 +565,11 @@
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(845, 484);
             this.ControlBox = false;
+            this.Controls.Add(this.lblTraNo);
+            this.Controls.Add(this.lblNoCu);
             this.Controls.Add(this.lblSoMatHang);
             this.Controls.Add(this.lblTongTien);
+            this.Controls.Add(this.txtTraNo);
             this.Controls.Add(this.rdbSanPham);
             this.Controls.Add(this.rdbDai);
             this.Controls.Add(this.rdbDau);
@@ -618,5 +646,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblSoMatHang;
         private System.Windows.Forms.Label lblNoCu;
+        private System.Windows.Forms.TextBox txtTraNo;
+        private System.Windows.Forms.Label lblTraNo;
     }
 }
