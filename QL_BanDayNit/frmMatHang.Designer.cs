@@ -59,7 +59,7 @@
             this.grvHienThiList.BackgroundColor = System.Drawing.Color.LightCyan;
             this.grvHienThiList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grvHienThiList.Location = new System.Drawing.Point(19, 111);
-            this.grvHienThiList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grvHienThiList.Margin = new System.Windows.Forms.Padding(4);
             this.grvHienThiList.MultiSelect = false;
             this.grvHienThiList.Name = "grvHienThiList";
             this.grvHienThiList.ReadOnly = true;
@@ -82,10 +82,11 @@
             // 
             this.txtDonGia.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDonGia.Location = new System.Drawing.Point(587, 44);
-            this.txtDonGia.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDonGia.Margin = new System.Windows.Forms.Padding(4);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.Size = new System.Drawing.Size(100, 26);
             this.txtDonGia.TabIndex = 4;
+            this.txtDonGia.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDonGia_KeyPress);
             // 
             // label1
             // 
@@ -102,10 +103,11 @@
             // 
             this.txtSoLuong.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSoLuong.Location = new System.Drawing.Point(432, 44);
-            this.txtSoLuong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSoLuong.Margin = new System.Windows.Forms.Padding(4);
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(77, 26);
             this.txtSoLuong.TabIndex = 3;
+            this.txtSoLuong.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSoLuong_KeyPress);
             // 
             // label2
             // 
@@ -124,7 +126,7 @@
             this.btnXoa.Image = ((System.Drawing.Image)(resources.GetObject("btnXoa.Image")));
             this.btnXoa.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnXoa.Location = new System.Drawing.Point(216, 324);
-            this.btnXoa.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(97, 30);
             this.btnXoa.TabIndex = 7;
@@ -138,7 +140,7 @@
             this.btnGhi.Image = ((System.Drawing.Image)(resources.GetObject("btnGhi.Image")));
             this.btnGhi.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGhi.Location = new System.Drawing.Point(321, 324);
-            this.btnGhi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGhi.Margin = new System.Windows.Forms.Padding(4);
             this.btnGhi.Name = "btnGhi";
             this.btnGhi.Size = new System.Drawing.Size(104, 30);
             this.btnGhi.TabIndex = 8;
@@ -152,7 +154,7 @@
             this.btnThoat.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.Image")));
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnThoat.Location = new System.Drawing.Point(433, 324);
-            this.btnThoat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThoat.Margin = new System.Windows.Forms.Padding(4);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(124, 30);
             this.btnThoat.TabIndex = 10;
@@ -164,7 +166,7 @@
             // 
             this.txtMaHang.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMaHang.Location = new System.Drawing.Point(236, 44);
-            this.txtMaHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaHang.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaHang.Name = "txtMaHang";
             this.txtMaHang.Size = new System.Drawing.Size(107, 26);
             this.txtMaHang.TabIndex = 1;
@@ -175,7 +177,7 @@
             // 
             this.txtTenHang.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTenHang.Location = new System.Drawing.Point(190, 77);
-            this.txtTenHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtTenHang.Margin = new System.Windows.Forms.Padding(4);
             this.txtTenHang.Name = "txtTenHang";
             this.txtTenHang.Size = new System.Drawing.Size(251, 26);
             this.txtTenHang.TabIndex = 2;
@@ -206,17 +208,18 @@
             // 
             this.txtGiaBan.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtGiaBan.Location = new System.Drawing.Point(564, 77);
-            this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4);
             this.txtGiaBan.Name = "txtGiaBan";
             this.txtGiaBan.Size = new System.Drawing.Size(122, 26);
             this.txtGiaBan.TabIndex = 4;
+            this.txtGiaBan.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDonGia_KeyPress);
             // 
             // rdbDay
             // 
             this.rdbDay.AutoSize = true;
             this.rdbDay.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbDay.Location = new System.Drawing.Point(321, 11);
-            this.rdbDay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdbDay.Margin = new System.Windows.Forms.Padding(4);
             this.rdbDay.Name = "rdbDay";
             this.rdbDay.Size = new System.Drawing.Size(58, 25);
             this.rdbDay.TabIndex = 36;
@@ -230,7 +233,7 @@
             this.rdbSanPham.Checked = true;
             this.rdbSanPham.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbSanPham.Location = new System.Drawing.Point(208, 11);
-            this.rdbSanPham.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdbSanPham.Margin = new System.Windows.Forms.Padding(4);
             this.rdbSanPham.Name = "rdbSanPham";
             this.rdbSanPham.Size = new System.Drawing.Size(103, 25);
             this.rdbSanPham.TabIndex = 37;
@@ -244,7 +247,7 @@
             this.rdbDau.AutoSize = true;
             this.rdbDau.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbDau.Location = new System.Drawing.Point(409, 11);
-            this.rdbDau.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdbDau.Margin = new System.Windows.Forms.Padding(4);
             this.rdbDau.Name = "rdbDau";
             this.rdbDau.Size = new System.Drawing.Size(59, 25);
             this.rdbDau.TabIndex = 36;
@@ -257,7 +260,7 @@
             this.rdbDai.AutoSize = true;
             this.rdbDai.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbDai.Location = new System.Drawing.Point(493, 11);
-            this.rdbDai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdbDai.Margin = new System.Windows.Forms.Padding(4);
             this.rdbDai.Name = "rdbDai";
             this.rdbDai.Size = new System.Drawing.Size(54, 25);
             this.rdbDai.TabIndex = 36;
@@ -304,7 +307,7 @@
             this.Controls.Add(this.lblMatHang);
             this.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "frmMatHang";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -98,6 +98,7 @@
             this.txtDienThoaiKH.Name = "txtDienThoaiKH";
             this.txtDienThoaiKH.Size = new System.Drawing.Size(175, 26);
             this.txtDienThoaiKH.TabIndex = 4;
+            this.txtDienThoaiKH.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNoCu_KeyPress);
             this.txtDienThoaiKH.Leave += new System.EventHandler(this.txtDienThoaiKH_Leave);
             // 
             // label2
@@ -224,6 +225,7 @@
             this.txtNoCu.TabIndex = 2;
             this.txtNoCu.Text = "0";
             this.txtNoCu.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtNoCu.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNoCu_KeyPress);
             // 
             // frmKhachHang
             // 

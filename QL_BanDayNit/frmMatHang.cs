@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace QL_BanDayNit
@@ -15,14 +17,15 @@ namespace QL_BanDayNit
         {
             InitializeComponent();
         }
-        
+        private static CultureInfo ViCultureInfo = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
         private void frmMatHang_Load(object sender, EventArgs e)
         {
             HienThi();
         }
 
         private int intSelectIntem = 0;
-        private string maLoaiHang = "MSP";        
+        private string maLoaiHang = "MSP";
         //Load từ Grid lên các textbox
         private void grvHienThiList_CurrentCellChanged(object sender, EventArgs e)
         {
@@ -36,7 +39,7 @@ namespace QL_BanDayNit
                     {
                         int hangSelect = grvHienThiList.CurrentCell.RowIndex;
                         string maMatHang = grvHienThiList.Rows[hangSelect].Cells[0].Value.ToString();
-                        string select = "select MaMatH,TenMatH,SoLuong,DonGia from tblMatHang WHERE MaMatH=N'" + maMatHang + "' AND SUBSTRING(MaMatH,1,3) ='"+ maLoaiHang +"'";
+                        string select = "select MaMatH,TenMatH,SoLuong,DonGia from tblMatHang WHERE MaMatH=N'" + maMatHang + "' AND SUBSTRING(MaMatH,1,3) ='" + maLoaiHang + "'";
                         DataSet ds = DataConn.GrdSource(select);
                         string strChuoiMaHang = ds.Tables[0].Rows[0]["MaMatH"].ToString();
                         txtMaHang.Text = strChuoiMaHang.Substring(3);
@@ -77,7 +80,7 @@ namespace QL_BanDayNit
         public void HienThi()
         {
             string select = "SELECT mh.MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá],gb.GiaBan [Giá Bán],gb.MaKH [Mã KH]" +
-                            "FROM tblMatHang mh, tblGiaBan gb "+
+                            "FROM tblMatHang mh, tblGiaBan gb " +
                             "WHERE mh.MaMatH = gb.MaMatH AND SUBSTRING(mh.MaMatH,1,3) ='" + maLoaiHang + "' ORDER BY mh.MaMatH DESC";
             DataSet ds = DataConn.GrdSource(select);
             grvHienThiList.DataSource = ds.Tables[0];
@@ -99,7 +102,7 @@ namespace QL_BanDayNit
 
         private void btnGhi_Click(object sender, EventArgs e)
         {
-            if(!KiemTraDuLieuNhap()) return;
+            if (!KiemTraDuLieuNhap()) return;
             if (KiemTraTrungMaMatHangTrongTable(lblMaHang.Text + txtMaHang.Text, "tblMatHang"))
             {
                 if (MessageBox.Show("Đã Có Mặt Hàng Này!\nBạn Muốn Sửa Lại Không?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
@@ -132,7 +135,7 @@ namespace QL_BanDayNit
                         MessageBox.Show("Hãy nhập tên hàng!", "Chú ý");
                         txtTenHang.Select();
                         return;
-                    }                 
+                    }
 
                     string select1 = "select TenMatH from tblMatHang";
                     SqlDataReader sqlData1 = DataConn.ThucHienReader(select1);
@@ -151,10 +154,10 @@ namespace QL_BanDayNit
                     sqlData1.Close();
                     sqlData1.Dispose();
 
-                    string select = "insert into tblMatHang values(N'" + lblMaHang.Text + txtMaHang.Text + "',N'" + txtTenHang.Text + "'," + txtSoLuong.Text + "," + txtDonGia.Text + ")";
+                    string select = "insert into tblMatHang values(N'" + lblMaHang.Text + txtMaHang.Text + "',N'" + txtTenHang.Text + "'," + txtSoLuong.Text + "," + txtDonGia.Text.Replace(",", ".") + ")";
                     DataConn.ThucHienCmd(select);
 
-                    ThemGiaBanChoKhachHang(lblMaHang.Text + txtMaHang.Text,txtGiaBan.Text);
+                    ThemGiaBanChoKhachHang(lblMaHang.Text + txtMaHang.Text, txtGiaBan.Text);
 
                     HienThi();
                     if (MessageBox.Show("Thêm Giá Bán Cho Từng Khách Hàng ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
@@ -181,6 +184,7 @@ namespace QL_BanDayNit
         private bool KiemTraDuLieuNhap()
         {
             int int0 = 0;
+            float float0 = 0;
             if (!int.TryParse(this.txtSoLuong.Text, out int0))
             {
                 MessageBox.Show("Số lượng là số nguyên !");
@@ -193,13 +197,14 @@ namespace QL_BanDayNit
                 txtMaHang.Select();
                 return false;
             }
-            if (!int.TryParse(this.txtDonGia.Text, out int0))
+            if (!float.TryParse(this.txtDonGia.Text, out float0))
             {
                 MessageBox.Show("Nhập số nguyên cho Đơn Giá !");
                 txtDonGia.Select();
+
                 return false;
             }
-            if (!int.TryParse(this.txtGiaBan.Text, out int0))
+            if (!float.TryParse(this.txtGiaBan.Text, out float0))
             {
                 MessageBox.Show("Nhập số nguyên cho Giá Bán !");
                 txtGiaBan.Select();
@@ -223,19 +228,19 @@ namespace QL_BanDayNit
                 txtGiaBan.Select();
                 return false;
             }
-            return true;  
+            return true;
         }
 
-        private void ThemGiaBanChoKhachHang(string mahang,string giaban)
+        private void ThemGiaBanChoKhachHang(string mahang, string giaban)
         {
             string selectKH = "select* from tblKhachHang";
             DataSet dsKH = DataConn.GrdSource(selectKH);
             DataTable dtTable = dsKH.Tables[0];
             foreach (DataRow row in dtTable.Rows)
             {
-                    string maKH = row["MaKH"].ToString();
-                    string insertGia = "INSERT into tblGiaBan values(N'" + mahang + "',N'" + maKH + "'," + giaban + ")";
-                    DataConn.ThucHienCmd(insertGia);                
+                string maKH = row["MaKH"].ToString();
+                string insertGia = "INSERT into tblGiaBan values(N'" + mahang + "',N'" + maKH + "'," + giaban.Replace(",", ".") + ")";
+                DataConn.ThucHienCmd(insertGia);
             }
         }
 
@@ -247,15 +252,15 @@ namespace QL_BanDayNit
             foreach (DataRow row in dtTable.Rows)
             {
                 string maKH = row["MaKH"].ToString();
-                string insertGia = "UPDATE tblGiaBan SET GiaBan='"+ giaban +"' WHERE MaMatH='"+ mahang +"' AND MaKH='" + maKH + "'";
+                string insertGia = "UPDATE tblGiaBan SET GiaBan='" + giaban.Replace(",", ".") + "' WHERE MaMatH='" + mahang + "' AND MaKH='" + maKH + "'";
                 DataConn.ThucHienCmd(insertGia);
             }
         }
 
-        private bool KiemTraTrungMaMatHangTrongTable(string strMaMH,string tableName)
+        private bool KiemTraTrungMaMatHangTrongTable(string strMaMH, string tableName)
         {
             //Exception khi trùng Mã mặt hàng (trùng khóa chính)
-            string select1 = "select MaMatH from "+ tableName;
+            string select1 = "select MaMatH from " + tableName;
             SqlDataReader sqlData = DataConn.ThucHienReader(select1);
             try
             {
@@ -284,9 +289,16 @@ namespace QL_BanDayNit
                 if (txtMaHang.Text == "" && txtSoLuong.Text == "" && txtDonGia.Text == "" && txtTenHang.Text == "" && txtGiaBan.Text == "")
                     throw new NotEnoughInfoException();
 
-                string update = "UPDATE tblMatHang SET TenMatH=N'" + txtTenHang.Text + "',SoLuong='" + txtSoLuong.Text + "',DonGia='" + txtDonGia.Text + "' WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
+                string update = "UPDATE tblMatHang SET TenMatH=N'" + txtTenHang.Text + "',SoLuong='" + txtSoLuong.Text + "',DonGia='" + txtDonGia.Text.Replace(",", ".") + "' WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
                 DataConn.ThucHienCmd(update);
-                UpdateGiaBanKhachHangChung(lblMaHang.Text + txtMaHang.Text, txtGiaBan.Text);
+                if (MessageBox.Show("Cập Nhật Giá Chung Cho Khách Hàng ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    UpdateGiaBanKhachHangChung(lblMaHang.Text + txtMaHang.Text, txtGiaBan.Text);
+                }
+                else
+                {
+                    return;
+                }
                 HienThi();
             }
             catch (NotEnoughInfoException)
@@ -353,6 +365,32 @@ namespace QL_BanDayNit
                 return;
             }
             txtMaHang.Text = String.Format("{0:000}", double.Parse(txtMaHang.Text));
+        }
+
+        private void txtDonGia_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //if (!Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
+            //    e.Handled = true;
+
+            string decimalString = Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+            char decimalChar = Convert.ToChar(decimalString);
+
+            if (Char.IsDigit(e.KeyChar) || Char.IsControl(e.KeyChar))
+            { }
+            else if (e.KeyChar == decimalChar && txtDonGia.Text.IndexOf(decimalString) == -1)
+            { }
+            else if (e.KeyChar == decimalChar && txtGiaBan.Text.IndexOf(decimalString) == -1)
+            { }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtSoLuong_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
+                e.Handled = true;
         }
     }
 }

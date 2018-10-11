@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace QL_BanDayNit
@@ -18,9 +19,9 @@ namespace QL_BanDayNit
         public delegate void LoadData();
         public LoadData MyLoadData;
         private string _maMatHang;
-                    
 
-        public frmNhapGiaBan(string Message): this()
+
+        public frmNhapGiaBan(string Message) : this()
         {
             _maMatHang = Message;
         }
@@ -58,7 +59,7 @@ namespace QL_BanDayNit
             }
         }
 
-        private void UpdateGiaBanKhachHangChung(string makhachhang,string mahang, string giaban)
+        private void UpdateGiaBanKhachHangChung(string makhachhang, string mahang, string giaban)
         {
             string selectKH = "select* from tblKhachHang";
             DataSet dsKH = DataConn.GrdSource(selectKH);
@@ -68,31 +69,65 @@ namespace QL_BanDayNit
                 string maKH = row["MaKH"].ToString();
                 if (maKH == makhachhang)
                 {
-                    string insertGia = "UPDATE tblGiaBan SET GiaBan='" + giaban + "' WHERE MaMatH='" + mahang + "' AND MaKH='" + maKH + "'";
-                    DataConn.ThucHienCmd(insertGia);
+                    string strGiaBan = giaban.Replace(",", ".");
+                    string selectGiaBan = "SELECT Count(*)FROM tblGiaBan WHERE MaKH = '" + makhachhang + "' AND MaMatH = '" + mahang + "'";
+                    if(DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectGiaBan) != 0)
+                    {
+                        string updateGia = "UPDATE tblGiaBan SET GiaBan='" + strGiaBan + "' WHERE MaMatH='" + mahang + "' AND MaKH='" + maKH + "'";
+                        DataConn.ThucHienCmd(updateGia);
+                    }
+                    else
+                    {
+                        string insertGiaBan = "INSERT INTO tblGiaBan VALUES('" + mahang + "','"+ makhachhang + "',"+ strGiaBan + ")";
+                        DataConn.ThucHienCmd(insertGiaBan);
+                    }
                     MessageBox.Show("Cập Nhập Thành Công !");
                 }
             }
         }
 
+        string strGiaBanTruoc = "0";
         private void cbxKhachHang_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxKhachHang.ValueMember != "")
             {
-                txtGiaBan.Text = LayGiaBanTheoTenMaKH(cbxKhachHang.SelectedValue.ToString(),_maMatHang); ;
+                strGiaBanTruoc = txtGiaBan.Text;
+                txtGiaBan.Text = LayGiaBanTheoTenMaKH(cbxKhachHang.SelectedValue.ToString(), _maMatHang); ;
             }
         }
 
-        private string LayGiaBanTheoTenMaKH(string maKH,string maMH)
+        private string LayGiaBanTheoTenMaKH(string maKH, string maMH)
         {
-            string selectSQL = "SELECT GiaBan FROM tblGiaBan WHERE MaKH = '"+ maKH +"' AND MaMatH = '"+ maMH +"'";
-            DataSet dsKH = DataConn.GrdSource(selectSQL);            
-            return dsKH.Tables[0].Rows[0]["GiaBan"].ToString();
+            string selectSQL = "SELECT GiaBan FROM tblGiaBan WHERE MaKH = '" + maKH + "' AND MaMatH = '" + maMH + "'";
+            DataSet dsKH = DataConn.GrdSource(selectSQL);
+            try
+            {
+                return dsKH.Tables[0].Rows[0]["GiaBan"].ToString();
+            }
+            catch
+            {
+                return strGiaBanTruoc;
+            }
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void txtGiaBan_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string decimalString = Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+            char decimalChar = Convert.ToChar(decimalString);
+
+            if (Char.IsDigit(e.KeyChar) || Char.IsControl(e.KeyChar))
+            { }
+            else if (e.KeyChar == decimalChar && txtGiaBan.Text.IndexOf(decimalString) == -1)
+            { }
+            else
+            {
+                e.Handled = true;
+            }
         }
     }
 }
