@@ -156,10 +156,10 @@ namespace QL_BanDayNit
 
         private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //frmDoanhThu dt = new frmDoanhThu();
-            //dt.ShowDialog();
-            frmHoTroThongBaoDoanhThu ht = new frmHoTroThongBaoDoanhThu();
-            ht.ShowDialog();
+            frmDoanhThu dt = new frmDoanhThu();
+            dt.ShowDialog();
+            //frmHoTroThongBaoDoanhThu ht = new frmHoTroThongBaoDoanhThu();
+            //ht.ShowDialog();
         }
 
         private void grdKetQua_CurrentCellChanged(object sender, EventArgs e)

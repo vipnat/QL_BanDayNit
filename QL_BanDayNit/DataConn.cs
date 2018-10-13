@@ -145,8 +145,29 @@ namespace QL_BanDayNit
             {
                 MessageBox.Show("" + e);
             }
+            if (_number > 0)
+                return _number;
+            else
+                return 0;
+        }
 
+        public static float Lay1GiaFloat_ExecuteScalar(string sqlQuery)
+        {
+            float _number = 0;
+            try
+            {
+                cmd = new SqlCommand(sqlQuery, con);
+                object resultObj = cmd.ExecuteScalar();
 
+                if (resultObj != null)
+                {
+                    float.TryParse(resultObj.ToString(), out _number);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("" + e);
+            }
             if (_number > 0)
                 return _number;
             else

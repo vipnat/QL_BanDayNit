@@ -29,58 +29,20 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmHoTroThongBaoDoanhThu));
-            this.txtThang = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtNam = new System.Windows.Forms.TextBox();
             this.btnXemTB = new System.Windows.Forms.Button();
             this.btnThoat = new System.Windows.Forms.Button();
+            this.dtpThangNam = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // txtThang
-            // 
-            this.txtThang.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtThang.Location = new System.Drawing.Point(110, 19);
-            this.txtThang.Name = "txtThang";
-            this.txtThang.Size = new System.Drawing.Size(59, 26);
-            this.txtThang.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(48, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 19);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Tháng";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(48, 60);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(39, 19);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Năm";
-            // 
-            // txtNam
-            // 
-            this.txtNam.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNam.Location = new System.Drawing.Point(110, 60);
-            this.txtNam.Name = "txtNam";
-            this.txtNam.Size = new System.Drawing.Size(59, 26);
-            this.txtNam.TabIndex = 2;
             // 
             // btnXemTB
             // 
             this.btnXemTB.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXemTB.Image = ((System.Drawing.Image)(resources.GetObject("btnXemTB.Image")));
             this.btnXemTB.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnXemTB.Location = new System.Drawing.Point(5, 110);
+            this.btnXemTB.Location = new System.Drawing.Point(8, 94);
             this.btnXemTB.Name = "btnXemTB";
-            this.btnXemTB.Size = new System.Drawing.Size(164, 32);
+            this.btnXemTB.Size = new System.Drawing.Size(157, 32);
             this.btnXemTB.TabIndex = 4;
             this.btnXemTB.Text = "Xem thông báo";
             this.btnXemTB.UseVisualStyleBackColor = true;
@@ -91,7 +53,7 @@
             this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThoat.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.Image")));
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(175, 110);
+            this.btnThoat.Location = new System.Drawing.Point(171, 95);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(98, 31);
             this.btnThoat.TabIndex = 5;
@@ -99,35 +61,51 @@
             this.btnThoat.UseVisualStyleBackColor = true;
             this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
+            // dtpThangNam
+            // 
+            this.dtpThangNam.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.dtpThangNam.Location = new System.Drawing.Point(85, 48);
+            this.dtpThangNam.MinDate = new System.DateTime(2018, 10, 1, 0, 0, 0, 0);
+            this.dtpThangNam.Name = "dtpThangNam";
+            this.dtpThangNam.Size = new System.Drawing.Size(84, 26);
+            this.dtpThangNam.TabIndex = 6;
+            this.dtpThangNam.Value = new System.DateTime(2018, 11, 1, 0, 0, 0, 0);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.label1.Location = new System.Drawing.Point(21, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(230, 21);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Xem Doanh Thu Theo Tháng";
+            // 
             // frmHoTroThongBaoDoanhThu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
-            this.ClientSize = new System.Drawing.Size(281, 154);
+            this.ClientSize = new System.Drawing.Size(277, 151);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dtpThangNam);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnXemTB);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtNam);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtThang);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.Name = "frmHoTroThongBaoDoanhThu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông báo doanh thu";
+            this.Load += new System.EventHandler(this.frmHoTroThongBaoDoanhThu_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtThang;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtNam;
         private System.Windows.Forms.Button btnXemTB;
         private System.Windows.Forms.Button btnThoat;
+        private System.Windows.Forms.DateTimePicker dtpThangNam;
+        private System.Windows.Forms.Label label1;
     }
 }
