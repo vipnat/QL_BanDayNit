@@ -169,6 +169,7 @@
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.Size = new System.Drawing.Size(95, 26);
             this.txtDonGia.TabIndex = 8;
+            this.txtDonGia.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDonGia_KeyPress);
             // 
             // lblDonGia
             // 
@@ -305,7 +306,7 @@
             this.btnInHD.Name = "btnInHD";
             this.btnInHD.Size = new System.Drawing.Size(132, 32);
             this.btnInHD.TabIndex = 17;
-            this.btnInHD.Text = "In hóa đơn (&I)";
+            this.btnInHD.Text = "Xuất Hóa Đơn (&I)";
             this.btnInHD.UseVisualStyleBackColor = true;
             this.btnInHD.Click += new System.EventHandler(this.btnInHD_Click);
             // 
@@ -545,6 +546,7 @@
             this.txtTraNo.Text = "0";
             this.txtTraNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtTraNo.Visible = false;
+            this.txtTraNo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTraNo_KeyPress);
             // 
             // lblTraNo
             // 

@@ -33,7 +33,7 @@ namespace QL_BanDayNit
                 {
                     string aa = sqlData.GetString(0);
                     int getMaKH = Convert.ToInt32(sqlData.GetString(0).Remove(0, 2));
-                    if (getMaKH >= mKH )
+                    if (getMaKH == mKH)
                     {
                         mKH = getMaKH + 1;
                     }
@@ -56,7 +56,7 @@ namespace QL_BanDayNit
             DataSet ds = DataConn.GrdSource(select);
             grdKhachHang.DataSource = ds.Tables[0];
             grdKhachHang.Refresh();
-            if(grdKhachHang.RowCount <= 0)
+            if (grdKhachHang.RowCount <= 0)
                 txtMaKH.Text = LayMaKH().ToString("000");
         }
 
@@ -70,13 +70,14 @@ namespace QL_BanDayNit
                 {
                     int hang = grdKhachHang.CurrentCell.RowIndex;
                     string ma = grdKhachHang.Rows[hang].Cells[0].Value.ToString();
-                    string select = "SELECT [MaKH],[TenKH],[DiaChi],[SoDT] FROM [tblKhachHang] WHERE [MaKH]=N'" + ma + "'";
+                    string select = "SELECT [MaKH],[TenKH],[DiaChi],[SoDT],[NoCu] FROM [tblKhachHang] WHERE [MaKH]=N'" + ma + "'";
 
                     DataSet ds = DataConn.GrdSource(select);
-                    txtMaKH.Text = ds.Tables[0].Rows[0]["MaKH"].ToString().Remove(0,2);
+                    txtMaKH.Text = ds.Tables[0].Rows[0]["MaKH"].ToString().Remove(0, 2);
                     txtTenKH.Text = ds.Tables[0].Rows[0]["TenKH"].ToString();
                     txtDiaChiKH.Text = ds.Tables[0].Rows[0]["DiaChi"].ToString();
                     txtDienThoaiKH.Text = ds.Tables[0].Rows[0]["SoDT"].ToString();
+                    txtNoCu.Text = ds.Tables[0].Rows[0]["NoCu"].ToString();
                 }
             }
         }
@@ -108,10 +109,23 @@ namespace QL_BanDayNit
                 txtTenKH.Select();
                 return;
             }
-
             string query_SQL = "";
-            query_SQL = "INSERT INTO [tblKhachHang]([MaKH],[TenKH],[DiaChi],[SoDT],[NoCu])VALUES (N'" + lblMaKH.Text + txtMaKH.Text + "',N'" + txtTenKH.Text + "',N'" + txtDiaChiKH.Text + "' ," + txtDienThoaiKH.Text + "," + txtNoCu.Text + ")";
-            DataConn.ThucHienCmd(query_SQL);
+            query_SQL = "SELECT COUNT(*)FROM tblKhachHang WHERE MaKH = N'" + lblMaKH.Text + txtMaKH.Text + "' ";
+            if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(query_SQL) <= 0)
+            {
+                query_SQL = "INSERT INTO [tblKhachHang]([MaKH],[TenKH],[DiaChi],[SoDT],[NoCu])VALUES (N'" + lblMaKH.Text + txtMaKH.Text + "',N'" + txtTenKH.Text + "',N'" + txtDiaChiKH.Text + "' ," + txtDienThoaiKH.Text + "," + txtNoCu.Text + ")";
+                DataConn.ThucHienCmd(query_SQL);
+                MessageBox.Show("Thêm Khách Hàng Thành Công !", "Thông Báo");
+            }
+            else
+            {
+                query_SQL = "UPDATE tblKhachHang SET TenKH = N'" + txtTenKH.Text + "', DiaChi = N'" + txtDiaChiKH.Text + "', SoDT = " + txtDienThoaiKH.Text + ", NoCu = " + txtNoCu.Text + "" +
+                            "WHERE MaKH = N'" + lblMaKH.Text + txtMaKH.Text + "' ";
+                DataConn.ThucHienCmd(query_SQL);
+                MessageBox.Show("Cập Nhập Thông Tin Thành Công !", "Thông Báo");
+            }
+
+
 
             HienThi();
         }
@@ -127,18 +141,25 @@ namespace QL_BanDayNit
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string query_SQL = "DELETE FROM [tblKhachHang] WHERE [MaKH]=N'" + lblMaKH.Text + txtMaKH.Text + "'";
-                DataConn.ThucHienCmd(query_SQL);
-                MessageBox.Show("Xóa Thành Công !");
-                HienThi();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Xóa Không Thành Công !" + ex);
-            }
-            
+            if (MessageBox.Show("Bạn Muốn Xóa Thông Tin Khách Hàng: " + txtTenKH.Text + " ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                return;
+            else
+                try
+                {
+                    // Xóa Thông Tin Khách Hàng Trong Bảng Giá Bán
+                    string sqlDeleteGiaBan = "DELETE FROM tblGiaBan WHERE [MaKH]=N'" + lblMaKH.Text + txtMaKH.Text + "'";
+                    DataConn.ThucHienCmd(sqlDeleteGiaBan);
+                    // Xóa Thông Tin
+                    string query_SQL = "DELETE FROM [tblKhachHang] WHERE [MaKH]=N'" + lblMaKH.Text + txtMaKH.Text + "'";
+                    DataConn.ThucHienCmd(query_SQL);
+                    MessageBox.Show("Xóa Khách Hàng Thành Công !");
+                    HienThi();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Xóa Không Thành Công !" + ex);
+                }
+
         }
 
         private void btnThoat_Click(object sender, EventArgs e)

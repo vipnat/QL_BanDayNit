@@ -311,5 +311,11 @@ namespace QL_BanDayNit
             else
                 grdKq.Columns[3].Visible = false;
         }
+
+        private void txtDienThoai_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
+                e.Handled = true;
+        }
     }
 }

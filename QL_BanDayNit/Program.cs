@@ -15,7 +15,7 @@ namespace QL_BanDayNit
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new frmMain());
-            Application.Run(new frmMatHang());
+            Application.Run(new frmXuatHang());
         }
     }
 }
