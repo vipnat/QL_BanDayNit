@@ -48,6 +48,8 @@
             this.rdbDau = new System.Windows.Forms.RadioButton();
             this.rdbDai = new System.Windows.Forms.RadioButton();
             this.lblMaHang = new System.Windows.Forms.Label();
+            this.btnThem = new System.Windows.Forms.Button();
+            this.cbxHienThi = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.grvHienThiList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -168,6 +170,7 @@
             this.txtMaHang.Location = new System.Drawing.Point(236, 44);
             this.txtMaHang.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaHang.Name = "txtMaHang";
+            this.txtMaHang.ReadOnly = true;
             this.txtMaHang.Size = new System.Drawing.Size(107, 26);
             this.txtMaHang.TabIndex = 1;
             this.txtMaHang.Text = "0";
@@ -280,12 +283,37 @@
             this.lblMaHang.Text = "MSP";
             this.lblMaHang.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // btnThem
+            // 
+            this.btnThem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnThem.Location = new System.Drawing.Point(111, 324);
+            this.btnThem.Margin = new System.Windows.Forms.Padding(4);
+            this.btnThem.Name = "btnThem";
+            this.btnThem.Size = new System.Drawing.Size(97, 30);
+            this.btnThem.TabIndex = 7;
+            this.btnThem.Text = "Thêm";
+            this.btnThem.UseVisualStyleBackColor = true;
+            this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
+            // 
+            // cbxHienThi
+            // 
+            this.cbxHienThi.AutoSize = true;
+            this.cbxHienThi.Location = new System.Drawing.Point(587, 11);
+            this.cbxHienThi.Name = "cbxHienThi";
+            this.cbxHienThi.Size = new System.Drawing.Size(213, 25);
+            this.cbxHienThi.TabIndex = 38;
+            this.cbxHienThi.Text = "Hiển Thị Theo Từng KH";
+            this.cbxHienThi.UseVisualStyleBackColor = true;
+            this.cbxHienThi.CheckedChanged += new System.EventHandler(this.cbxHienThi_CheckedChanged);
+            // 
             // frmMatHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(820, 371);
+            this.Controls.Add(this.cbxHienThi);
             this.Controls.Add(this.rdbSanPham);
             this.Controls.Add(this.rdbDai);
             this.Controls.Add(this.rdbDau);
@@ -295,6 +323,7 @@
             this.Controls.Add(this.txtMaHang);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnGhi);
+            this.Controls.Add(this.btnThem);
             this.Controls.Add(this.btnXoa);
             this.Controls.Add(this.txtSoLuong);
             this.Controls.Add(this.label2);
@@ -340,5 +369,7 @@
         private System.Windows.Forms.RadioButton rdbDau;
         private System.Windows.Forms.RadioButton rdbDai;
         private System.Windows.Forms.Label lblMaHang;
+        private System.Windows.Forms.Button btnThem;
+        private System.Windows.Forms.CheckBox cbxHienThi;
     }
 }

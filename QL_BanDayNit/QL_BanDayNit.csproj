@@ -108,11 +108,11 @@
     <Compile Include="frmDoiPass.Designer.cs">
       <DependentUpon>frmDoiPass.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmHoTroThongBaoDoanhThu.cs">
+    <Compile Include="frmTrangChu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmHoTroThongBaoDoanhThu.Designer.cs">
-      <DependentUpon>frmHoTroThongBaoDoanhThu.cs</DependentUpon>
+    <Compile Include="frmTrangChu.Designer.cs">
+      <DependentUpon>frmTrangChu.cs</DependentUpon>
     </Compile>
     <Compile Include="frmKhachHang.cs">
       <SubType>Form</SubType>
@@ -190,9 +190,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmDoiPass.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmHoTroThongBaoDoanhThu.resx">
+    <EmbeddedResource Include="frmTrangChu.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmHoTroThongBaoDoanhThu.cs</DependentUpon>
+      <DependentUpon>frmTrangChu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmKhachHang.resx">
       <DependentUpon>frmKhachHang.cs</DependentUpon>

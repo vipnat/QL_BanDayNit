@@ -11,7 +11,7 @@ namespace QL_BanDayNit
 {
     public partial class frmNhanVien : Form
     {
-        private bool kt;
+
         public frmNhanVien()
         {
             InitializeComponent();
@@ -92,12 +92,9 @@ namespace QL_BanDayNit
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            kt = false;
             btnThem.Enabled = false;
-            btnSua.Enabled = false;
             btnXoa.Enabled = false;
             btnGhi.Enabled = true;
-            btnHoan.Enabled = true;
             btnThoat.Enabled = true;
             txtMaNV.ReadOnly = true;
             txtTenNV.ReadOnly = false;
@@ -108,7 +105,7 @@ namespace QL_BanDayNit
         private void btnGhi_Click(object sender, EventArgs e)
         {
             string strMaNhanVien = lblMaNV.Text + txtMaNV.Text;
-            if (kt == true)//Thêm
+            if (!KiemTraNhanVienTonTai(strMaNhanVien))//Thêm
             {
                 string select = "";
                 try
@@ -132,46 +129,7 @@ namespace QL_BanDayNit
                         txtDiaChi.Select();
                         return;
                     }
-                    //Bắt lỗi nếu trùng mã nhân viên
-                    string select1 = "select MaNhanVien from tblNhanVien";
-                    SqlDataReader sqlData = DataConn.ThucHienReader(select1);
-
                     
-                    try
-                    {
-                        while (sqlData.Read())
-                        {
-                            if (sqlData.GetString(0) == strMaNhanVien)
-                            {
-                                sqlData.Close();
-                                sqlData.Dispose();
-                                throw new SameKeyException();
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        sqlData.Close();
-                        sqlData.Dispose();
-                    }
-
-                    //select1 = "select TenNhanVien from tblNhanVien";
-                    //SqlDataReader sqlData1 = DataConn.ThucHienReader(select1);
-                    //if (dr1 != null)
-                    //{
-                    //    while (dr1.Read())
-                    //    {
-                    //        if (dr1.GetString(0) == txtTenNV.Text)
-                    //        {
-                    //            dr1.Close();
-                    //            dr1.Dispose();
-                    //            throw new SameKeyException();
-                    //        }
-                    //    }
-                    //}
-                    //dr1.Close();
-                    //dr1.Dispose();
-
                     select = "insert into tblNhanVien values(N'" + strMaNhanVien + "',N'" + txtTenNV.Text + "',N'" + txtDiaChi.Text + "',N'" + txtDienThoai.Text + "')";
                     DataConn.ThucHienCmd(select);
                     HienThi();
@@ -207,15 +165,17 @@ namespace QL_BanDayNit
             }
         }
 
+        private bool KiemTraNhanVienTonTai(string strMaNhanVien)
+        {
+            // Kiểm Tra Nhân Viên
+            string selectNhanVien = "SELECT* FROM tblNhanVien WHERE MaNhanVien = '" + strMaNhanVien + "'";
+            DataSet dsNhanVien = DataConn.GrdSource(selectNhanVien);
+            if (dsNhanVien.Tables[0].Rows.Count > 0) return true;
+            return false;
+        }
+
         private void btnThem_Click(object sender, EventArgs e)
         {
-            kt = true;
-            btnThem.Enabled = false;
-            btnSua.Enabled = false;
-            btnXoa.Enabled = false;
-            btnGhi.Enabled = true;
-            btnHoan.Enabled = true;
-            btnThoat.Enabled = true;
             txtTenNV.ReadOnly = false;
             txtDienThoai.ReadOnly = false;
             txtDiaChi.ReadOnly = false;
@@ -234,11 +194,9 @@ namespace QL_BanDayNit
         private void btnHoan_Click(object sender, EventArgs e)
         {
             btnThem.Enabled = true;
-            btnSua.Enabled = true;
             btnXoa.Enabled = true;
             btnThoat.Enabled = true;
             btnGhi.Enabled = false;
-            btnHoan.Enabled = false;
             txtTenNV.ReadOnly = true;
             txtMaNV.ReadOnly = true;
             txtDienThoai.ReadOnly = true;

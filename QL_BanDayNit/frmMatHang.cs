@@ -21,6 +21,7 @@ namespace QL_BanDayNit
 
         private void frmMatHang_Load(object sender, EventArgs e)
         {
+            ThemGiaBanChoCacMatHangDaCo();
             HienThi();
         }
 
@@ -52,7 +53,7 @@ namespace QL_BanDayNit
                         string select1 = "select GiaBan from tblGiaBan WHERE MaMatH=N'" + maMatHang + "'";
                         DataSet ds1 = DataConn.GrdSource(select1);
                         txtGiaBan.Text = ds1.Tables[0].Rows[0]["GiaBan"].ToString();
-
+                        btnThem.Enabled = true;
                     }
                     catch (Exception se)
                     {
@@ -79,29 +80,35 @@ namespace QL_BanDayNit
 
         public void HienThi()
         {
-            string select = "SELECT mh.MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá],gb.GiaBan [Giá Bán],gb.MaKH [Mã KH]" +
+            string selectTheoKH = "SELECT mh.MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá],gb.GiaBan [Giá Bán],gb.MaKH [Mã KH]" +
                             "FROM tblMatHang mh, tblGiaBan gb " +
                             "WHERE mh.MaMatH = gb.MaMatH AND SUBSTRING(mh.MaMatH,1,3) ='" + maLoaiHang + "' ORDER BY mh.MaMatH DESC";
-            DataSet ds = DataConn.GrdSource(select);
+            string selectMatHang = "SELECT MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá] FROM tblMatHang "+
+                                   "WHERE SUBSTRING(MaMatH,1,3) ='" + maLoaiHang + "' ORDER BY MaMatH DESC";
+            DataSet ds = DataConn.GrdSource(!cbxHienThi.Checked ? selectMatHang : selectTheoKH);
             grvHienThiList.DataSource = ds.Tables[0];
             grvHienThiList.Refresh();
             if (ds.Tables[0].Rows.Count > 0)
             {
 
                 grvHienThiList.CurrentCell = grvHienThiList.Rows[intSelectIntem].Cells[0];
-
                 grvHienThiList.Columns[0].Width = 100;
                 grvHienThiList.Columns[1].Width = 280;
                 grvHienThiList.Columns[2].Width = 105;
                 grvHienThiList.Columns[3].Width = 95;
-                grvHienThiList.Columns[4].Width = 95;
-                grvHienThiList.Columns[5].Width = 90;
+                if (cbxHienThi.Checked)
+                {
+                    grvHienThiList.Columns[4].Width = 95;
+                    grvHienThiList.Columns[5].Width = 90;
+                }
+                
                 grvHienThiList.FirstDisplayedScrollingRowIndex = intSelectIntem;
             }
         }
 
         private void btnGhi_Click(object sender, EventArgs e)
         {
+            intSelectIntem = grvHienThiList.CurrentCell.RowIndex;
             if (!KiemTraDuLieuNhap()) return;
             if (KiemTraTrungMaMatHangTrongTable(lblMaHang.Text + txtMaHang.Text, "tblMatHang"))
             {
@@ -111,12 +118,10 @@ namespace QL_BanDayNit
                 }
                 else
                 {
-                    intSelectIntem = grvHienThiList.CurrentCell.RowIndex;
+                    btnThem.Enabled = true;
                     CapNhapDuLieuMatHang(sender, e);
-                    if (MessageBox.Show("Thêm Giá Bán Cho Từng Khách Hàng ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                    {
-                        HienThiFormNhapGia(lblMaHang.Text + txtMaHang.Text);
-                    }
+                    
+                    HienThi();
                 }
             }
             else
@@ -160,6 +165,7 @@ namespace QL_BanDayNit
                     ThemGiaBanChoKhachHang(lblMaHang.Text + txtMaHang.Text, txtGiaBan.Text);
 
                     HienThi();
+                    btnThem.Enabled = true;
                     if (MessageBox.Show("Thêm Giá Bán Cho Từng Khách Hàng ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
                         HienThiFormNhapGia(lblMaHang.Text + txtMaHang.Text);
@@ -297,9 +303,11 @@ namespace QL_BanDayNit
                 }
                 else
                 {
-                    return;
+                    if (MessageBox.Show("Thêm Giá Bán Cho Từng Khách Hàng ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        HienThiFormNhapGia(lblMaHang.Text + txtMaHang.Text);
+                    }
                 }
-                HienThi();
             }
             catch (NotEnoughInfoException)
             {
@@ -348,6 +356,7 @@ namespace QL_BanDayNit
 
         private void rdbSanPham_CheckedChanged(object sender, EventArgs e)
         {
+            ThemGiaBanChoCacMatHangDaCo();
             if (rdbSanPham.Checked) lblMaHang.Text = maLoaiHang = "MSP";
             if (rdbDay.Checked) lblMaHang.Text = maLoaiHang = "DAY";
             if (rdbDau.Checked) lblMaHang.Text = maLoaiHang = "DAU";
@@ -391,6 +400,75 @@ namespace QL_BanDayNit
         {
             if (!Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            btnThem.Enabled = false;
+            txtMaHang.Text = LayMaMatHangMoi(maLoaiHang).ToString("000");
+        }
+
+        private int LayMaMatHangMoi(string maLoai)
+        {
+            int mKH = 1;
+            string select1 = "select MaMatH from tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maLoai + "'";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+            try
+            {
+                while (sqlData.Read())
+                {
+                    string aa = sqlData.GetString(0);
+                    int getMaKH = Convert.ToInt32(sqlData.GetString(0).Remove(0, 3));
+                    if (getMaKH == mKH)
+                    {
+                        mKH = getMaKH + 1;
+                    }
+                }
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+            return mKH;
+        }
+
+        private int LayMaMatHangMaxTheoLoai(string maLoai)
+        {
+            string sqlLayMaLonNhat = "SELECT MAX(SUBSTRING(MaMatH,4,10)) FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='"+ maLoai + "'";
+            try
+            {
+                return DataConn.Lay1GiaTriSoDung_ExecuteScalar(sqlLayMaLonNhat);
+            }
+            catch
+            {
+                return 1;
+            }
+            
+        }
+
+        private void ThemGiaBanChoCacMatHangDaCo()
+        {
+            // Lay Danh Sach Mặt Hàng
+            string sqlDSMH = "SELECT MaMatH,DonGia FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + lblMaHang.Text +"'";
+            
+            DataSet dsMH = DataConn.GrdSource(sqlDSMH);
+            DataTable dtTable = dsMH.Tables[0];
+            foreach (DataRow row in dtTable.Rows)
+            {
+                string maMHang = row["MaMatH"].ToString();
+                string sqlKiemTraTonTai = "SELECT COUNT(*)FROM tblGiaBan WHERE MaMatH ='" + maMHang + "'";
+                if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(sqlKiemTraTonTai) <= 0)
+                    ThemGiaBanChoKhachHang(maMHang, row["DonGia"].ToString());
+            }
+
+        }
+
+        private void cbxHienThi_CheckedChanged(object sender, EventArgs e)
+        {
+            HienThi();
         }
     }
 }

@@ -66,7 +66,7 @@ namespace QL_BanDayNit
 
         private void grdView_CurrentCellChanged(object sender, EventArgs e)
         {
-           
+
             if (grdView.RowCount > 0)
             {
                 if (grdView.CurrentCell == null)
@@ -81,30 +81,22 @@ namespace QL_BanDayNit
                         txtMa.Text = ds.Tables[0].Rows[0]["MaHD"].ToString();
                     }
                     else
-                    try
-                    {
-                        int hang = grdView.CurrentCell.RowIndex;
-                        string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia,tblHoaDonXuat.GhiChu" +
-                            " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
-                            " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
-                            " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
-                            " WHERE tblHoaDonXuat.MaHD=N'" + grdView.Rows[hang].Cells[0].Value.ToString() + "'" +
-                            " AND tblChiTietHDX.MaMatH=N'" + grdView.Rows[hang].Cells[2].Value.ToString() + "'";
-                        DataSet ds = DataConn.GrdSource(select);
-
-                        //cboMaNhanVien.Text = ds.Tables[0].Rows[0]["TenNhanVien"].ToString();
-                        //cboMaMatH.Text = ds.Tables[0].Rows[0]["TenMatH"].ToString();
-                        //txtMaHD.Text = ds.Tables[0].Rows[0]["MaHD"].ToString();
-                        //txtSoLuong.Text = ds.Tables[0].Rows[0]["SoLuong"].ToString();
-                        //pckNgayXuat.Text = ds.Tables[0].Rows[0]["NgayXuat"].ToString();
-                        //txtDonGia.Text = ds.Tables[0].Rows[0]["DonGia"].ToString();
-                        //txtGhiChu.Text = ds.Tables[0].Rows[0]["GhiChu"].ToString();
-                        txtMa.Text = ds.Tables[0].Rows[0]["MaHD"].ToString();
-                    }
-                    catch (Exception se)
-                    {
-                        MessageBox.Show("" + se.Message);
-                    }
+                        try
+                        {
+                            int hang = grdView.CurrentCell.RowIndex;
+                            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia,tblHoaDonXuat.GhiChu" +
+                                " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
+                                " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
+                                " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
+                                " WHERE tblHoaDonXuat.MaHD=N'" + grdView.Rows[hang].Cells[0].Value.ToString() + "'" +
+                                " AND tblChiTietHDX.MaMatH=N'" + grdView.Rows[hang].Cells[2].Value.ToString() + "'";
+                            DataSet ds = DataConn.GrdSource(select);
+                            txtMa.Text = ds.Tables[0].Rows[0]["MaHD"].ToString();
+                        }
+                        catch (Exception se)
+                        {
+                            MessageBox.Show("" + se.Message);
+                        }
                 }
                 else
                     return;
@@ -142,26 +134,28 @@ namespace QL_BanDayNit
                 grdView.Columns[5].Visible = true;
             else
                 grdView.Columns[5].Visible = false;
+            if (cbxChiTiet.Checked == true)
+            {
+                if (chkListBox.GetItemChecked(6) == true)
+                    grdView.Columns[6].Visible = true;
+                else
+                    grdView.Columns[6].Visible = false;
 
-            if (chkListBox.GetItemChecked(6) == true)
-                grdView.Columns[6].Visible = true;
-            else
-                grdView.Columns[6].Visible = false;
+                if (chkListBox.GetItemChecked(7) == true && cbxChiTiet.Checked == true)
+                    grdView.Columns[7].Visible = true;
+                else
+                    grdView.Columns[7].Visible = false;
+            }
 
-            if (chkListBox.GetItemChecked(7) == true)
-                grdView.Columns[7].Visible = true;
-            else
-                grdView.Columns[7].Visible = false;
+            //if (chkListBox.GetItemChecked(8) == true)
+            //    grdView.Columns[8].Visible = true;
+            //else
+            //    grdView.Columns[8].Visible = false;
 
-            if (chkListBox.GetItemChecked(8) == true)
-                grdView.Columns[8].Visible = true;
-            else
-                grdView.Columns[8].Visible = false;
-
-            if (chkListBox.GetItemChecked(9) == true)
-                grdView.Columns[9].Visible = true;
-            else
-                grdView.Columns[9].Visible = false;
+            //if (chkListBox.GetItemChecked(9) == true)
+            //    grdView.Columns[9].Visible = true;
+            //else
+            //    grdView.Columns[9].Visible = false;
         }
 
         private void btnInHD_Click(object sender, EventArgs e)
