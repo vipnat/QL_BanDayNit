@@ -38,7 +38,7 @@
             this.txtDonGia = new System.Windows.Forms.TextBox();
             this.lblDonGia = new System.Windows.Forms.Label();
             this.btnNhap = new System.Windows.Forms.Button();
-            this.cbxMaMatH = new System.Windows.Forms.ComboBox();
+            this.cbxTenMatHang = new System.Windows.Forms.ComboBox();
             this.pckNgayNhap = new System.Windows.Forms.DateTimePicker();
             this.txtGhiChu = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -57,6 +57,7 @@
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
             this.txtMaH = new System.Windows.Forms.TextBox();
+            this.cbxMa = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdNhapHang)).BeginInit();
             this.groupHoaDonNhap.SuspendLayout();
             this.groupChiTietHDN.SuspendLayout();
@@ -65,7 +66,7 @@
             // lblMaMatH
             // 
             this.lblMaMatH.AutoSize = true;
-            this.lblMaMatH.Location = new System.Drawing.Point(24, 21);
+            this.lblMaMatH.Location = new System.Drawing.Point(6, 20);
             this.lblMaMatH.Name = "lblMaMatH";
             this.lblMaMatH.Size = new System.Drawing.Size(66, 19);
             this.lblMaMatH.TabIndex = 2;
@@ -94,7 +95,7 @@
             // 
             this.txtSoLuong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtSoLuong.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSoLuong.Location = new System.Drawing.Point(336, 20);
+            this.txtSoLuong.Location = new System.Drawing.Point(401, 16);
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(60, 26);
             this.txtSoLuong.TabIndex = 7;
@@ -103,7 +104,7 @@
             // lblSoLuong
             // 
             this.lblSoLuong.AutoSize = true;
-            this.lblSoLuong.Location = new System.Drawing.Point(273, 21);
+            this.lblSoLuong.Location = new System.Drawing.Point(341, 20);
             this.lblSoLuong.Name = "lblSoLuong";
             this.lblSoLuong.Size = new System.Drawing.Size(64, 19);
             this.lblSoLuong.TabIndex = 6;
@@ -122,7 +123,7 @@
             // 
             this.txtDonGia.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtDonGia.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDonGia.Location = new System.Drawing.Point(473, 20);
+            this.txtDonGia.Location = new System.Drawing.Point(528, 16);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.ReadOnly = true;
             this.txtDonGia.Size = new System.Drawing.Size(65, 26);
@@ -132,7 +133,7 @@
             // lblDonGia
             // 
             this.lblDonGia.AutoSize = true;
-            this.lblDonGia.Location = new System.Drawing.Point(398, 21);
+            this.lblDonGia.Location = new System.Drawing.Point(463, 20);
             this.lblDonGia.Name = "lblDonGia";
             this.lblDonGia.Size = new System.Drawing.Size(56, 19);
             this.lblDonGia.TabIndex = 10;
@@ -151,19 +152,20 @@
             this.btnNhap.UseVisualStyleBackColor = true;
             this.btnNhap.Click += new System.EventHandler(this.btnNhap_Click);
             // 
-            // cbxMaMatH
+            // cbxTenMatHang
             // 
-            this.cbxMaMatH.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxMaMatH.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.cbxMaMatH.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cbxMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxMaMatH.FormattingEnabled = true;
-            this.cbxMaMatH.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbxMaMatH.Location = new System.Drawing.Point(91, 19);
-            this.cbxMaMatH.Name = "cbxMaMatH";
-            this.cbxMaMatH.Size = new System.Drawing.Size(173, 27);
-            this.cbxMaMatH.TabIndex = 6;
-            this.cbxMaMatH.SelectedIndexChanged += new System.EventHandler(this.cboMaMatH_SelectedIndexChanged);
+            this.cbxTenMatHang.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxTenMatHang.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cbxTenMatHang.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbxTenMatHang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxTenMatHang.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxTenMatHang.FormattingEnabled = true;
+            this.cbxTenMatHang.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.cbxTenMatHang.Location = new System.Drawing.Point(170, 16);
+            this.cbxTenMatHang.Name = "cbxTenMatHang";
+            this.cbxTenMatHang.Size = new System.Drawing.Size(173, 27);
+            this.cbxTenMatHang.TabIndex = 6;
+            this.cbxTenMatHang.SelectedIndexChanged += new System.EventHandler(this.cboMaMatH_SelectedIndexChanged);
             // 
             // pckNgayNhap
             // 
@@ -259,7 +261,8 @@
             this.groupChiTietHDN.Controls.Add(this.cbxDay);
             this.groupChiTietHDN.Controls.Add(this.cbxDauKhoa);
             this.groupChiTietHDN.Controls.Add(this.label2);
-            this.groupChiTietHDN.Controls.Add(this.cbxMaMatH);
+            this.groupChiTietHDN.Controls.Add(this.cbxMa);
+            this.groupChiTietHDN.Controls.Add(this.cbxTenMatHang);
             this.groupChiTietHDN.Controls.Add(this.txtDonGia);
             this.groupChiTietHDN.Controls.Add(this.lblDonGia);
             this.groupChiTietHDN.Controls.Add(this.txtSoLuong);
@@ -382,6 +385,21 @@
             this.txtMaH.TabIndex = 31;
             this.txtMaH.Visible = false;
             // 
+            // cbxMa
+            // 
+            this.cbxMa.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxMa.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cbxMa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbxMa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxMa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxMa.FormattingEnabled = true;
+            this.cbxMa.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.cbxMa.Location = new System.Drawing.Point(72, 16);
+            this.cbxMa.Name = "cbxMa";
+            this.cbxMa.Size = new System.Drawing.Size(92, 27);
+            this.cbxMa.TabIndex = 6;
+            this.cbxMa.SelectedIndexChanged += new System.EventHandler(this.cboMaMatH_SelectedIndexChanged);
+            // 
             // frmNhap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -425,7 +443,7 @@
         private System.Windows.Forms.TextBox txtDonGia;
         private System.Windows.Forms.Label lblDonGia;
         private System.Windows.Forms.Button btnNhap;
-        private System.Windows.Forms.ComboBox cbxMaMatH;
+        private System.Windows.Forms.ComboBox cbxTenMatHang;
         private System.Windows.Forms.DateTimePicker pckNgayNhap;
         private System.Windows.Forms.TextBox txtGhiChu;
         private System.Windows.Forms.Label label1;
@@ -444,5 +462,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox cbDai;
         private System.Windows.Forms.CheckBox cbDauDay;
+        private System.Windows.Forms.ComboBox cbxMa;
     }
 }

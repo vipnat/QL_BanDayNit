@@ -27,8 +27,8 @@ namespace QL_BanDayNit
         private void frmDoanhThu_Load(object sender, EventArgs e)
         {
             SetMyCustomFormat();
+            cbxHienThi.Checked = true;
             HienThiToanBo();
-
         }
 
         private void HienThiToanBo()
@@ -64,6 +64,7 @@ namespace QL_BanDayNit
 
         private void btnXem_Click(object sender, EventArgs e)
         {
+            cbxHienThi.Checked = false;
             HienThiTheoThangNam(dtpThangNam.Value.Month.ToString("00"), dtpThangNam.Value.Year.ToString());
         }
 
@@ -86,6 +87,7 @@ namespace QL_BanDayNit
 
         private void btnXemNam_Click(object sender, EventArgs e)
         {
+            cbxHienThi.Checked = false;
             // SQL Select data
             string sqlGetLoiNhuan = "SELECT YEAR(NgayXuat) [Năm], SUM(TongTien) [Tổng Tiền],SUM(TongTienGoc) [Tiền Gốc],SUM(TongTien-TongTienGoc) [Lợi Nhuận] FROM tblHoaDonXuat " +
                                     "WHERE YEAR(NgayXuat) = " + dtpNam.Value.Year.ToString() + " GROUP BY YEAR(NgayXuat)";

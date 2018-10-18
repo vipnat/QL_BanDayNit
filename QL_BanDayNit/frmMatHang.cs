@@ -17,7 +17,6 @@ namespace QL_BanDayNit
         {
             InitializeComponent();
         }
-        private static CultureInfo ViCultureInfo = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
         private void frmMatHang_Load(object sender, EventArgs e)
         {
@@ -75,7 +74,12 @@ namespace QL_BanDayNit
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (MessageBox.Show("Bạn Có Muốn Thoát Ra?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            {
+                return;
+            }
+            else
+                this.Close();
         }
 
         public void HienThi()
@@ -83,14 +87,16 @@ namespace QL_BanDayNit
             string selectTheoKH = "SELECT mh.MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá],gb.GiaBan [Giá Bán],gb.MaKH [Mã KH]" +
                             "FROM tblMatHang mh, tblGiaBan gb " +
                             "WHERE mh.MaMatH = gb.MaMatH AND SUBSTRING(mh.MaMatH,1,3) ='" + maLoaiHang + "' ORDER BY mh.MaMatH DESC";
-            string selectMatHang = "SELECT MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá] FROM tblMatHang "+
+            string selectMatHang = "SELECT MaMatH [Mã Hàng],TenMatH [Tên Hàng],SoLuong [Số Lượng],DonGia [Đơn Giá] FROM tblMatHang " +
                                    "WHERE SUBSTRING(MaMatH,1,3) ='" + maLoaiHang + "' ORDER BY MaMatH DESC";
-            DataSet ds = DataConn.GrdSource(!cbxHienThi.Checked ? selectMatHang : selectTheoKH);
+            string sqlSelect = !cbxHienThi.Checked ? selectMatHang : selectTheoKH;
+
+            DataSet ds = DataConn.GrdSource(sqlSelect);
             grvHienThiList.DataSource = ds.Tables[0];
             grvHienThiList.Refresh();
+
             if (ds.Tables[0].Rows.Count > 0)
             {
-
                 grvHienThiList.CurrentCell = grvHienThiList.Rows[intSelectIntem].Cells[0];
                 grvHienThiList.Columns[0].Width = 100;
                 grvHienThiList.Columns[1].Width = 280;
@@ -101,7 +107,7 @@ namespace QL_BanDayNit
                     grvHienThiList.Columns[4].Width = 95;
                     grvHienThiList.Columns[5].Width = 90;
                 }
-                
+
                 grvHienThiList.FirstDisplayedScrollingRowIndex = intSelectIntem;
             }
         }
@@ -120,7 +126,7 @@ namespace QL_BanDayNit
                 {
                     btnThem.Enabled = true;
                     CapNhapDuLieuMatHang(sender, e);
-                    
+
                     HienThi();
                 }
             }
@@ -356,11 +362,11 @@ namespace QL_BanDayNit
 
         private void rdbSanPham_CheckedChanged(object sender, EventArgs e)
         {
-            ThemGiaBanChoCacMatHangDaCo();
             if (rdbSanPham.Checked) lblMaHang.Text = maLoaiHang = "MSP";
             if (rdbDay.Checked) lblMaHang.Text = maLoaiHang = "DAY";
             if (rdbDau.Checked) lblMaHang.Text = maLoaiHang = "DAU";
             if (rdbDai.Checked) lblMaHang.Text = maLoaiHang = "DAI";
+            intSelectIntem = 0;
             HienThi();
         }
 
@@ -437,7 +443,7 @@ namespace QL_BanDayNit
 
         private int LayMaMatHangMaxTheoLoai(string maLoai)
         {
-            string sqlLayMaLonNhat = "SELECT MAX(SUBSTRING(MaMatH,4,10)) FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='"+ maLoai + "'";
+            string sqlLayMaLonNhat = "SELECT MAX(SUBSTRING(MaMatH,4,10)) FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maLoai + "'";
             try
             {
                 return DataConn.Lay1GiaTriSoDung_ExecuteScalar(sqlLayMaLonNhat);
@@ -446,14 +452,14 @@ namespace QL_BanDayNit
             {
                 return 1;
             }
-            
+
         }
 
         private void ThemGiaBanChoCacMatHangDaCo()
         {
             // Lay Danh Sach Mặt Hàng
-            string sqlDSMH = "SELECT MaMatH,DonGia FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + lblMaHang.Text +"'";
-            
+            string sqlDSMH = "SELECT MaMatH,DonGia FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + lblMaHang.Text + "'";
+
             DataSet dsMH = DataConn.GrdSource(sqlDSMH);
             DataTable dtTable = dsMH.Tables[0];
             foreach (DataRow row in dtTable.Rows)

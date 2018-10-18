@@ -41,7 +41,8 @@ namespace QL_BanDayNit
             btnThem.Enabled = false;
             txtGhiChu.Select();
 
-            LoadComboboxLoaiMatHangTheoMaSanPham(cbxMaMatH, "");
+            //LoadComboboxLoaiMatHangTheoMaSanPham(cbxTenMatHang, "");
+            LoadComboboxMatHang("MSP");
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDauKhoa, "DAU");
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDay, "DAY");
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDai, "DAI");
@@ -122,13 +123,13 @@ namespace QL_BanDayNit
 
         //string v = "";
         private void cboMaMatH_SelectedIndexChanged(object sender, EventArgs e)
-        {       
+        {
             cbDauDay.Checked = false;
             cbDai.Checked = false;
 
-            if (cbxMaMatH.SelectedIndex >= 0)
+            if (cbxTenMatHang.SelectedIndex >= 0)
             {
-                maMatHang = cbxMaMatH.SelectedValue.ToString();
+                maMatHang = cbxTenMatHang.SelectedValue.ToString();
                 if (maMatHang.Substring(0, 3) == "MSP")
                 {
                     //cbxDay.Enabled = true;
@@ -149,7 +150,7 @@ namespace QL_BanDayNit
                 //v = cboMaMatH.SelectedValue.ToString();
                 if (groupChiTietHDN.Enabled)
                 {
-                    string select1 = "select DonGia from tblMatHang where MaMatH =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
+                    string select1 = "select DonGia from tblMatHang where MaMatH =N'" + cbxTenMatHang.SelectedValue.ToString() + "'";
                     SqlDataReader sqlData = DataConn.ThucHienReader(select1);
                     try
                     {
@@ -195,6 +196,7 @@ namespace QL_BanDayNit
 
         private void btnNhap_Click(object sender, EventArgs e)
         {
+            maMatHang = cbxTenMatHang.SelectedValue.ToString();
             try
             {
                 if (txtMaHoaDon.Text == "")
@@ -307,7 +309,14 @@ namespace QL_BanDayNit
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (grdNhapHang.RowCount > 0)
+                if (MessageBox.Show("Hoàn Thành Hóa Đơn Và Thoát ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                {
+                    return;
+                }
+                else
+                    this.Close();
+            else this.Close();
         }
 
         private bool SoSanhSoLuongTrongListOld(string maMH, string sLuong)
@@ -337,10 +346,10 @@ namespace QL_BanDayNit
                 try
                 {
                     //Exception khi không đủ dữ liệu
-                    if (cbxMaMatH.Text == "")
+                    if (cbxTenMatHang.Text == "")
                     {
                         MessageBox.Show("Hãy chọn mặt hàng!", "Chú ý!");
-                        cbxMaMatH.Select();
+                        cbxTenMatHang.Select();
                         return;
                     }
 
@@ -475,7 +484,7 @@ namespace QL_BanDayNit
         {
             try
             {
-                if (cbxMaMatH.Text == "" && txtDonGia.Text == "" && txtSoLuong.Text == "")
+                if (cbxTenMatHang.Text == "" && txtDonGia.Text == "" && txtSoLuong.Text == "")
                     throw new NotEnoughInfoException();
                 if (double.Parse(txtSoLuong.Text) <= 0)
                 {
@@ -587,13 +596,13 @@ namespace QL_BanDayNit
 
                         txtMaH.Text = ds.Tables[0].Rows[0]["MaMatH"].ToString();
                         //cbxMaMatH.Text = ds.Tables[0].Rows[0]["TenMatH"].ToString();
-                        cbxMaMatH.SelectedValue = _strMaMatHangSelect;
+                        cbxTenMatHang.SelectedValue = _strMaMatHangSelect;
                         txtSoLuong.Text = ds.Tables[0].Rows[0]["SoLuong"].ToString();
                         txtDonGia.Text = ds.Tables[0].Rows[0]["DonGia"].ToString();
 
                         // Không Được Thay Đổi Đầu & Dây Hoặc Đai Đã Chọn
                         cbDauDay.Enabled = false;
-                        cbDai.Enabled = false;                        
+                        cbDai.Enabled = false;
 
                         string _strChuoiMa = listCheckDauDayDai[_strMaMatHangSelect].ToString();
                         if (_strChuoiMa != "")
@@ -723,7 +732,7 @@ namespace QL_BanDayNit
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            cbxMaMatH.Text = "";
+            cbxTenMatHang.Text = "";
             txtDonGia.Text = "0";
             txtSoLuong.Text = "0";
         }
@@ -759,7 +768,7 @@ namespace QL_BanDayNit
                 // Lấy hàng được chọn để xóa
                 intSelectIntem = grdNhapHang.CurrentCell.RowIndex;
                 // Đưa con trỏ lên 1 hàng sau khi xóa
-                intSelectIntem = intSelectIntem > 0 ? intSelectIntem - 1 : 0; 
+                intSelectIntem = intSelectIntem > 0 ? intSelectIntem - 1 : 0;
 
                 HienThi();
                 btnTongTien_Click(sender, e);
@@ -806,5 +815,26 @@ namespace QL_BanDayNit
                 cbxDai.Enabled = false;
             }
         }
+
+        private void LoadComboboxMatHang(string maHang)
+        {
+            // Load cbx Mã Mặt Hàng
+            string selectMatHang = "SELECT * FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maHang + "'" +
+                                   "AND DonGia > 0  ";
+            DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
+            cbxMa.DataSource = dsMatHang.Tables[0];
+            cbxMa.DisplayMember = "MaMatH";
+            cbxMa.ValueMember = "TenMatH";
+            if (dsMatHang.Tables[0].Rows.Count > 0)
+            {
+                maMatHang = dsMatHang.Tables[0].Rows[cbxMa.SelectedIndex][0].ToString();
+                cbxMa.Text = cbxMa.SelectedValue.ToString();
+            }
+            // Load cbx Tên Mặt Hàng
+            cbxTenMatHang.DataSource = dsMatHang.Tables[0];
+            cbxTenMatHang.DisplayMember = "TenMatH";
+            cbxTenMatHang.ValueMember = "MaMatH";
+        }
     }
+
 }

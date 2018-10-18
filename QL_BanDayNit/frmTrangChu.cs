@@ -44,8 +44,8 @@ namespace QL_BanDayNit
 
         private void btnThemSP_Click(object sender, EventArgs e)
         {
-            frmMatHang frmSP = new frmMatHang();
-            frmSP.ShowDialog();
+            frmMatHang frmSPham = new frmMatHang();
+            frmSPham.ShowDialog();
         }
 
         private void btnBanHang_Click(object sender, EventArgs e)
@@ -63,6 +63,12 @@ namespace QL_BanDayNit
         private void btnDoanhThu_Click(object sender, EventArgs e)
         {
             frmDoanhThu frmDT = new frmDoanhThu();
+            frmDT.ShowDialog();
+        }
+
+        private void bntNhapHang_Click(object sender, EventArgs e)
+        {
+            frmNhap frmDT = new frmNhap();
             frmDT.ShowDialog();
         }
     }

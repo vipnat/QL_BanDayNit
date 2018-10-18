@@ -69,6 +69,7 @@ namespace QL_BanDayNit
             cboMaNhanVien.ValueMember = "MaNhanVien";
             if (dsNhanVien.Tables[0].Rows.Count > 0)
                 strMaNhanVien = dsNhanVien.Tables[0].Rows[cboMaNhanVien.SelectedIndex][0].ToString();
+
             HienThi();
         }
 
