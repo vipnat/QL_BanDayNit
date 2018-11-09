@@ -109,6 +109,10 @@ namespace QL_BanDayNit
                 txtTenKH.Select();
                 return;
             }
+            if (txtNoCu.Text == "")
+            {
+                txtNoCu.Text = "0";
+            }
             string query_SQL = "";
             query_SQL = "SELECT COUNT(*)FROM tblKhachHang WHERE MaKH = N'" + lblMaKH.Text + txtMaKH.Text + "' ";
             if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(query_SQL) <= 0)
@@ -135,6 +139,7 @@ namespace QL_BanDayNit
             txtMaKH.Text = LayMaKH().ToString("000");
             txtDiaChiKH.Clear();
             txtTenKH.Clear();
+            txtNoCu.Clear();
             txtDienThoaiKH.Clear();
             txtTenKH.Focus();
         }

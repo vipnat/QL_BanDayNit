@@ -222,7 +222,7 @@
             this.txtNoCu.Location = new System.Drawing.Point(133, 101);
             this.txtNoCu.Name = "txtNoCu";
             this.txtNoCu.Size = new System.Drawing.Size(165, 26);
-            this.txtNoCu.TabIndex = 2;
+            this.txtNoCu.TabIndex = 5;
             this.txtNoCu.Text = "0";
             this.txtNoCu.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtNoCu.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNoCu_KeyPress);

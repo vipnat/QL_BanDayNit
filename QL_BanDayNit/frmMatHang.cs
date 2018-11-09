@@ -51,7 +51,8 @@ namespace QL_BanDayNit
                         // Lấy Giá Bán Cho Khách Hàng Tự Do
                         string select1 = "select GiaBan from tblGiaBan WHERE MaMatH=N'" + maMatHang + "'";
                         DataSet ds1 = DataConn.GrdSource(select1);
-                        txtGiaBan.Text = ds1.Tables[0].Rows[0]["GiaBan"].ToString();
+                        if (ds1.Tables[0].Rows.Count > 0)
+                            txtGiaBan.Text = ds1.Tables[0].Rows[0]["GiaBan"].ToString();
                         btnThem.Enabled = true;
                     }
                     catch (Exception se)
