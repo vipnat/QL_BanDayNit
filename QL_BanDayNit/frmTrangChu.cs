@@ -71,5 +71,11 @@ namespace QL_BanDayNit
             frmNhap frmDT = new frmNhap();
             frmDT.ShowDialog();
         }
+
+        private void btnDoiTen_Click(object sender, EventArgs e)
+        {
+            frmDoiTenFile doiten = new frmDoiTenFile();
+            doiten.ShowDialog();
+        }
     }
 }

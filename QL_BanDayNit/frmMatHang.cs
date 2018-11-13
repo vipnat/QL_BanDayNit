@@ -54,6 +54,7 @@ namespace QL_BanDayNit
                         if (ds1.Tables[0].Rows.Count > 0)
                             txtGiaBan.Text = ds1.Tables[0].Rows[0]["GiaBan"].ToString();
                         btnThem.Enabled = true;
+                        cbbSize.Enabled = true;
                     }
                     catch (Exception se)
                     {
@@ -126,6 +127,7 @@ namespace QL_BanDayNit
                 else
                 {
                     btnThem.Enabled = true;
+                    cbbSize.Enabled = true;
                     CapNhapDuLieuMatHang(sender, e);
 
                     HienThi();
@@ -173,6 +175,7 @@ namespace QL_BanDayNit
 
                     HienThi();
                     btnThem.Enabled = true;
+                    cbbSize.Enabled = true;
                     if (MessageBox.Show("Thêm Giá Bán Cho Từng Khách Hàng ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
                         HienThiFormNhapGia(lblMaHang.Text + txtMaHang.Text);
@@ -411,21 +414,72 @@ namespace QL_BanDayNit
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            string strSize = "";
+            if (cbbSize.Text == "")
+            {
+                MessageBox.Show("Chọn Size Mặt Hàng Cần Thêm !");
+                cbbSize.Focus();
+                return;
+            }
+            else
+            {
+                cbbSize.Enabled = false;
+                switch (cbbSize.Text)
+                {
+                    case "2F":
+                        {
+                            strSize = "20";
+                            break;
+                        }
+                    case "2F5":
+                        {
+                            strSize = "25";
+                            break;
+                        }
+                    case "3F":
+                        {
+                            strSize = "30";
+                            break;
+                        }
+                    case "3F5":
+                        {
+                            strSize = "35";
+                            break;
+                        }
+                    case "4F":
+                        {
+                            strSize = "40";
+                            break;
+                        }
+                    case "Bóp":
+                        {
+                            strSize = "50";
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
             btnThem.Enabled = false;
-            txtMaHang.Text = LayMaMatHangMoi(maLoaiHang).ToString("000");
+            txtTenHang.Clear();
+            txtDonGia.Clear();
+            txtSoLuong.Clear();
+            txtGiaBan.Clear();
+            txtTenHang.Focus();
+            txtMaHang.Text = strSize + LayMaMatHangMoi(maLoaiHang+strSize).ToString("00");
         }
 
         private int LayMaMatHangMoi(string maLoai)
         {
             int mKH = 1;
-            string select1 = "select MaMatH from tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maLoai + "'";
+            string select1 = "select MaMatH from tblMatHang WHERE SUBSTRING(MaMatH,1,5) ='" + maLoai + "'";
             SqlDataReader sqlData = DataConn.ThucHienReader(select1);
             try
             {
                 while (sqlData.Read())
                 {
                     string aa = sqlData.GetString(0);
-                    int getMaKH = Convert.ToInt32(sqlData.GetString(0).Remove(0, 3));
+                    int getMaKH = Convert.ToInt32(sqlData.GetString(0).Remove(0, 5));
                     if (getMaKH == mKH)
                     {
                         mKH = getMaKH + 1;
@@ -453,7 +507,6 @@ namespace QL_BanDayNit
             {
                 return 1;
             }
-
         }
 
         private void ThemGiaBanChoCacMatHangDaCo()

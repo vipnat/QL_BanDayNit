@@ -38,6 +38,7 @@
             this.btnDSHD = new System.Windows.Forms.Button();
             this.btnDoanhThu = new System.Windows.Forms.Button();
             this.bntNhapHang = new System.Windows.Forms.Button();
+            this.btnDoiTen = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnThemKH
@@ -57,7 +58,7 @@
             this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThoat.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.Image")));
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(363, 181);
+            this.btnThoat.Location = new System.Drawing.Point(237, 182);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(77, 31);
             this.btnThoat.TabIndex = 5;
@@ -71,11 +72,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.label1.Location = new System.Drawing.Point(92, 9);
+            this.label1.Location = new System.Drawing.Point(60, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(212, 26);
             this.label1.TabIndex = 7;
             this.label1.Text = "Quản Lý Bán Hàng";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btnThemSP
             // 
@@ -149,18 +151,30 @@
             this.bntNhapHang.UseVisualStyleBackColor = true;
             this.bntNhapHang.Click += new System.EventHandler(this.bntNhapHang_Click);
             // 
+            // btnDoiTen
+            // 
+            this.btnDoiTen.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.btnDoiTen.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDoiTen.Location = new System.Drawing.Point(303, 9);
+            this.btnDoiTen.Name = "btnDoiTen";
+            this.btnDoiTen.Size = new System.Drawing.Size(11, 10);
+            this.btnDoiTen.TabIndex = 4;
+            this.btnDoiTen.UseVisualStyleBackColor = true;
+            this.btnDoiTen.Click += new System.EventHandler(this.btnDoiTen_Click);
+            // 
             // frmTrangChu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
-            this.ClientSize = new System.Drawing.Size(452, 224);
+            this.ClientSize = new System.Drawing.Size(331, 224);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnThemNhanVien);
             this.Controls.Add(this.bntNhapHang);
             this.Controls.Add(this.btnDoanhThu);
             this.Controls.Add(this.btnDSHD);
+            this.Controls.Add(this.btnDoiTen);
             this.Controls.Add(this.btnBanHang);
             this.Controls.Add(this.btnThemSP);
             this.Controls.Add(this.btnThemKH);
@@ -185,5 +199,6 @@
         private System.Windows.Forms.Button btnDSHD;
         private System.Windows.Forms.Button btnDoanhThu;
         private System.Windows.Forms.Button bntNhapHang;
+        private System.Windows.Forms.Button btnDoiTen;
     }
 }

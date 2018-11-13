@@ -28,6 +28,9 @@ namespace QL_BanDayNit
 
         private int intSelectIntem = 0;
         private string maLoaiHang = "MSP";
+        string _strMaMatHang = "";
+        string _strMaKhachHang = "";
+        string strMaNhanVien = "";
         private Hashtable listMatHangOld = new Hashtable();
 
         private void frmXuatHang_Load(object sender, EventArgs e)
@@ -37,7 +40,7 @@ namespace QL_BanDayNit
             txtMaHD.Text = LayMaHoaDonTheoNgay(DateTime.Today.Day.ToString() + DateTime.Today.Month.ToString() + DateTime.Today.Year.ToString());
 
             cboMaNhanVien.Text = "";
-            txtGhiChu.Text = lblNoCu.Text = "";
+            txtGhiChu.Text = lblNoCu.Text = lblAllTong.Text = "";
             lblTongTien.Text = lblTongSL.Text = "0";
 
             listMatHangOld.Clear();
@@ -136,7 +139,7 @@ namespace QL_BanDayNit
             return MaHD;
         }
 
-        string _strMaMatHang = "";
+       
         private void cboMaMatH_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxMaMatH.ValueMember != null)
@@ -147,7 +150,7 @@ namespace QL_BanDayNit
 
             try
             {
-                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
+                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, _strMaKhachHang);
                 if (strDonGia == "")
                 {
                     strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
@@ -158,8 +161,6 @@ namespace QL_BanDayNit
             {
 
             }
-
-
         }
 
         private void cbxTenMatHang_SelectedIndexChanged(object sender, EventArgs e)
@@ -171,7 +172,7 @@ namespace QL_BanDayNit
             }
             try
             {
-                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, cbxKhachHang.SelectedValue.ToString());
+                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, _strMaKhachHang);
                 if (strDonGia == "")
                 {
                     strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
@@ -252,13 +253,36 @@ namespace QL_BanDayNit
             return DonGia;
         }
 
-        string strMaNhanVien = "";
+       
         private void cboMaNhanVien_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboMaNhanVien.ValueMember != null)
             {
                 strMaNhanVien = cboMaNhanVien.SelectedValue.ToString();
             }
+        }
+
+        private string LaySoDienThoaiNhanVienTheoMa(string maNhanVien)
+        {
+            string strSDT = "";
+            
+            string select = "SELECT tblNhanVien.DienThoai FROM tblNhanVien WHERE tblNhanVien.MaNhanVien = '" + maNhanVien + "'";
+            SqlDataReader sqlData = DataConn.ThucHienReader(select);
+            try
+            {
+                //MessageBox.Show("1");
+                while (sqlData.Read())
+                {
+                    strSDT = sqlData.GetString(0);
+                }
+            }
+            finally
+            {
+                sqlData.Close();
+                sqlData.Dispose();
+            }
+
+            return strSDT;
         }
 
         private void HienThi()
@@ -306,6 +330,7 @@ namespace QL_BanDayNit
                     return;
                 }
                 if (!KiemTraNhanVienTonTai(strMaNhanVien)) return;
+                _strMaKhachHang = cbxKhachHang.SelectedValue.ToString();
 
                 // Khóa Combobox Chọn Khách Hàng
                 cbxKhachHang.Enabled = false;
@@ -337,20 +362,23 @@ namespace QL_BanDayNit
 
                 MessageBox.Show("Tạo Thành Công Hóa Đơn Số " + txtMaHD.Text);
 
+                txtTraNo.Text = "0";
                 HienThi();
                 groupChiTietHDX.Enabled = true;
                 btnGhi.Enabled = true;
 
-                string strNoCu = LayNoCuTheoMaKhachHang(cbxKhachHang.SelectedValue.ToString());
+                string strNoCu = LayNoCuTheoMaKhachHang(_strMaKhachHang);
                 lblNoCu.Text = "Nợ Cũ : " + strNoCu;
                 if (Convert.ToInt32(strNoCu) > 0)
                 {
                     lblNoCu.Visible = true;
-                    lblTraNo.Visible = true;
-                    txtTraNo.Visible = true;
+                    lblAllTong.Visible = true;
                 }
-                else lblNoCu.Visible = false;
-
+                else
+                {
+                    lblNoCu.Visible = false;
+                    lblAllTong.Visible = false;
+                }
             }
             catch (SameKeyException)
             {
@@ -442,7 +470,7 @@ namespace QL_BanDayNit
                     CapNhapMatHangDaBan(sender, e);
 
                     //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + cbxKhachHang.SelectedValue.ToString() + "'";
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
                     LoadDuLieuDuocChonTuGridView(intSelectIntem);
@@ -487,7 +515,7 @@ namespace QL_BanDayNit
                     DataConn.ThucHienCmd(query_SQL);
 
                     //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + cbxKhachHang.SelectedValue.ToString() + "'";
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
                     // Lấy Tổng Số Lượng
@@ -499,6 +527,8 @@ namespace QL_BanDayNit
                     lblTongTien.Text = LayTongTienCuaMaHoaDon(txtMaHD.Text);
                     btnInHD.Enabled = true;
                     btnTinhTien_Click(sender, e);
+                    double tongtienAll = Convert.ToDouble(LayTongTienCuaMaHoaDon(txtMaHD.Text)) + Convert.ToDouble(LayNoCuTheoMaKhachHang(_strMaKhachHang));
+                    lblAllTong.Text = "Tổng : "  + tongtienAll.ToString();
                     HienThi();
                 }
                 catch (FormatException)
@@ -519,6 +549,12 @@ namespace QL_BanDayNit
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private void btnGhiMoi_Click(object sender, EventArgs e)
+        {
+            frmMatHang frmMH = new frmMatHang();
+            frmMH.ShowDialog();
         }
 
         private bool KiemTraSoLuongTrongKhoTheoMaMH(string _strMaMH)
@@ -577,8 +613,6 @@ namespace QL_BanDayNit
                     btnTinhTien_Click(sender, e);
 
                 }
-
-
             }
             catch (FormatException)
             {
@@ -650,10 +684,9 @@ namespace QL_BanDayNit
             if (double.Parse(txtDonGia.Text) <= 0)
             {
                 MessageBox.Show("Đơn giá không được nhỏ hơn 0!");
-                txtSoLuong.Select();
+                txtDonGia.Select();
                 return false;
             }
-
             return true;
         }
 
@@ -766,6 +799,8 @@ namespace QL_BanDayNit
             }
             else
             {
+                if (txtTraNo.Text == "")
+                    txtTraNo.Text = "0";
 
                 XuatHoaDonPDF();
 
@@ -787,11 +822,9 @@ namespace QL_BanDayNit
         private void XuatHoaDonPDF()
         {
             // Update Nợ Cũ
-            double dbNoCu = Convert.ToDouble(LayNoCuTheoMaKhachHang(cbxKhachHang.SelectedValue.ToString()));
-            dbNoCu = dbNoCu - Convert.ToDouble(txtTraNo.Text);
-            string updateNoCu = "UPDATE tblKhachHang SET NoCu = " + dbNoCu + " WHERE MaKH = N'" + cbxKhachHang.SelectedValue.ToString() + "'";
-            DataConn.ThucHienCmd(updateNoCu);
-
+            double dbNoCu = Convert.ToDouble(LayNoCuTheoMaKhachHang(_strMaKhachHang));
+            double dbTraTien = Convert.ToDouble(txtTraNo.Text);
+            
             //BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             string _timesBin = System.IO.Directory.GetCurrentDirectory() + @"/times.ttf";
             string __timesWinFonts = Environment.GetEnvironmentVariable("SystemRoot") + "\\fonts\\times.ttf";
@@ -828,11 +861,11 @@ namespace QL_BanDayNit
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
 
-            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + "\n\nKhách Hàng : " + cbxKhachHang.Text + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + " (" + LaySoDienThoaiNhanVienTheoMa(strMaNhanVien) + ")" + "\n\nKhách Hàng : " + cbxKhachHang.Text + "\n\n", new iTextSharp.text.Font(arialCustomer)));
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
             //
-            cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n" + "Nợ Cũ: " + dbNoCu + "\n\n", new iTextSharp.text.Font(arialCustomer)));
+            cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n\n" + "" + "\n\n", new iTextSharp.text.Font(arialCustomer)));
             cellTitle.Border = 0;
             cellTitle.HorizontalAlignment = 2;
             pdfTableTitle.AddCell(cellTitle);
@@ -897,7 +930,20 @@ namespace QL_BanDayNit
             }
             using (FileStream stream = new FileStream(namePDF, FileMode.Create))
             {
-                Document pdfDoc = new Document(PageSize.A5, 10f, 10f, 10f, 0f);
+                Document pdfDoc = new Document();
+
+                //if (grdXuatHang.Rows.Count <= 16)
+                //{
+                //    pdfDoc = new Document(PageSize.A5, 10f, 10f, 15f, 30f);
+                //    pdfDoc.SetPageSize(PageSize.LETTER.Rotate());
+                //}
+                //else
+                //{
+                //    pdfDoc = new Document(PageSize.A4, 10f, 10f, 15f, 30f);
+                //    pdfDoc.SetPageSize(PageSize.A4);
+                //}
+
+                pdfDoc = new Document(PageSize.A5, 10f, 10f, 15f, 30f);
                 pdfDoc.SetPageSize(PageSize.LETTER.Rotate());
                 PdfWriter.GetInstance(pdfDoc, stream);
                 pdfDoc.Open();
@@ -912,21 +958,32 @@ namespace QL_BanDayNit
 
                 pdfTableTongTien.AddCell(new Phrase("\nSố Mặt Hàng: " + lblSoMatHang.Text, new iTextSharp.text.Font(arialCustomer, 16)));
                 pdfTableTongTien.AddCell(new Phrase("\nTổng SL: " + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 16)));
-                pdfTableTongTien.AddCell(new Phrase("\nTổng Tiền: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 16)));
+                if(dbNoCu > 0)
+                    pdfTableTongTien.AddCell(new Phrase("\nTổng Toa : \t" + intTongTienBan + "\nNợ Cũ      : " + dbNoCu + "\nTổng Tiền: " + (dbTongTienBan + dbNoCu) + "\nTrả           : " + dbTraTien + "\n------------------\nCòn          :  " + (dbTongTienBan + dbNoCu - dbTraTien) , new iTextSharp.text.Font(arialCustomer, 16)));
+                else
+                    pdfTableTongTien.AddCell(new Phrase("\nTổng Toa : \t" + intTongTienBan + "\nTrả           : " + dbTraTien + "\n------------------\nCòn          :  " + (dbTongTienBan - dbTraTien), new iTextSharp.text.Font(arialCustomer, 16)));
 
-                dbTongTienBan = dbTongTienBan * 1000;
-                // Create Cell Footter
-                PdfPCell cellTongTien;
-                cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()), new iTextSharp.text.Font(arialCustomer, 15)));
-                cellTongTien.Colspan = 3;
-                cellTongTien.HorizontalAlignment = 0;
-                cellTongTien.Border = 0;
-                pdfTableTongTien.AddCell(cellTongTien);
+                //dbTongTienBan = dbTongTienBan * 1000;
+                //// Create Cell Footter
+                //PdfPCell cellTongTien;
+                //cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()), new iTextSharp.text.Font(arialCustomer, 15)));
+                //cellTongTien.Colspan = 3;
+                //cellTongTien.HorizontalAlignment = 0;
+                //cellTongTien.Border = 0;
+                //pdfTableTongTien.AddCell(cellTongTien);
 
                 pdfDoc.Add(pdfTableTongTien);
 
                 pdfDoc.Close();
                 stream.Close();
+            }
+
+            // Update Nợ Cũ
+            if (dbNoCu > 0)
+            {
+                dbNoCu = dbNoCu + Convert.ToDouble(LayTongTienCuaMaHoaDon(txtMaHD.Text)) - dbTraTien;
+                string updateNoCu = "UPDATE tblKhachHang SET NoCu = " + dbNoCu + " WHERE MaKH = N'" + _strMaKhachHang + "'";
+                DataConn.ThucHienCmd(updateNoCu);
             }
 
             System.Diagnostics.Process.Start(@"" + namePDF);
@@ -1146,5 +1203,6 @@ namespace QL_BanDayNit
             if (!Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;
         }
+
     }
 }

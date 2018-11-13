@@ -50,6 +50,7 @@
             this.lblMaHang = new System.Windows.Forms.Label();
             this.btnThem = new System.Windows.Forms.Button();
             this.cbxHienThi = new System.Windows.Forms.CheckBox();
+            this.cbbSize = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.grvHienThiList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -307,12 +308,29 @@
             this.cbxHienThi.UseVisualStyleBackColor = true;
             this.cbxHienThi.CheckedChanged += new System.EventHandler(this.cbxHienThi_CheckedChanged);
             // 
+            // cbbSize
+            // 
+            this.cbbSize.FormattingEnabled = true;
+            this.cbbSize.Items.AddRange(new object[] {
+            "",
+            "2F",
+            "2F5",
+            "3F",
+            "3F5",
+            "4F",
+            "Bóp"});
+            this.cbbSize.Location = new System.Drawing.Point(121, 323);
+            this.cbbSize.Name = "cbbSize";
+            this.cbbSize.Size = new System.Drawing.Size(57, 29);
+            this.cbbSize.TabIndex = 39;
+            // 
             // frmMatHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(820, 371);
+            this.Controls.Add(this.cbbSize);
             this.Controls.Add(this.cbxHienThi);
             this.Controls.Add(this.rdbSanPham);
             this.Controls.Add(this.rdbDai);
@@ -371,5 +389,6 @@
         private System.Windows.Forms.Label lblMaHang;
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.CheckBox cbxHienThi;
+        private System.Windows.Forms.ComboBox cbbSize;
     }
 }
