@@ -54,10 +54,11 @@
             this.cbxDay = new System.Windows.Forms.ComboBox();
             this.cbxDauKhoa = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.cbxMa = new System.Windows.Forms.ComboBox();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
             this.txtMaH = new System.Windows.Forms.TextBox();
-            this.cbxMa = new System.Windows.Forms.ComboBox();
+            this.btnMHMoi = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdNhapHang)).BeginInit();
             this.groupHoaDonNhap.SuspendLayout();
             this.groupChiTietHDN.SuspendLayout();
@@ -351,6 +352,21 @@
             this.label2.TabIndex = 11;
             this.label2.Text = "Đầu + Dây";
             // 
+            // cbxMa
+            // 
+            this.cbxMa.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxMa.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cbxMa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbxMa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxMa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxMa.FormattingEnabled = true;
+            this.cbxMa.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.cbxMa.Location = new System.Drawing.Point(72, 16);
+            this.cbxMa.Name = "cbxMa";
+            this.cbxMa.Size = new System.Drawing.Size(92, 27);
+            this.cbxMa.TabIndex = 6;
+            this.cbxMa.SelectedIndexChanged += new System.EventHandler(this.cboMaMatH_SelectedIndexChanged);
+            // 
             // btnXoa
             // 
             this.btnXoa.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -385,20 +401,17 @@
             this.txtMaH.TabIndex = 31;
             this.txtMaH.Visible = false;
             // 
-            // cbxMa
+            // btnMHMoi
             // 
-            this.cbxMa.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxMa.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.cbxMa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cbxMa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxMa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxMa.FormattingEnabled = true;
-            this.cbxMa.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbxMa.Location = new System.Drawing.Point(72, 16);
-            this.cbxMa.Name = "cbxMa";
-            this.cbxMa.Size = new System.Drawing.Size(92, 27);
-            this.cbxMa.TabIndex = 6;
-            this.cbxMa.SelectedIndexChanged += new System.EventHandler(this.cboMaMatH_SelectedIndexChanged);
+            this.btnMHMoi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnMHMoi.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnMHMoi.Location = new System.Drawing.Point(669, 150);
+            this.btnMHMoi.Name = "btnMHMoi";
+            this.btnMHMoi.Size = new System.Drawing.Size(47, 30);
+            this.btnMHMoi.TabIndex = 18;
+            this.btnMHMoi.Text = "Mới";
+            this.btnMHMoi.UseVisualStyleBackColor = true;
+            this.btnMHMoi.Click += new System.EventHandler(this.btnMHMoi_Click);
             // 
             // frmNhap
             // 
@@ -412,6 +425,7 @@
             this.Controls.Add(this.btnXoa);
             this.Controls.Add(this.groupChiTietHDN);
             this.Controls.Add(this.groupHoaDonNhap);
+            this.Controls.Add(this.btnMHMoi);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnGhi);
             this.Controls.Add(this.grdNhapHang);
@@ -463,5 +477,6 @@
         private System.Windows.Forms.CheckBox cbDai;
         private System.Windows.Forms.CheckBox cbDauDay;
         private System.Windows.Forms.ComboBox cbxMa;
+        private System.Windows.Forms.Button btnMHMoi;
     }
 }

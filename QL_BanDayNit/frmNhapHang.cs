@@ -17,6 +17,9 @@ namespace QL_BanDayNit
             InitializeComponent();
         }
 
+        public delegate void LoadDataMH();
+        public LoadDataMH MyLoadDataBanHang;
+
         private int intSelectIntem = 0;
         private Hashtable listMatHangOld = new Hashtable();
         private Hashtable listCheckDauDayDai = new Hashtable();
@@ -42,7 +45,7 @@ namespace QL_BanDayNit
             txtGhiChu.Select();
 
             //LoadComboboxLoaiMatHangTheoMaSanPham(cbxTenMatHang, "");
-            LoadComboboxMatHang("MSP");
+            LoadComboboxMatHang();
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDauKhoa, "DAU");
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDay, "DAY");
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDai, "DAI");
@@ -816,10 +819,10 @@ namespace QL_BanDayNit
             }
         }
 
-        private void LoadComboboxMatHang(string maHang)
+        private void LoadComboboxMatHang()
         {
             // Load cbx Mã Mặt Hàng
-            string selectMatHang = "SELECT * FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maHang + "'" +
+            string selectMatHang = "SELECT * FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='MSP'" +
                                    "AND DonGia > 0  ";
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
             cbxMa.DataSource = dsMatHang.Tables[0];
@@ -834,6 +837,13 @@ namespace QL_BanDayNit
             cbxTenMatHang.DataSource = dsMatHang.Tables[0];
             cbxTenMatHang.DisplayMember = "TenMatH";
             cbxTenMatHang.ValueMember = "MaMatH";
+        }
+
+        private void btnMHMoi_Click(object sender, EventArgs e)
+        {
+            frmMatHang frmMH = new frmMatHang();
+            frmMH.MyLoadDataBanHang = new frmMatHang.LoadDataMH(LoadComboboxMatHang);
+            frmMH.ShowDialog();
         }
     }
 

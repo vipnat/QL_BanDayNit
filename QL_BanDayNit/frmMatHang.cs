@@ -18,6 +18,10 @@ namespace QL_BanDayNit
             InitializeComponent();
         }
 
+
+        public delegate void LoadDataMH();
+        public LoadDataMH MyLoadDataBanHang;
+
         private void frmMatHang_Load(object sender, EventArgs e)
         {
             ThemGiaBanChoCacMatHangDaCo();
@@ -76,6 +80,8 @@ namespace QL_BanDayNit
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
+            if (MyLoadDataBanHang != null)
+                MyLoadDataBanHang();
             if (MessageBox.Show("Bạn Có Muốn Thoát Ra?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
             {
                 return;
@@ -451,9 +457,19 @@ namespace QL_BanDayNit
                             strSize = "40";
                             break;
                         }
+                    case "Da":
+                        {
+                            strSize = "45";
+                            break;
+                        }
                     case "Bóp":
                         {
                             strSize = "50";
+                            break;
+                        }
+                    case "PK":
+                        {
+                            strSize = "99";
                             break;
                         }
                     default:

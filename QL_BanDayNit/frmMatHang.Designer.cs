@@ -318,7 +318,9 @@
             "3F",
             "3F5",
             "4F",
-            "Bóp"});
+            "Da",
+            "Bóp",
+            "PK"});
             this.cbbSize.Location = new System.Drawing.Point(121, 323);
             this.cbbSize.Name = "cbbSize";
             this.cbbSize.Size = new System.Drawing.Size(57, 29);

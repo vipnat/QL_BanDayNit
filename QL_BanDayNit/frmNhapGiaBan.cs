@@ -51,7 +51,6 @@ namespace QL_BanDayNit
                     return;
                 }
                 UpdateGiaBanKhachHangChung(maKH, _maMatHang, giaban);
-                MyLoadData();
             }
             catch (FormatException)
             {
@@ -112,6 +111,7 @@ namespace QL_BanDayNit
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
+            MyLoadData();
             this.Close();
         }
 
