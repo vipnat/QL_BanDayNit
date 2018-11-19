@@ -15,6 +15,8 @@ namespace QL_BanDayNit
             InitializeComponent();
         }
 
+        int sohangChon = 0;
+        bool checkHienThiChiTiet = false;
         private void frmDanhSachHDX_Load(object sender, EventArgs e)
         {
             chkListBox.Items.Insert(0, "Mã hóa đơn");
@@ -37,6 +39,7 @@ namespace QL_BanDayNit
             DataSet ds = DataConn.GrdSource(select);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
+            checkHienThiChiTiet = true;
         }
 
         private void HienThiHD()
@@ -45,28 +48,69 @@ namespace QL_BanDayNit
             DataSet ds = DataConn.GrdSource(select);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
+            checkHienThiChiTiet = false;
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    string delete = "";
-            //    delete = "DELETE tblChiTietHDX WHERE MaHD='" + txtMa.Text + "'";
-            //    DataConn.ThucHienCmd(delete);
-            //    delete = "DELETE tblHoaDonXuat WHERE MaHD='" + txtMa.Text + "'";
-            //    DataConn.ThucHienCmd(delete);
-            //    HienThi();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+            string strTenMH = grdView.Rows[sohangChon].Cells[3].Value.ToString();
+            string strMaHD = grdView.Rows[sohangChon].Cells[0].Value.ToString();
+            string strMaMH = grdView.Rows[sohangChon].Cells[2].Value.ToString();
+
+            if (checkHienThiChiTiet)
+                if (MessageBox.Show("Xóa Sản Phẩm: " + strTenMH + " Trong HĐ ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                {
+                    return;
+                }
+                else
+                {
+                    string sqlDelete = "DELETE FROM tblChiTietHDX WHERE MaHD=N'" + strMaHD + "' AND MaMatH='" + strMaMH + "'";
+                    DataConn.ThucHienCmd(sqlDelete);
+
+                    UpdateTongTien(strMaHD);
+
+                    btnXemHoaDon_Click(sender, e);
+                }
+        }
+
+        private string LayTongTienCuaMaHoaDon(string maHD)
+        {
+            string selectTongTien = "SELECT SUM(SoLuong*DonGia) AS TongTien FROM tblChiTietHDX WHERE MaHD='" + maHD + "'";
+            DataSet dsTongTien = DataConn.GrdSource(selectTongTien);
+            string getTongTien = dsTongTien.Tables[0].Rows[0]["TongTien"].ToString();
+            if (getTongTien == "") return "0";
+            return getTongTien;
+        }
+
+        private void UpdateTongTien(string maHoaDon)
+        {
+            float tongTien = float.Parse(LayTongTienCuaMaHoaDon(maHoaDon));
+            float tongTienGoc = 0;
+
+            string sqlSelectHDX = "SELECT [MaMatH],[SoLuong] FROM [tblChiTietHDX] WHERE MaHD='"+ maHoaDon + "'";
+            DataSet dsHoaDonXuat = DataConn.GrdSource(sqlSelectHDX);
+            DataTable dtTableHDX = dsHoaDonXuat.Tables[0];
+
+            foreach (DataRow row in dtTableHDX.Rows)
+            {
+                string maMHang = row["MaMatH"].ToString();
+                double soLuong = Convert.ToDouble(row["SoLuong"].ToString());
+                string getTongTienGoc = "SELECT (DonGia*" + soLuong + ")AS TongGoc FROM tblMatHang WHERE MaMatH = N'" + maMHang + "'";
+                tongTienGoc = tongTienGoc + DataConn.Lay1GiaFloat_ExecuteScalar(getTongTienGoc);
+            }
+
+            // Update Tiền Gốc Hóa Đơn
+            string updateTongTienGoc = "UPDATE [tblHoaDonXuat] SET [TongTienGoc] = @TongGoc WHERE MaHD='" + maHoaDon + "'";
+            DataConn.ThucHienInsertSqlParameter(updateTongTienGoc, "@TongGoc", tongTienGoc);
+
+            // Update Tổng Tiền Hóa Đơn
+            string updateTongTien = "UPDATE [tblHoaDonXuat] SET [TongTien] = @TTien WHERE MaHD='" + maHoaDon + "'";
+            DataConn.ThucHienInsertSqlParameter(updateTongTien, "@TTien", tongTien);
+
         }
 
         private void grdView_CurrentCellChanged(object sender, EventArgs e)
         {
-
             if (grdView.RowCount > 0)
             {
                 if (grdView.CurrentCell == null)
@@ -187,11 +231,24 @@ namespace QL_BanDayNit
             DataSet ds = DataConn.GrdSource(select);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
+            checkHienThiChiTiet = true;
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void grdView_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                sohangChon = grdView.CurrentCell.RowIndex;
+            }
+            catch
+            {
+                return;
+            }
         }
     }
 }

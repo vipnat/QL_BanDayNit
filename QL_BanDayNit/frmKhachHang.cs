@@ -123,6 +123,9 @@ namespace QL_BanDayNit
             }
             else
             {
+                if (MessageBox.Show("Cập Nhập Thông Tin Khách Hàng: "+ txtTenKH.Text + " ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                    return;
+                
                 query_SQL = "UPDATE tblKhachHang SET TenKH = N'" + txtTenKH.Text + "', DiaChi = N'" + txtDiaChiKH.Text + "', SoDT = " + txtDienThoaiKH.Text + ", NoCu = " + txtNoCu.Text + "" +
                             "WHERE MaKH = N'" + lblMaKH.Text + txtMaKH.Text + "' ";
                 DataConn.ThucHienCmd(query_SQL);

@@ -55,6 +55,7 @@
             this.grdView.Size = new System.Drawing.Size(978, 362);
             this.grdView.TabIndex = 5;
             this.grdView.CurrentCellChanged += new System.EventHandler(this.grdView_CurrentCellChanged);
+            this.grdView.SelectionChanged += new System.EventHandler(this.grdView_SelectionChanged);
             // 
             // btnXoa
             // 
