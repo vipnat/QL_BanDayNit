@@ -309,7 +309,6 @@ namespace QL_BanDayNit
 
         private void HienThi()
         {
-
             // SQL Select data
             string select = " SELECT tblMatHang.MaMatH [Mã MH], tblMatHang.TenMatH [Mặt Hàng],tblChiTietHDX.SoLuong [Số Lượng],tblChiTietHDX.DonGia [Đơn Giá],tblChiTietHDX.SoLuong * tblChiTietHDX.DonGia as [Thành Tiền]" +
                             " FROM tblChiTietHDX INNER JOIN tblHoaDonXuat ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
@@ -1220,6 +1219,10 @@ namespace QL_BanDayNit
             if (!Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;
         }
+
+        
+        // Sử Lý Trả Hàng = Nhập Hàng Mới
+
 
     }
 }

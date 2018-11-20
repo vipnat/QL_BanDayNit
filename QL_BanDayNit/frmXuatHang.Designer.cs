@@ -426,7 +426,7 @@
             this.btnGhiMoi.Location = new System.Drawing.Point(771, 233);
             this.btnGhiMoi.Margin = new System.Windows.Forms.Padding(4);
             this.btnGhiMoi.Name = "btnGhiMoi";
-            this.btnGhiMoi.Size = new System.Drawing.Size(61, 20);
+            this.btnGhiMoi.Size = new System.Drawing.Size(61, 25);
             this.btnGhiMoi.TabIndex = 15;
             this.btnGhiMoi.Text = "SP Mới";
             this.btnGhiMoi.UseVisualStyleBackColor = true;

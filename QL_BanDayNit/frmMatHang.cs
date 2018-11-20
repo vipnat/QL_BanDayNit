@@ -356,13 +356,20 @@ namespace QL_BanDayNit
                     return;
                 }
 
-                string deleteGb = "DELETE tblGiaBan WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
-                DataConn.ThucHienCmd(deleteGb);
+                if (MessageBox.Show("Bạn Có Muốn Xóa Mặt Hàng: " + txtTenHang.Text + " ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                {
+                    return;
+                }
+                else
+                {
+                    string deleteGb = "DELETE tblGiaBan WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
+                    DataConn.ThucHienCmd(deleteGb);
 
-                string delete = "DELETE tblMatHang WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
-                DataConn.ThucHienCmd(delete);
-
-                HienThi();
+                    string delete = "DELETE tblMatHang WHERE MaMatH=N'" + lblMaHang.Text + txtMaHang.Text + "'";
+                    DataConn.ThucHienCmd(delete);
+                    HienThi();
+                }
+                
             }
             catch (SameKeyException)
             {
