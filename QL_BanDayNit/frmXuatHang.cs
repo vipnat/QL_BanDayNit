@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using CrystalDecisions.Shared;
 using System.Collections;
 using System.Threading;
+using System.Diagnostics;
 
 namespace QL_BanDayNit
 {
@@ -34,6 +35,7 @@ namespace QL_BanDayNit
         string _strMaMatHang = "";
         string _strMaKhachHang = "";
         string strMaNhanVien = "";
+        string strNoCu = "";
         private Hashtable listMatHangOld = new Hashtable();
 
         private void frmXuatHang_Load(object sender, EventArgs e)
@@ -162,7 +164,7 @@ namespace QL_BanDayNit
             return MaHD;
         }
 
-       
+
         private void cboMaMatH_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxMaMatH.ValueMember != null)
@@ -275,7 +277,7 @@ namespace QL_BanDayNit
             return DonGia;
         }
 
-       
+
         private void cboMaNhanVien_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboMaNhanVien.ValueMember != null)
@@ -287,7 +289,7 @@ namespace QL_BanDayNit
         private string LaySoDienThoaiNhanVienTheoMa(string maNhanVien)
         {
             string strSDT = "";
-            
+
             string select = "SELECT tblNhanVien.DienThoai FROM tblNhanVien WHERE tblNhanVien.MaNhanVien = '" + maNhanVien + "'";
             SqlDataReader sqlData = DataConn.ThucHienReader(select);
             try
@@ -374,7 +376,7 @@ namespace QL_BanDayNit
                 groupChiTietHDX.Enabled = true;
                 btnGhi.Enabled = true;
 
-                string strNoCu = LayNoCuTheoMaKhachHang(_strMaKhachHang);
+                strNoCu = LayNoCuTheoMaKhachHang(_strMaKhachHang);
                 lblNoCu.Text = "Nợ Cũ : " + strNoCu;
                 if (Convert.ToInt32(strNoCu) > 0)
                 {
@@ -389,7 +391,7 @@ namespace QL_BanDayNit
             }
             catch (SameKeyException)
             {
-                
+
             }
             catch (FormatException)
             {
@@ -428,7 +430,7 @@ namespace QL_BanDayNit
             return false;
         }
 
-        
+
 
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -465,15 +467,14 @@ namespace QL_BanDayNit
             DataConn.ThucHienCmd(deleteHD);
         }
 
-        private void InsertTongTienGoc ()
+        private void InsertTongTienGoc()
         {
-            float tongTienGoc = 0;           
-
+            float tongTienGoc = 0;
             foreach (string strMaMH in listMatHangOld.Keys)
             {
                 double soLuong = double.Parse(listMatHangOld[strMaMH].ToString());
                 // Lay Tong Tien Goc
-                string getTongTienGoc = "SELECT (DonGia*"+ soLuong + ")AS TongGoc FROM tblMatHang WHERE MaMatH = N'"+ strMaMH + "'";
+                string getTongTienGoc = "SELECT (DonGia*" + soLuong + ")AS TongGoc FROM tblMatHang WHERE MaMatH = N'" + strMaMH + "'";
                 tongTienGoc = tongTienGoc + DataConn.Lay1GiaFloat_ExecuteScalar(getTongTienGoc);
 
             }
@@ -485,6 +486,8 @@ namespace QL_BanDayNit
         private void btnGhi_Click(object sender, EventArgs e)
         {
             string query_SQL;
+            string strTongTienHoaDon = "";
+
             if (!KiemTraDuLieuNhapSo()) return;
             if (KiemTraMatHangDaCo(_strMaMatHang))
             {
@@ -498,9 +501,11 @@ namespace QL_BanDayNit
                     CapNhapMatHangDaBan(sender, e);
 
                     //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'"+ cbxMaMatH.Text  + "'";
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.Text + "'";
                     DataConn.ThucHienCmd(query_SQL);
-
+                    strTongTienHoaDon = LayTongTienCuaMaHoaDon(txtMaHD.Text);
+                    double tongtienAll = Convert.ToDouble(strTongTienHoaDon) + Convert.ToDouble(strNoCu);
+                    lblAllTong.Text = "Tổng : " + tongtienAll.ToString();
                     LoadDuLieuDuocChonTuGridView(intSelectIntem);
                 }
             }
@@ -551,12 +556,12 @@ namespace QL_BanDayNit
                     lblTongSL.Text = DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSL).ToString();
 
                     listMatHangOld.Add(_strMaMatHang, (double.Parse(txtSoLuong.Text)));
-                    string strTongTienHoaDon = LayTongTienCuaMaHoaDon(txtMaHD.Text);
+                    strTongTienHoaDon = LayTongTienCuaMaHoaDon(txtMaHD.Text);
                     lblTongTien.Text = strTongTienHoaDon;
                     btnInHD.Enabled = true;
                     btnTinhTien_Click(sender, e);
-                    double tongtienAll = Convert.ToDouble(strTongTienHoaDon) + Convert.ToDouble(LayNoCuTheoMaKhachHang(_strMaKhachHang));
-                    lblAllTong.Text = "Tổng : "  + tongtienAll.ToString();
+                    double tongtienAll = Convert.ToDouble(strTongTienHoaDon) + Convert.ToDouble(strNoCu);
+                    lblAllTong.Text = "Tổng : " + tongtienAll.ToString();
                     HienThi();
                 }
                 catch (FormatException)
@@ -768,7 +773,7 @@ namespace QL_BanDayNit
                 {
                     if (txtMaHD.Text == "")
                         throw new NotEnoughInfoException();
-                    
+
 
                     if (KiemTraChiTietHoaDonTonTai(txtMaHD.Text)) // Không Tồn Tại Chi Tiết Hóa Đơn
                     {
@@ -810,29 +815,41 @@ namespace QL_BanDayNit
                 if (txtTraNo.Text == "")
                     txtTraNo.Text = "0";
 
+
+                // Thêm Tổng Tiền Gốc
+                InsertTongTienGoc();
+                // Update Nợ Cũ
+                double dbNoCu = Convert.ToDouble(strNoCu);
+                double dbTraTien = Convert.ToDouble(txtTraNo.Text);
+                if (dbNoCu > 0)
+                {
+                    dbNoCu = dbNoCu + Convert.ToDouble(LayTongTienCuaMaHoaDon(txtMaHD.Text)) - dbTraTien;
+                    string updateNoCu = "UPDATE tblKhachHang SET NoCu = " + dbNoCu + " WHERE MaKH = N'" + _strMaKhachHang + "'";
+                    DataConn.ThucHienCmd(updateNoCu);
+                }
+
+                // Xuất Hóa Đơn PDF
                 XuatHoaDonPDF();
 
-                InsertTongTienGoc();
-
                 // Thoát Sau Khi In Hóa Đơn
-                if (MessageBox.Show("Đã Hoàn Thành Hóa Đơn Bạn Có Muốn Thoát Ra ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                if (MessageBox.Show("Đã Xuất Thành Công Bạn Có Muốn Chỉnh Sửa ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
-                    frmXuatHang_Load(sender, e);
                     return;
                 }
                 else
                 {
-                    this.Close();
+                    frmXuatHang_Load(sender, e);
                 }
             }
         }
 
+        int idProcess = -1;
         private void XuatHoaDonPDF()
         {
             // Update Nợ Cũ
-            double dbNoCu = Convert.ToDouble(LayNoCuTheoMaKhachHang(_strMaKhachHang));
+            double dbNoCu = Convert.ToDouble(strNoCu);
             double dbTraTien = Convert.ToDouble(txtTraNo.Text);
-            
+
             //BaseFont arialCustomer = BaseFont.CreateFont(System.IO.Directory.GetCurrentDirectory() + @"/Futura.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             string _timesBin = System.IO.Directory.GetCurrentDirectory() + @"/times.ttf";
             string __timesWinFonts = Environment.GetEnvironmentVariable("SystemRoot") + "\\fonts\\times.ttf";
@@ -933,23 +950,14 @@ namespace QL_BanDayNit
                 catch
                 {
                     MessageBox.Show("Tập Tin PDF Đã Có Và Đang Được Sử Dụng ! \nTắt Tập Tin Để Tạo Lại.");
+
                     return;
                 }
             }
+
             using (FileStream stream = new FileStream(namePDF, FileMode.Create))
             {
                 Document pdfDoc = new Document();
-
-                //if (grdXuatHang.Rows.Count <= 16)
-                //{
-                //    pdfDoc = new Document(PageSize.A5, 10f, 10f, 15f, 30f);
-                //    pdfDoc.SetPageSize(PageSize.LETTER.Rotate());
-                //}
-                //else
-                //{
-                //    pdfDoc = new Document(PageSize.A4, 10f, 10f, 15f, 30f);
-                //    pdfDoc.SetPageSize(PageSize.A4);
-                //}
 
                 pdfDoc = new Document(PageSize.A5, 10f, 10f, 15f, 30f);
                 pdfDoc.SetPageSize(PageSize.LETTER.Rotate());
@@ -966,8 +974,8 @@ namespace QL_BanDayNit
 
                 pdfTableTongTien.AddCell(new Phrase("\nSố Mặt Hàng: " + lblSoMatHang.Text, new iTextSharp.text.Font(arialCustomer, 16)));
                 pdfTableTongTien.AddCell(new Phrase("\nTổng SL: " + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 16)));
-                if(dbNoCu > 0)
-                    pdfTableTongTien.AddCell(new Phrase("\nTổng Toa : \t" + intTongTienBan + "\nNợ Cũ      : " + dbNoCu + "\nTổng Tiền: " + (dbTongTienBan + dbNoCu) + "\nTrả           : " + dbTraTien + "\n------------------\nCòn          :  " + (dbTongTienBan + dbNoCu - dbTraTien) , new iTextSharp.text.Font(arialCustomer, 16)));
+                if (dbNoCu > 0)
+                    pdfTableTongTien.AddCell(new Phrase("\nTổng Toa : \t" + intTongTienBan + "\nNợ Cũ      : " + dbNoCu + "\nTổng Tiền: " + (dbTongTienBan + dbNoCu) + "\nTrả           : " + dbTraTien + "\n------------------\nCòn          :  " + (dbTongTienBan + dbNoCu - dbTraTien), new iTextSharp.text.Font(arialCustomer, 16)));
                 else
                     pdfTableTongTien.AddCell(new Phrase("\nTổng Toa : \t" + intTongTienBan + "\nTrả           : " + dbTraTien + "\n------------------\nCòn          :  " + (dbTongTienBan - dbTraTien), new iTextSharp.text.Font(arialCustomer, 16)));
 
@@ -984,14 +992,6 @@ namespace QL_BanDayNit
 
                 pdfDoc.Close();
                 stream.Close();
-            }
-
-            // Update Nợ Cũ
-            if (dbNoCu > 0)
-            {
-                dbNoCu = dbNoCu + Convert.ToDouble(LayTongTienCuaMaHoaDon(txtMaHD.Text)) - dbTraTien;
-                string updateNoCu = "UPDATE tblKhachHang SET NoCu = " + dbNoCu + " WHERE MaKH = N'" + _strMaKhachHang + "'";
-                DataConn.ThucHienCmd(updateNoCu);
             }
 
             System.Diagnostics.Process.Start(@"" + namePDF);
@@ -1013,14 +1013,14 @@ namespace QL_BanDayNit
                 intSelectIntem = grdXuatHang.CurrentCell.RowIndex;
                 // Đưa con trỏ lên 1 hàng sau khi xóa
                 intSelectIntem = intSelectIntem > 0 ? intSelectIntem - 1 : 0;
-                
+
                 // Lấy Tổng Số Lượng
                 string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
                 lblTongSL.Text = DataConn.Lay1GiaTriSoDung_ExecuteScalar(selectSL).ToString();
 
                 string strTongTienHoaDon = LayTongTienCuaMaHoaDon(txtMaHD.Text);
                 lblTongTien.Text = strTongTienHoaDon;
-                double tongtienAll = Convert.ToDouble(strTongTienHoaDon) + Convert.ToDouble(LayNoCuTheoMaKhachHang(_strMaKhachHang));
+                double tongtienAll = Convert.ToDouble(strTongTienHoaDon) + Convert.ToDouble(strNoCu);
                 lblAllTong.Text = "Tổng : " + tongtienAll.ToString();
                 HienThi();
                 btnTinhTien_Click(sender, e);
@@ -1220,7 +1220,7 @@ namespace QL_BanDayNit
                 e.Handled = true;
         }
 
-        
+
         // Sử Lý Trả Hàng = Nhập Hàng Mới
 
 
