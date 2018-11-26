@@ -88,7 +88,7 @@
             this.txtDonGia.Margin = new System.Windows.Forms.Padding(4);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.Size = new System.Drawing.Size(100, 26);
-            this.txtDonGia.TabIndex = 4;
+            this.txtDonGia.TabIndex = 2;
             this.txtDonGia.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDonGia_KeyPress);
             // 
             // label1
@@ -109,7 +109,7 @@
             this.txtSoLuong.Margin = new System.Windows.Forms.Padding(4);
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(77, 26);
-            this.txtSoLuong.TabIndex = 3;
+            this.txtSoLuong.TabIndex = 1;
             this.txtSoLuong.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSoLuong_KeyPress);
             // 
             // label2
@@ -184,7 +184,7 @@
             this.txtTenHang.Margin = new System.Windows.Forms.Padding(4);
             this.txtTenHang.Name = "txtTenHang";
             this.txtTenHang.Size = new System.Drawing.Size(251, 26);
-            this.txtTenHang.TabIndex = 2;
+            this.txtTenHang.TabIndex = 0;
             // 
             // label3
             // 
@@ -215,7 +215,7 @@
             this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4);
             this.txtGiaBan.Name = "txtGiaBan";
             this.txtGiaBan.Size = new System.Drawing.Size(122, 26);
-            this.txtGiaBan.TabIndex = 4;
+            this.txtGiaBan.TabIndex = 3;
             this.txtGiaBan.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDonGia_KeyPress);
             // 
             // rdbDay

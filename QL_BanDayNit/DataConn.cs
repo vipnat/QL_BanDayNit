@@ -15,9 +15,9 @@ namespace QL_BanDayNit
         private static SqlCommand cmd;
         private static SqlDataAdapter da;
         private static DataSet ds;
-        // Tên Database trong CSDL
-        private static string strTenDB = "BanHang";
-        //private static string strTenDB = "BanHangTest";
+        // Tên Database trong CSDL  // Thư Mục Lưu Hóa Đơn
+        private static string strTenDB = "BanHang"; public static string folderLuuHoaDon = System.IO.Directory.GetCurrentDirectory() + "\\LuuHoaDon\\";
+        //private static string strTenDB = "BanHangTest"; public static string folderLuuHoaDon = "C:\\LuuHoaDon\\";
 
         // Add Tên Computer của bạn ở đây.
         private static string strPC_Name = Environment.MachineName;

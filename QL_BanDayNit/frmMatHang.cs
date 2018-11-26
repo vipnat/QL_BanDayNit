@@ -57,6 +57,9 @@ namespace QL_BanDayNit
                         DataSet ds1 = DataConn.GrdSource(select1);
                         if (ds1.Tables[0].Rows.Count > 0)
                             txtGiaBan.Text = ds1.Tables[0].Rows[0]["GiaBan"].ToString();
+                        else
+                            txtGiaBan.Text = (Convert.ToDouble(txtDonGia.Text) + 4) + "";
+                            
                         btnThem.Enabled = true;
                         cbbSize.Enabled = true;
                     }
