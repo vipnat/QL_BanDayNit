@@ -175,6 +175,26 @@ namespace QL_BanDayNit
                 return 0;
         }
 
+        public static string Lay1GiaTriSelect_ExecuteScalar(string sqlQuery)
+        {
+            string getData = "";
+            try
+            {
+                cmd = new SqlCommand(sqlQuery, con);
+                object resultObj = cmd.ExecuteScalar();
+
+                if (resultObj != null)
+                {
+                    getData = resultObj.ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("" + e);
+            }
+            return getData;
+        }
+
         private static string LayFileDBTuOpenShowdialog()
         {
             OpenFileDialog openD = new OpenFileDialog();
@@ -205,6 +225,7 @@ namespace QL_BanDayNit
                 con.Dispose();
             }
         }
+
         public static void ThucHienCmd(string select)
         {
             cmd = new SqlCommand(select, con);
@@ -218,6 +239,7 @@ namespace QL_BanDayNit
                 MessageBox.Show("" + se.Message);
             }
         }
+
         public static DataSet GrdSource(string select)
         {
             da = new SqlDataAdapter(select, con);
@@ -225,6 +247,7 @@ namespace QL_BanDayNit
             da.Fill(ds);
             return ds;
         }
+
         public static SqlDataReader ThucHienReader(string select)
         {
             cmd = new SqlCommand(select, con);
@@ -237,6 +260,7 @@ namespace QL_BanDayNit
                 return null;
             }
         }
+
         internal static void ThucHienCmd_Backup()
         {
             cmd = new SqlCommand(strBackup, con);

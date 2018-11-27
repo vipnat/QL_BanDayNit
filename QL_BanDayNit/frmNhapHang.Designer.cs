@@ -94,16 +94,16 @@
             // 
             this.txtSoLuong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtSoLuong.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSoLuong.Location = new System.Drawing.Point(407, 16);
+            this.txtSoLuong.Location = new System.Drawing.Point(402, 16);
             this.txtSoLuong.Name = "txtSoLuong";
-            this.txtSoLuong.Size = new System.Drawing.Size(60, 26);
+            this.txtSoLuong.Size = new System.Drawing.Size(42, 26);
             this.txtSoLuong.TabIndex = 2;
             this.txtSoLuong.Text = "0";
             // 
             // lblSoLuong
             // 
             this.lblSoLuong.AutoSize = true;
-            this.lblSoLuong.Location = new System.Drawing.Point(343, 20);
+            this.lblSoLuong.Location = new System.Drawing.Point(338, 20);
             this.lblSoLuong.Name = "lblSoLuong";
             this.lblSoLuong.Size = new System.Drawing.Size(64, 19);
             this.lblSoLuong.TabIndex = 6;
@@ -122,17 +122,17 @@
             // 
             this.txtDonGia.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtDonGia.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDonGia.Location = new System.Drawing.Point(529, 16);
+            this.txtDonGia.Location = new System.Drawing.Point(512, 16);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.ReadOnly = true;
-            this.txtDonGia.Size = new System.Drawing.Size(65, 26);
+            this.txtDonGia.Size = new System.Drawing.Size(50, 26);
             this.txtDonGia.TabIndex = 8;
             this.txtDonGia.Text = "0";
             // 
             // lblDonGia
             // 
             this.lblDonGia.AutoSize = true;
-            this.lblDonGia.Location = new System.Drawing.Point(470, 20);
+            this.lblDonGia.Location = new System.Drawing.Point(454, 20);
             this.lblDonGia.Name = "lblDonGia";
             this.lblDonGia.Size = new System.Drawing.Size(56, 19);
             this.lblDonGia.TabIndex = 10;
@@ -159,7 +159,7 @@
             this.cbxTenMatHang.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxTenMatHang.FormattingEnabled = true;
             this.cbxTenMatHang.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbxTenMatHang.Location = new System.Drawing.Point(173, 16);
+            this.cbxTenMatHang.Location = new System.Drawing.Point(166, 16);
             this.cbxTenMatHang.Name = "cbxTenMatHang";
             this.cbxTenMatHang.Size = new System.Drawing.Size(173, 27);
             this.cbxTenMatHang.TabIndex = 1;
@@ -214,11 +214,12 @@
             this.btnGhi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnGhi.Image = ((System.Drawing.Image)(resources.GetObject("btnGhi.Image")));
             this.btnGhi.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnGhi.Location = new System.Drawing.Point(597, 16);
+            this.btnGhi.Location = new System.Drawing.Point(572, 16);
             this.btnGhi.Name = "btnGhi";
-            this.btnGhi.Size = new System.Drawing.Size(78, 27);
+            this.btnGhi.Size = new System.Drawing.Size(50, 27);
             this.btnGhi.TabIndex = 3;
-            this.btnGhi.Text = "Ghi (&G)";
+            this.btnGhi.Text = "Ghi";
+            this.btnGhi.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnGhi.UseVisualStyleBackColor = true;
             this.btnGhi.Click += new System.EventHandler(this.btnGhi_Click);
             // 
@@ -255,6 +256,7 @@
             this.groupChiTietHDN.Controls.Add(this.cbDai);
             this.groupChiTietHDN.Controls.Add(this.cbDauDay);
             this.groupChiTietHDN.Controls.Add(this.cbxDai);
+            this.groupChiTietHDN.Controls.Add(this.btnMHMoi);
             this.groupChiTietHDN.Controls.Add(this.label4);
             this.groupChiTietHDN.Controls.Add(this.cbxDay);
             this.groupChiTietHDN.Controls.Add(this.cbxDauKhoa);
@@ -276,7 +278,7 @@
             // cbDai
             // 
             this.cbDai.AutoSize = true;
-            this.cbDai.Location = new System.Drawing.Point(423, 61);
+            this.cbDai.Location = new System.Drawing.Point(546, 61);
             this.cbDai.Name = "cbDai";
             this.cbDai.Size = new System.Drawing.Size(15, 14);
             this.cbDai.TabIndex = 21;
@@ -286,7 +288,7 @@
             // cbDauDay
             // 
             this.cbDauDay.AutoSize = true;
-            this.cbDauDay.Location = new System.Drawing.Point(9, 61);
+            this.cbDauDay.Location = new System.Drawing.Point(6, 61);
             this.cbDauDay.Name = "cbDauDay";
             this.cbDauDay.Size = new System.Drawing.Size(15, 14);
             this.cbDauDay.TabIndex = 20;
@@ -300,16 +302,16 @@
             this.cbxDai.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDai.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDai.FormattingEnabled = true;
-            this.cbxDai.Location = new System.Drawing.Point(469, 52);
+            this.cbxDai.Location = new System.Drawing.Point(586, 52);
             this.cbxDai.Name = "cbxDai";
-            this.cbxDai.Size = new System.Drawing.Size(137, 27);
+            this.cbxDai.Size = new System.Drawing.Size(88, 27);
             this.cbxDai.TabIndex = 18;
             this.cbxDai.SelectedIndexChanged += new System.EventHandler(this.cbxDai_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(439, 58);
+            this.label4.Location = new System.Drawing.Point(556, 58);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(30, 19);
             this.label4.TabIndex = 17;
@@ -322,9 +324,9 @@
             this.cbxDay.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDay.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDay.FormattingEnabled = true;
-            this.cbxDay.Location = new System.Drawing.Point(274, 52);
+            this.cbxDay.Location = new System.Drawing.Point(299, 52);
             this.cbxDay.Name = "cbxDay";
-            this.cbxDay.Size = new System.Drawing.Size(145, 27);
+            this.cbxDay.Size = new System.Drawing.Size(244, 27);
             this.cbxDay.TabIndex = 14;
             this.cbxDay.SelectedIndexChanged += new System.EventHandler(this.cbxDay_SelectedIndexChanged);
             // 
@@ -335,16 +337,16 @@
             this.cbxDauKhoa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDauKhoa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDauKhoa.FormattingEnabled = true;
-            this.cbxDauKhoa.Location = new System.Drawing.Point(99, 52);
+            this.cbxDauKhoa.Location = new System.Drawing.Point(91, 52);
             this.cbxDauKhoa.Name = "cbxDauKhoa";
-            this.cbxDauKhoa.Size = new System.Drawing.Size(173, 27);
+            this.cbxDauKhoa.Size = new System.Drawing.Size(206, 27);
             this.cbxDauKhoa.TabIndex = 12;
             this.cbxDauKhoa.SelectedIndexChanged += new System.EventHandler(this.cbxDauKhoa_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 58);
+            this.label2.Location = new System.Drawing.Point(19, 58);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 19);
             this.label2.TabIndex = 11;
@@ -358,7 +360,7 @@
             this.cbxMa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxMa.FormattingEnabled = true;
             this.cbxMa.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbxMa.Location = new System.Drawing.Point(75, 16);
+            this.cbxMa.Location = new System.Drawing.Point(71, 16);
             this.cbxMa.Name = "cbxMa";
             this.cbxMa.Size = new System.Drawing.Size(92, 27);
             this.cbxMa.TabIndex = 0;
@@ -380,12 +382,14 @@
             // btnMHMoi
             // 
             this.btnMHMoi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnMHMoi.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMHMoi.ForeColor = System.Drawing.Color.Red;
             this.btnMHMoi.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnMHMoi.Location = new System.Drawing.Point(669, 102);
+            this.btnMHMoi.Location = new System.Drawing.Point(627, 16);
             this.btnMHMoi.Name = "btnMHMoi";
-            this.btnMHMoi.Size = new System.Drawing.Size(47, 30);
+            this.btnMHMoi.Size = new System.Drawing.Size(47, 26);
             this.btnMHMoi.TabIndex = 18;
-            this.btnMHMoi.Text = "Mới";
+            this.btnMHMoi.Text = "+SP";
             this.btnMHMoi.UseVisualStyleBackColor = true;
             this.btnMHMoi.Click += new System.EventHandler(this.btnMHMoi_Click);
             // 
@@ -399,7 +403,6 @@
             this.Controls.Add(this.btnXoa);
             this.Controls.Add(this.groupChiTietHDN);
             this.Controls.Add(this.groupHoaDonNhap);
-            this.Controls.Add(this.btnMHMoi);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.grdNhapHang);
             this.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

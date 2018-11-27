@@ -66,9 +66,23 @@ namespace QL_BanDayNit
                 selectMatHang = "SELECT* FROM tblMatHang WHERE SUBSTRING(tblMatHang.MaMatH,1,3) = '" + strTienToMaMatHang + "'";
             try
             {
+
+                DataTable tableHienThi = new DataTable();
+                tableHienThi.Columns.Add("MaMatH");
+                tableHienThi.Columns.Add("TenMatH");
+                tableHienThi.Columns.Add("DonGia");
+
                 DataSet ds = DataConn.GrdSource(selectMatHang);
                 ds = DataConn.GrdSource(selectMatHang);
-                cbxLoad.DataSource = ds.Tables[0];
+
+                // Chuyển sang list để làm datasource cho combobox  
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    tableHienThi.Rows.Add(row["MaMatH"], row["TenMatH"] + "(" + row["DonGia"] + "k)" , row["TenMatH"]);
+                }
+
+                //cbxLoad.DataSource = ds.Tables[0];
+                cbxLoad.DataSource = tableHienThi;
                 cbxLoad.DisplayMember = "TenMatH";
                 cbxLoad.ValueMember = "MaMatH";
                 if (ds.Tables[0].Rows.Count > 0 && strTienToMaMatHang == "")
@@ -615,9 +629,9 @@ namespace QL_BanDayNit
                             cbxDay.Enabled = false;
                             cbxDai.Enabled = false;
                             // Hiển thị lên Combobox
-                            cbxDauKhoa.SelectedValue = _strChuoiMa.Substring(0, 6);
-                            cbxDay.SelectedValue = _strChuoiMa.Substring(6, 6);
-                            cbxDai.SelectedValue = _strChuoiMa.Substring(12);
+                            cbxDauKhoa.SelectedValue = _strChuoiMa.Substring(0, 7);
+                            cbxDay.SelectedValue = _strChuoiMa.Substring(7, 7);
+                            cbxDai.SelectedValue = _strChuoiMa.Substring(14);
                         }
                         else
                         {

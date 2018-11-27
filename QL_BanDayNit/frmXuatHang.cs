@@ -96,18 +96,39 @@ namespace QL_BanDayNit
             string selectMatHang = "SELECT * FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maHang + "'" +
                                    "AND DonGia > 0  ";
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
-            cbxMaMatH.DataSource = dsMatHang.Tables[0];
-            cbxMaMatH.DisplayMember = "MaMatH";
-            cbxMaMatH.ValueMember = "TenMatH";
+
+            // Tạo Table Hiển THị
+            DataTable tableHienThi = new DataTable();
+            tableHienThi.Columns.Add("MaMatH");
+            tableHienThi.Columns.Add("MaRutGon");
+
+            // Chuyển sang list để làm datasource cho combobox  
+            foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            {
+                string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
+                tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
+            }
+
+            cbxMaMatH.DataSource = tableHienThi;
+            cbxMaMatH.DisplayMember = "MaRutGon";
+            cbxMaMatH.ValueMember = "MaMatH";
+
+
             if (dsMatHang.Tables[0].Rows.Count > 0)
             {
                 _strMaMatHang = dsMatHang.Tables[0].Rows[cbxMaMatH.SelectedIndex][0].ToString();
-                cbxTenMatHang.Text = cbxMaMatH.SelectedValue.ToString();
+                cbxTenMatHang.Text = LayTenMatHangTheoMa(cbxMaMatH.SelectedValue.ToString());
             }
             // Load cbx Tên Mặt Hàng
             cbxTenMatHang.DataSource = dsMatHang.Tables[0];
             cbxTenMatHang.DisplayMember = "TenMatH";
             cbxTenMatHang.ValueMember = "MaMatH";
+        }
+
+        private string LayTenMatHangTheoMa(string strMaMH)
+        {
+            string sqlSqlectTen = "SELECT tblMatHang.TenMatH FROM tblMatHang WHERE MaMatH ='" + strMaMH + "'";
+            return DataConn.Lay1GiaTriSelect_ExecuteScalar(sqlSqlectTen);
         }
 
         private void LoadCombobox()
@@ -116,13 +137,30 @@ namespace QL_BanDayNit
             string selectMatHang = "SELECT * FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maLoaiHang + "'" +
                                    "AND DonGia > 0  ";
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
-            cbxMaMatH.DataSource = dsMatHang.Tables[0];
-            cbxMaMatH.DisplayMember = "MaMatH";
-            cbxMaMatH.ValueMember = "TenMatH";
+
+
+            // Tạo Table Hiển THị
+            DataTable tableHienThi = new DataTable();
+            tableHienThi.Columns.Add("MaMatH");
+            tableHienThi.Columns.Add("MaRutGon");
+
+            // Chuyển sang list để làm datasource cho combobox  
+            foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            {
+                string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
+                tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
+            }
+
+            // Load Combobox Mã Mặt Hàng
+            cbxMaMatH.DataSource = tableHienThi;
+            cbxMaMatH.DisplayMember = "MaRutGon";
+            cbxMaMatH.ValueMember = "MaMatH";
+
+
             if (dsMatHang.Tables[0].Rows.Count > 0)
             {
                 _strMaMatHang = dsMatHang.Tables[0].Rows[cbxMaMatH.SelectedIndex][0].ToString();
-                cbxTenMatHang.Text = cbxMaMatH.SelectedValue.ToString();
+                cbxTenMatHang.Text = LayTenMatHangTheoMa(cbxMaMatH.SelectedValue.ToString());
             }
             // Load cbx Tên Mặt Hàng
             cbxTenMatHang.DataSource = dsMatHang.Tables[0];
@@ -177,16 +215,16 @@ namespace QL_BanDayNit
         {
             if (cbxMaMatH.ValueMember != null)
             {
-                _strMaMatHang = cbxMaMatH.Text;
-                cbxTenMatHang.Text = cbxMaMatH.SelectedValue.ToString();
+                _strMaMatHang = cbxMaMatH.SelectedValue.ToString();
+                cbxTenMatHang.Text = LayTenMatHangTheoMa(cbxMaMatH.SelectedValue.ToString());
             }
 
             try
             {
-                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, _strMaKhachHang);
+                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.SelectedValue.ToString(), _strMaKhachHang);
                 if (strDonGia == "")
                 {
-                    strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
+                    strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.SelectedValue.ToString());
                 }
                 txtDonGia.Text = strDonGia;
             }
@@ -201,14 +239,14 @@ namespace QL_BanDayNit
 
             if (cbxTenMatHang.ValueMember != null && !cbxKhachHang.Enabled)
             {
-                cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString();
+                cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString().Substring(3);
             }
             try
             {
-                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.Text, _strMaKhachHang);
+                string strDonGia = LayDonGiaTheoMaKhachHang(cbxMaMatH.SelectedValue.ToString(), _strMaKhachHang);
                 if (strDonGia == "")
                 {
-                    strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.Text);
+                    strDonGia = LayDonGiaTheoMatHang(cbxMaMatH.SelectedValue.ToString());
                 }
                 txtDonGia.Text = strDonGia;
             }
@@ -241,25 +279,8 @@ namespace QL_BanDayNit
 
         private string LayNoCuTheoMaKhachHang(string maKhachHang)
         {
-            string NoCu = "";
-            string select = "SELECT tblKhachHang.NoCu FROM tblKhachHang WHERE tblKhachHang.MaKH = '" + maKhachHang + "'";
-            SqlDataReader sqlData = DataConn.ThucHienReader(select);
-            try
-            {
-                //if (sqlData.Read() == null) return NoCu;
-                //MessageBox.Show("1");
-                while (sqlData.Read())
-                {
-                    //if (sqlData.GetDecimal(0) == 0) return NoCu;
-                    NoCu = sqlData.GetString(0);
-                }
-            }
-            finally
-            {
-                sqlData.Close();
-                sqlData.Dispose();
-            }
-            return NoCu;
+            string selectNoCu = "SELECT tblKhachHang.NoCu FROM tblKhachHang WHERE tblKhachHang.MaKH = '" + maKhachHang + "'";
+            return DataConn.Lay1GiaTriSelect_ExecuteScalar(selectNoCu);
         }
 
         private string LayDonGiaTheoMatHang(string maMatHang)
@@ -292,25 +313,8 @@ namespace QL_BanDayNit
 
         private string LaySoDienThoaiNhanVienTheoMa(string maNhanVien)
         {
-            string strSDT = "";
-
-            string select = "SELECT tblNhanVien.DienThoai FROM tblNhanVien WHERE tblNhanVien.MaNhanVien = '" + maNhanVien + "'";
-            SqlDataReader sqlData = DataConn.ThucHienReader(select);
-            try
-            {
-                //MessageBox.Show("1");
-                while (sqlData.Read())
-                {
-                    strSDT = sqlData.GetString(0);
-                }
-            }
-            finally
-            {
-                sqlData.Close();
-                sqlData.Dispose();
-            }
-
-            return strSDT;
+            string selectSDT = "SELECT tblNhanVien.DienThoai FROM tblNhanVien WHERE tblNhanVien.MaNhanVien = '" + maNhanVien + "'";
+            return DataConn.Lay1GiaTriSelect_ExecuteScalar(selectSDT);
         }
 
         private void HienThi()
@@ -418,7 +422,7 @@ namespace QL_BanDayNit
                     lblNoCu.Visible = false;
                     lblAllTong.Visible = false;
                 }
-                txtDonGia.Text = LayDonGiaTheoMatHang(cbxMaMatH.Text);
+                txtDonGia.Text = LayDonGiaTheoMatHang(cbxMaMatH.SelectedValue.ToString());
             }
             catch (SameKeyException)
             {
@@ -568,7 +572,7 @@ namespace QL_BanDayNit
                     CapNhapMatHangDaBan(sender, e);
 
                     //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.Text + "'";
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
 
@@ -624,7 +628,7 @@ namespace QL_BanDayNit
                     DataConn.ThucHienCmd(query_SQL);
 
                     //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.Text + "'";
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
                     // Lấy Tổng Số Lượng
@@ -1152,9 +1156,9 @@ namespace QL_BanDayNit
             //Creating iTextSharp Table from the DataTable data  Table Bán Hàng
             //
             PdfPTable pdfTable = new PdfPTable(grdXuatHang.ColumnCount);
-            float[] widths = new float[] { 2f, 5f, 2f, 2f, 2f };
+            float[] widths = new float[] { 1.5f, 5f, 1.5f, 2f, 2f };
             pdfTable.SetWidths(widths);
-            pdfTable.WidthPercentage = 90;
+            pdfTable.WidthPercentage = 95;
             pdfTable.DefaultCell.Padding = 3;
             pdfTable.DefaultCell.BorderWidth = 1;
             pdfTable.DefaultCell.VerticalAlignment = iTextSharp.text.Rectangle.ALIGN_MIDDLE;
@@ -1202,7 +1206,7 @@ namespace QL_BanDayNit
                 pdfTableTra = new PdfPTable(grdTraHang.ColumnCount);
                 float[] widthsTra = new float[] { 2f, 5f, 2f, 2f, 2f };
                 pdfTableTra.SetWidths(widthsTra);
-                pdfTableTra.WidthPercentage = 90;
+                pdfTableTra.WidthPercentage = 95;
                 pdfTableTra.DefaultCell.Padding = 3;
                 pdfTableTra.DefaultCell.BorderWidth = 1;
                 pdfTableTra.DefaultCell.VerticalAlignment = iTextSharp.text.Rectangle.ALIGN_MIDDLE;
@@ -1211,18 +1215,6 @@ namespace QL_BanDayNit
                 PdfPCell titleTraHang = new PdfPCell(new Phrase("Trả Hàng", new iTextSharp.text.Font(arialCustomer, 16))) { Colspan = 5 };
                 titleTraHang.HorizontalAlignment = Element.ALIGN_CENTER;
                 pdfTableTra.AddCell(titleTraHang);
-
-
-                //Adding Header row
-                //foreach (DataGridViewColumn column in grdTraHang.Columns)
-                //{
-                //    PdfPCell cellHeader = new PdfPCell(new Phrase(column.HeaderText, new iTextSharp.text.Font(arialCustomer)));
-                //    cellHeader.BackgroundColor = new iTextSharp.text.Color(240, 240, 240);
-                //    cellHeader.HorizontalAlignment = 1;
-                //    cellHeader.FixedHeight = 20f;
-                //    pdfTableTra.AddCell(cellHeader);
-                //}
-
 
                 int maSP_Tra = 0;
                 //Adding DataRow
@@ -1250,18 +1242,17 @@ namespace QL_BanDayNit
 
             }
 
-
             //
             // Table Tính Tiền
             //
             PdfPTable pdfTableTongTien = new PdfPTable(5);
-            float[] widthsTT = new float[] { 2f, 5f, 2f, 2f, 2f };
+            float[] widthsTT = new float[] { 1.5f, 5f, 1.5f, 2f, 2f };
             pdfTableTongTien.SetWidths(widthsTT);
-            pdfTableTongTien.WidthPercentage = 90;
+            pdfTableTongTien.WidthPercentage = 95;
             pdfTableTongTien.DefaultCell.BorderWidth = 0;
 
             // Add Cell Tính Tiền
-            pdfTableTongTien.AddCell(new Phrase("\nSố Loại: " + lblSoMatHang.Text, new iTextSharp.text.Font(arialCustomer, 16)));
+            pdfTableTongTien.AddCell(new Phrase("\nSố Loại: " + lblSoMatHang.Text, new iTextSharp.text.Font(arialCustomer, 14)));
             pdfTableTongTien.AddCell(new Phrase("", new iTextSharp.text.Font(arialCustomer, 16)));
             pdfTableTongTien.AddCell(new Phrase("\n" + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 16)));
 
@@ -1322,7 +1313,8 @@ namespace QL_BanDayNit
                 Document pdfDoc = new Document();
 
                 pdfDoc = new Document(PageSize.A5, 10f, 10f, 15f, 30f);
-                pdfDoc.SetPageSize(PageSize.LETTER.Rotate());
+                pdfDoc.SetPageSize(PageSize.LETTER);  // A5 Dọc
+                //pdfDoc.SetPageSize(PageSize.LETTER.Rotate()); A5 Ngang
                 PdfWriter.GetInstance(pdfDoc, stream);
                 pdfDoc.Open();
                 pdfDoc.AddAuthor("Anh Tuan");
@@ -1483,10 +1475,22 @@ namespace QL_BanDayNit
 
         private void rdbSanPham_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdbSanPham.Checked) maLoaiHang = "MSP";
-            if (rdbDay.Checked) maLoaiHang = "DAY";
-            if (rdbDau.Checked) maLoaiHang = "DAU";
-            if (rdbDai.Checked) maLoaiHang = "DAI";
+            if (rdbSanPham.Checked)
+            {
+                maLoaiHang = lblMaMatH.Text = "MSP";
+            }
+            if (rdbDay.Checked)
+            {
+                maLoaiHang = lblMaMatH.Text = "DAY";
+            }
+            if (rdbDau.Checked)
+            {
+                maLoaiHang = lblMaMatH.Text = "DAU";
+            }
+            if (rdbDai.Checked)
+            {
+                maLoaiHang = lblMaMatH.Text = "DAI";
+            }
             LoadComboboxMatHang(maLoaiHang);
         }
 
@@ -1694,5 +1698,6 @@ namespace QL_BanDayNit
             else
                 lblConLai.Text = "";
         }
+
     }
 }
