@@ -172,16 +172,16 @@ namespace QL_BanDayNit
         {
             string MaHD = "";
             int maSo = 1;
-            string select1 = "select MaHD FROM tblHoaDonXuat";
+            string selectMaHoaDon = "select MaHD FROM tblHoaDonXuat";
 
-            DataSet ds = DataConn.GrdSource(select1);
+            DataSet ds = DataConn.GrdSource(selectMaHoaDon);
             if (ds.Tables[0].Rows.Count == 0)
             {
                 MaHD = ngayText + maSo.ToString("000");
             }
             else
             {
-                SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+                SqlDataReader sqlData = DataConn.ThucHienReader(selectMaHoaDon);
                 try
                 {
                     while (sqlData.Read())
@@ -189,10 +189,10 @@ namespace QL_BanDayNit
                         string getMaHD = sqlData.GetString(0);
                         string getNgay = getMaHD.Substring(0, 8);
                         string getMa = getMaHD.Substring(8);
-                        if (getMaHD.Length == 10)
+                        if (getMaHD.Length == 11)
                         {
-                            getNgay = getMaHD.Substring(0, 7);
-                            getMa = getMaHD.Substring(7);
+                            getNgay = getMaHD.Substring(0, 8);
+                            getMa = getMaHD.Substring(8);
                         }
                         if (getNgay == ngayText)
                         {
@@ -258,23 +258,8 @@ namespace QL_BanDayNit
 
         private string LayDonGiaTheoMaKhachHang(string maMatHang, string maKhachHang)
         {
-            string DonGia = "";
-            string select = "SELECT tblGiaBan.GiaBan FROM tblGiaBan WHERE tblGiaBan.MaMatH = '" + maMatHang + "' and tblGiaBan.MaKH = '" + maKhachHang + "'";
-            SqlDataReader sqlData = DataConn.ThucHienReader(select);
-            try
-            {
-                //MessageBox.Show("1");
-                while (sqlData.Read())
-                {
-                    DonGia = sqlData.GetDecimal(0).ToString();
-                }
-            }
-            finally
-            {
-                sqlData.Close();
-                sqlData.Dispose();
-            }
-            return DonGia;
+            string selectDonGia = "SELECT tblGiaBan.GiaBan FROM tblGiaBan WHERE tblGiaBan.MaMatH = '" + maMatHang + "' and tblGiaBan.MaKH = '" + maKhachHang + "'";
+            return DataConn.Lay1GiaTriSelect_ExecuteScalar(selectDonGia);
         }
 
         private string LayNoCuTheoMaKhachHang(string maKhachHang)
@@ -289,9 +274,10 @@ namespace QL_BanDayNit
 
             string selectGiaBan = "SELECT [tblMatHang].[DonGia] FROM [tblMatHang] WHERE [tblMatHang].MaMatH = '" + maMatHang + "'";
             string selectGiaTheoKH = "SELECT [tblMatHang].[DonGia] FROM [tblMatHang] INNER JOIN [tblGiaBan] ON [tblMatHang].MaMatH = [tblGiaBan].MaMatH WHERE [MaKH]='" + _strMaKhachHang + "' AND [tblMatHang].MaMatH = '" + maMatHang + "'";
+            fDonGia = DataConn.Lay1GiaFloat_ExecuteScalar(selectGiaTheoKH);
 
-            if (DataConn.Lay1GiaFloat_ExecuteScalar(selectGiaTheoKH) > 0)
-                fDonGia = DataConn.Lay1GiaFloat_ExecuteScalar(selectGiaTheoKH);
+            if (fDonGia > 0)
+                return fDonGia.ToString();
             else
             {
                 fDonGia = DataConn.Lay1GiaFloat_ExecuteScalar(selectGiaBan) + 4;
@@ -560,7 +546,7 @@ namespace QL_BanDayNit
             string strTongTienHoaDon = "";
 
             if (!KiemTraDuLieuNhapSo()) return;
-            if (KiemTraMatHangDaCo(_strMaMatHang))
+            if (KiemTraTonTaiMatHang())
             {
                 if (MessageBox.Show("Đã Có Mặt Hàng Này!\nBạn Muốn Sửa Lại Không?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
@@ -675,7 +661,7 @@ namespace QL_BanDayNit
             string strTongTienHoaDonTra = "";
 
             if (!KiemTraDuLieuNhapSo()) return;
-            if (KiemTraMatHangDaCo(_strMaMatHang))
+            if (KiemTraTonTaiMatHang())
             {
                 MessageBox.Show("Đã Trả Mặt Hàng Này!\nBạn Cần Xóa Rồi Trả Lại.", "Thông Báo");
                 return;
@@ -714,6 +700,10 @@ namespace QL_BanDayNit
 
                     //Cập nhật lại Số Lượng cho bảng tblMatHang (Thêm số lượng mặt hàng)
                     query_SQL = "update tblMatHang set SoLuong=SoLuong+" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
+                    DataConn.ThucHienCmd(query_SQL);
+
+                    //Cập nhập giá mới cho khách hàng
+                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
                     listMatHangTra.Add(_strMaMatHang, (double.Parse(txtSoLuong.Text)));
@@ -768,7 +758,7 @@ namespace QL_BanDayNit
             bool _kiemTra = true;
             int _intSLDaXuat = 0;
             string selectSoLuong = "SELECT SoLuong FROM tblMatHang WHERE MaMatH='" + _strMaMH + "'";
-            if (KiemTraTonTaiMatHangDaThem()) // Nếu Là Update
+            if (KiemTraTonTaiMatHang()) // Nếu Là Update
             {
                 _intSLDaXuat = int.Parse(listMatHangOld[_strMaMatHang].ToString());
             }
@@ -786,7 +776,7 @@ namespace QL_BanDayNit
                 if (cbxMaMatH.Text == "" && txtSoLuong.Text == "" && txtDonGia.Text == "")
                     throw new NotEnoughInfoException();
 
-                if (KiemTraTonTaiMatHangDaThem())
+                if (KiemTraTonTaiMatHang())
                 {
                     //if (SoSanhSoLuongTrongListOld(_strMaMatHang, txtSoLuong.Text))
 
@@ -855,10 +845,12 @@ namespace QL_BanDayNit
             return false;
         }
 
-        private bool KiemTraTonTaiMatHangDaThem()
+        private bool KiemTraTonTaiMatHang()
         {
-            string select1 = "select MaMatH from tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
-            SqlDataReader sqlData = DataConn.ThucHienReader(select1);
+            string selectHDX = "select MaMatH from tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
+            string selectHDN = "select MaMatH from tblChiTietHDN WHERE MaHD='" + txtMaHD.Text + "'";
+
+            SqlDataReader sqlData = DataConn.ThucHienReader(cbxTraHang.Checked ? selectHDN : selectHDX);
             try
             {
                 while (sqlData.Read())
@@ -901,33 +893,6 @@ namespace QL_BanDayNit
                 return false;
             }
             return true;
-        }
-
-        private Boolean KiemTraMatHangDaCo(string _strMaMatHang)
-        {
-            string selectHDX = "select MaMatH from tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
-            string selectHDN = "select MaMatH from tblChiTietHDN WHERE MaHD='" + txtMaHD.Text + "'";
-
-            SqlDataReader sqlData = DataConn.ThucHienReader(cbxTraHang.Checked ? selectHDN : selectHDX);
-
-            try
-            {
-                while (sqlData.Read())
-                {
-                    if (sqlData.GetString(0) == _strMaMatHang)
-                    {
-                        sqlData.Close();
-                        sqlData.Dispose();
-                        return true;
-                    }
-                }
-            }
-            finally
-            {
-                sqlData.Close();
-                sqlData.Dispose();
-            }
-            return false;
         }
 
         private void grdXuatHang_CurrentCellChanged(object sender, EventArgs e)
@@ -1640,6 +1605,7 @@ namespace QL_BanDayNit
         // Sử Lý Trả Hàng = Nhập Hàng Mới
         private void cbxTraHang_CheckedChanged(object sender, EventArgs e)
         {
+            intSelectIntem = 0;
             if (cbxTraHang.Checked)
             {
                 if (!KiemTraHoaDonTonTai(txtMaHD.Text))

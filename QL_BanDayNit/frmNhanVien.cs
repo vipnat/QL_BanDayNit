@@ -188,6 +188,10 @@ namespace QL_BanDayNit
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show("Bạn Muốn Thoát Ra ?", "Thông Báo", MessageBoxButtons.YesNo) != DialogResult.Yes)
+            {
+                return;
+            }
             this.Close();
         }
 
@@ -205,6 +209,10 @@ namespace QL_BanDayNit
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show("Xóa Nhan Viên: " + txtTenNV.Text + " ?", "Thông Báo", MessageBoxButtons.YesNo) != DialogResult.Yes)
+            {
+                return;
+            }
             try
             {
                 //Nếu ko có đủ dữ liệu->thông báo thiếu dữ liệu
