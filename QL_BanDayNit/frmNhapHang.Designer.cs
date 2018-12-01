@@ -340,9 +340,9 @@
             this.cbxDay.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxDay.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxDay.FormattingEnabled = true;
-            this.cbxDay.Location = new System.Drawing.Point(299, 63);
+            this.cbxDay.Location = new System.Drawing.Point(317, 63);
             this.cbxDay.Name = "cbxDay";
-            this.cbxDay.Size = new System.Drawing.Size(244, 27);
+            this.cbxDay.Size = new System.Drawing.Size(227, 27);
             this.cbxDay.TabIndex = 14;
             this.cbxDay.SelectedIndexChanged += new System.EventHandler(this.cbxDay_SelectedIndexChanged);
             // 
@@ -355,7 +355,7 @@
             this.cbxDauKhoa.FormattingEnabled = true;
             this.cbxDauKhoa.Location = new System.Drawing.Point(91, 63);
             this.cbxDauKhoa.Name = "cbxDauKhoa";
-            this.cbxDauKhoa.Size = new System.Drawing.Size(206, 27);
+            this.cbxDauKhoa.Size = new System.Drawing.Size(225, 27);
             this.cbxDauKhoa.TabIndex = 12;
             this.cbxDauKhoa.SelectedIndexChanged += new System.EventHandler(this.cbxDauKhoa_SelectedIndexChanged);
             // 
@@ -387,7 +387,7 @@
             this.lblTongSo.AutoSize = true;
             this.lblTongSo.ForeColor = System.Drawing.Color.Red;
             this.lblTongSo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblTongSo.Location = new System.Drawing.Point(436, 43);
+            this.lblTongSo.Location = new System.Drawing.Point(414, 43);
             this.lblTongSo.Name = "lblTongSo";
             this.lblTongSo.Size = new System.Drawing.Size(25, 19);
             this.lblTongSo.TabIndex = 6;

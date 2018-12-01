@@ -51,11 +51,21 @@ namespace QL_BanDayNit
             LoadComboboxLoaiMatHangTheoMaSanPham(cbxDai, "DAI");
 
             cbxMaMatH.Text = _strMaMatHang;
-            lblTongSo.Text = LayTongSoLuongMatHangTheoMa(_strMaMatHang);
+            lblTongSo.Text = "Tổng "+ LayTongSoLuongMatHangTheoMa(_strMaMatHang);
 
             cbDai_CheckedChanged(sender, e);
             cbDauDay_CheckedChanged(sender, e);
 
+            if (_strMaMatHang.Substring(0, 3) == "MSP")
+            {
+                cbDauDay.Enabled = true;
+                cbDai.Enabled = true;
+            }
+            else
+            {
+                cbDauDay.Enabled = false;
+                cbDai.Enabled = false;
+            }
             // Function hiển thị.
             HienThi();
 
@@ -88,7 +98,7 @@ namespace QL_BanDayNit
                 // Chuyển sang list để làm datasource cho combobox  
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
-                    tableHienThi.Rows.Add(row["MaMatH"], row["TenMatH"] + "(" + row["DonGia"] + "k)", row["TenMatH"]);
+                    tableHienThi.Rows.Add(row["MaMatH"], row["TenMatH"] + "_(" + row["DonGia"] + "k)", row["TenMatH"]);
                 }
 
                 //cbxLoad.DataSource = ds.Tables[0];
@@ -150,8 +160,6 @@ namespace QL_BanDayNit
         //string v = "";
         private void cboMaMatH_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbDauDay.Checked = false;
-            cbDai.Checked = false;
 
             if (cbxMaMatH.ValueMember != null)
             {
@@ -162,11 +170,13 @@ namespace QL_BanDayNit
 
             if (cbxMaMatH.SelectedIndex > 0)
             {
-                _strMaMatHang = cbxTenMatHang.SelectedValue.ToString();
+                _strMaMatHang = cbxMaMatH.Text;
                 if (_strMaMatHang.Substring(0, 3) == "MSP")
                 {
                     cbDauDay.Enabled = true;
                     cbDai.Enabled = true;
+                    cbDauDay.Checked = false;
+                    cbDai.Checked = false;
                 }
                 else
                 {
@@ -174,9 +184,9 @@ namespace QL_BanDayNit
                     cbDai.Enabled = false;
                 }
 
-                string selectDonGia = "select DonGia from tblMatHang where MaMatH =N'" + cbxTenMatHang.SelectedValue.ToString() + "'";
+                string selectDonGia = "select DonGia from tblMatHang where MaMatH =N'" + cbxMaMatH.Text + "'";
                 txtDonGia.Text = DataConn.Lay1GiaFloat_ExecuteScalar(selectDonGia).ToString();
-                lblTongSo.Text = LayTongSoLuongMatHangTheoMa(cbxMaMatH.Text);
+                lblTongSo.Text = "Tổng "+ LayTongSoLuongMatHangTheoMa(cbxMaMatH.Text);
             }
         }
 
@@ -194,6 +204,8 @@ namespace QL_BanDayNit
                 {
                     cbDauDay.Enabled = true;
                     cbDai.Enabled = true;
+                    cbDauDay.Checked = false;
+                    cbDai.Checked = false;
                 }
                 else
                 {
@@ -203,7 +215,7 @@ namespace QL_BanDayNit
 
                 string selectDonGia = "select DonGia from tblMatHang where MaMatH =N'" + cbxTenMatHang.SelectedValue.ToString() + "'";
                 txtDonGia.Text = DataConn.Lay1GiaFloat_ExecuteScalar(selectDonGia).ToString();
-                lblTongSo.Text = LayTongSoLuongMatHangTheoMa(cbxMaMatH.Text);
+                lblTongSo.Text = "Tổng "+ LayTongSoLuongMatHangTheoMa(cbxMaMatH.Text);
             }
 
         }
@@ -472,7 +484,7 @@ namespace QL_BanDayNit
                     DataConn.ThucHienInsertSqlParameter(sqlQuery, "@prDonGia", float.Parse(txtDonGia.Text));
 
                     listMatHangOld.Add(_strMaMatHang, (double.Parse(txtSoLuong.Text)));
-                    lblTongSo.Text = LayTongSoLuongMatHangTheoMa(_strMaMatHang);
+                    lblTongSo.Text = "Tổng "+ LayTongSoLuongMatHangTheoMa(_strMaMatHang);
 
                     HienThi();
                     btnTongTien_Click(sender, e);
@@ -666,7 +678,7 @@ namespace QL_BanDayNit
                         cbxTenMatHang.SelectedValue = strMaMatHangSelect;
                         txtSoLuong.Text = ds.Tables[0].Rows[0]["SoLuong"].ToString();
                         txtDonGia.Text = ds.Tables[0].Rows[0]["DonGia"].ToString();
-                        lblTongSo.Text = LayTongSoLuongMatHangTheoMa(_strMaMatHang);
+                        lblTongSo.Text = "Tổng "+ LayTongSoLuongMatHangTheoMa(_strMaMatHang);
 
                         // Không Được Thay Đổi Đầu & Dây Hoặc Đai Đã Chọn
                         cbDauDay.Enabled = false;
@@ -677,7 +689,12 @@ namespace QL_BanDayNit
                         {
                             // Mở và chọn CheckBox nếu Có Thêm Đầu Đai
                             cbDauDay.Checked = true;
-                            cbDai.Checked = true;
+
+                            cbxDai.SelectedValue = _strChuoiMa.Substring(14); // Có Chọn Đai
+                            if(cbxDai.SelectedValue != null)
+                                cbDai.Checked = true;
+                            else
+                                cbDai.Checked = false;
                             // Không được sửa Đầu Đai đã chọn
                             cbxDauKhoa.Enabled = false;
                             cbxDay.Enabled = false;
@@ -685,7 +702,7 @@ namespace QL_BanDayNit
                             // Hiển thị lên Combobox
                             cbxDauKhoa.SelectedValue = _strChuoiMa.Substring(0, 7);
                             cbxDay.SelectedValue = _strChuoiMa.Substring(7, 7);
-                            cbxDai.SelectedValue = _strChuoiMa.Substring(14);
+                            
                         }
                         else
                         {
@@ -912,6 +929,10 @@ namespace QL_BanDayNit
             cbxTenMatHang.DataSource = tableHienThi;
             cbxTenMatHang.DisplayMember = "TenRutGon";
             cbxTenMatHang.ValueMember = "MaMatH";
+
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxDauKhoa, "DAU");
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxDay, "DAY");
+            LoadComboboxLoaiMatHangTheoMaSanPham(cbxDai, "DAI");
 
         }
 
