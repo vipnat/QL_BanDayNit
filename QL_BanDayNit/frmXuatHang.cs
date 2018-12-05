@@ -40,6 +40,8 @@ namespace QL_BanDayNit
         private Hashtable listMatHangOld = new Hashtable();
         private Hashtable listMatHangTra = new Hashtable();
 
+        public PdfNumber rotation { get; private set; }
+
         private void frmXuatHang_Load(object sender, EventArgs e)
         {
             pckNgayXuat.Text = DateTime.Today.TimeOfDay.ToString();
@@ -50,7 +52,7 @@ namespace QL_BanDayNit
             lblTra.Visible = false;
             lblTongTra.Visible = false;
 
-            txtMaHD.Text = LayMaHoaDonTheoNgay(DateTime.Today.Day.ToString() + DateTime.Today.Month.ToString() + DateTime.Today.Year.ToString());
+            txtMaHD.Text = LayMaHoaDonTheoNgay(DateTime.Today.Day.ToString("00") + DateTime.Today.Month.ToString("00") + DateTime.Today.Year.ToString());
 
             cboMaNhanVien.Text = "";
             txtGhiChu.Text = lblNoCu.Text = lblAllTong.Text = "";
@@ -97,20 +99,20 @@ namespace QL_BanDayNit
                                    "AND DonGia > 0  ";
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
 
-            // Tạo Table Hiển THị
-            DataTable tableHienThi = new DataTable();
-            tableHienThi.Columns.Add("MaMatH");
-            tableHienThi.Columns.Add("MaRutGon");
+            //Tạo Table Hiển THị
+            //DataTable tableHienThi = new DataTable();
+            //tableHienThi.Columns.Add("MaMatH");
+            //tableHienThi.Columns.Add("MaRutGon");
 
-            // Chuyển sang list để làm datasource cho combobox  
-            foreach (DataRow row in dsMatHang.Tables[0].Rows)
-            {
-                string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
-                tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
-            }
+            //Chuyển sang list để làm datasource cho combobox
+            //foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            //{
+            //    string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
+            //    tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
+            //}
 
-            cbxMaMatH.DataSource = tableHienThi;
-            cbxMaMatH.DisplayMember = "MaRutGon";
+            cbxMaMatH.DataSource = dsMatHang.Tables[0];
+            cbxMaMatH.DisplayMember = "MaMatH";
             cbxMaMatH.ValueMember = "MaMatH";
 
 
@@ -139,21 +141,21 @@ namespace QL_BanDayNit
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
 
 
-            // Tạo Table Hiển THị
-            DataTable tableHienThi = new DataTable();
-            tableHienThi.Columns.Add("MaMatH");
-            tableHienThi.Columns.Add("MaRutGon");
+            //// Tạo Table Hiển THị
+            //DataTable tableHienThi = new DataTable();
+            //tableHienThi.Columns.Add("MaMatH");
+            //tableHienThi.Columns.Add("MaRutGon");
 
-            // Chuyển sang list để làm datasource cho combobox  
-            foreach (DataRow row in dsMatHang.Tables[0].Rows)
-            {
-                string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
-                tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
-            }
+            //// Chuyển sang list để làm datasource cho combobox  
+            //foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            //{
+            //    string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
+            //    tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
+            //}
 
             // Load Combobox Mã Mặt Hàng
-            cbxMaMatH.DataSource = tableHienThi;
-            cbxMaMatH.DisplayMember = "MaRutGon";
+            cbxMaMatH.DataSource = dsMatHang.Tables[0];
+            cbxMaMatH.DisplayMember = "MaMatH";
             cbxMaMatH.ValueMember = "MaMatH";
 
 
@@ -239,7 +241,7 @@ namespace QL_BanDayNit
 
             if (cbxTenMatHang.ValueMember != null && !cbxKhachHang.Enabled)
             {
-                cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString().Substring(3);
+                cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString();
             }
             try
             {
@@ -273,7 +275,7 @@ namespace QL_BanDayNit
             float fDonGia = 0;
 
             string selectGiaBan = "SELECT [tblMatHang].[DonGia] FROM [tblMatHang] WHERE [tblMatHang].MaMatH = '" + maMatHang + "'";
-            string selectGiaTheoKH = "SELECT [tblMatHang].[DonGia] FROM [tblMatHang] INNER JOIN [tblGiaBan] ON [tblMatHang].MaMatH = [tblGiaBan].MaMatH WHERE [MaKH]='" + _strMaKhachHang + "' AND [tblMatHang].MaMatH = '" + maMatHang + "'";
+            string selectGiaTheoKH = "SELECT [tblGiaBan].[GiaBan] FROM [tblGiaBan] INNER JOIN [tblMatHang] ON [tblMatHang].MaMatH = [tblGiaBan].MaMatH WHERE [MaKH]='" + _strMaKhachHang + "' AND [tblMatHang].MaMatH = '" + maMatHang + "'";
             fDonGia = DataConn.Lay1GiaFloat_ExecuteScalar(selectGiaTheoKH);
 
             if (fDonGia > 0)
@@ -548,7 +550,7 @@ namespace QL_BanDayNit
             if (!KiemTraDuLieuNhapSo()) return;
             if (KiemTraTonTaiMatHang())
             {
-                if (MessageBox.Show("Đã Có Mặt Hàng Này!\nBạn Muốn Sửa Lại Không?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                if (MessageBox.Show("Đã Có Mặt Hàng Này!\nBạn Muốn Sửa Lại Không?", "Thông Báo", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 {
                     return;
                 }
@@ -1039,7 +1041,7 @@ namespace QL_BanDayNit
                 XuatHoaDonPDF();
 
                 // Thoát Sau Khi In Hóa Đơn
-                if (MessageBox.Show("Đã Xuất Thành Công Bạn Có Muốn Chỉnh Sửa ?", "Thông Báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                if (MessageBox.Show("Đã Xuất Thành Công Bạn Có Muốn Chỉnh Sửa ?", "Thông Báo", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     blHoaDonSua = true;
                     return;
@@ -1276,11 +1278,12 @@ namespace QL_BanDayNit
             using (FileStream stream = new FileStream(namePDF, FileMode.Create))
             {
                 Document pdfDoc = new Document();
-
                 pdfDoc = new Document(PageSize.A5, 10f, 10f, 15f, 30f);
+
+
                 pdfDoc.SetPageSize(PageSize.LETTER);  // A5 Dọc
                 //pdfDoc.SetPageSize(PageSize.LETTER.Rotate()); A5 Ngang
-                PdfWriter.GetInstance(pdfDoc, stream);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
                 pdfDoc.Open();
                 pdfDoc.AddAuthor("Anh Tuan");
                 pdfDoc.Add(pdfTableTitle);
@@ -1293,8 +1296,34 @@ namespace QL_BanDayNit
                 stream.Close();
             }
 
-            System.Diagnostics.Process.Start(@"" + namePDF);
+            string newRotationPDF = DataConn.folderLuuHoaDon + "print_rotation.pdf";
+            XoayNgangTrangA5(namePDF, newRotationPDF); // In Khổ A4
+
+            System.Diagnostics.Process.Start(@"" + newRotationPDF);
         }
+
+        #region Rotate All PDF Pages
+        private void XoayNgangTrangA5(string oldPDF, string newPDF)
+        {
+            using (FileStream stream = new FileStream(newPDF, FileMode.Create))
+            {
+                PdfReader reader = new PdfReader(oldPDF);
+                int n = reader.NumberOfPages;
+                PdfDictionary page;
+                PdfNumber rotate;
+                for (int p = 1; p <= n; p++)
+                {
+                    page = reader.GetPageN(p);
+                    rotate = page.GetAsNumber(PdfName.ROTATE);
+                    if (rotate == null)
+                        page.Put(PdfName.ROTATE, new PdfNumber(270)); // Xoay Ngang Đầu Hướng Sang Trái
+                }
+                PdfStamper stamper = new PdfStamper(reader, stream);
+                stamper.Close();
+                reader.Close();
+            }
+        }
+        #endregion
 
         private void btnXoa_Click(object sender, EventArgs e)
         {

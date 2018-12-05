@@ -56,6 +56,7 @@
             this.lblNoCu = new System.Windows.Forms.Label();
             this.groupChiTietHDX = new System.Windows.Forms.GroupBox();
             this.cbxTenMatHang = new System.Windows.Forms.ComboBox();
+            this.lblMaMatH = new System.Windows.Forms.Label();
             this.btnGhiMoi = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.bntTinhTien = new System.Windows.Forms.Button();
@@ -75,7 +76,6 @@
             this.lblTra = new System.Windows.Forms.Label();
             this.lblTongTra = new System.Windows.Forms.Label();
             this.lblConLai = new System.Windows.Forms.Label();
-            this.lblMaMatH = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grdXuatHang)).BeginInit();
             this.groupHoaDonXuat.SuspendLayout();
             this.groupChiTietHDX.SuspendLayout();
@@ -88,10 +88,10 @@
             this.cbxMaMatH.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxMaMatH.FormattingEnabled = true;
-            this.cbxMaMatH.Location = new System.Drawing.Point(67, 19);
+            this.cbxMaMatH.Location = new System.Drawing.Point(39, 19);
             this.cbxMaMatH.Margin = new System.Windows.Forms.Padding(4);
             this.cbxMaMatH.Name = "cbxMaMatH";
-            this.cbxMaMatH.Size = new System.Drawing.Size(76, 27);
+            this.cbxMaMatH.Size = new System.Drawing.Size(104, 27);
             this.cbxMaMatH.TabIndex = 6;
             this.cbxMaMatH.SelectedIndexChanged += new System.EventHandler(this.cboMaMatH_SelectedIndexChanged);
             // 
@@ -416,6 +416,18 @@
             this.cbxTenMatHang.TabIndex = 12;
             this.cbxTenMatHang.SelectedIndexChanged += new System.EventHandler(this.cbxTenMatHang_SelectedIndexChanged);
             // 
+            // lblMaMatH
+            // 
+            this.lblMaMatH.AutoSize = true;
+            this.lblMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaMatH.ForeColor = System.Drawing.Color.Red;
+            this.lblMaMatH.Location = new System.Drawing.Point(-4, 23);
+            this.lblMaMatH.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMaMatH.Name = "lblMaMatH";
+            this.lblMaMatH.Size = new System.Drawing.Size(43, 19);
+            this.lblMaMatH.TabIndex = 0;
+            this.lblMaMatH.Text = "MSP";
+            // 
             // btnGhiMoi
             // 
             this.btnGhiMoi.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -646,18 +658,6 @@
             this.lblConLai.Name = "lblConLai";
             this.lblConLai.Size = new System.Drawing.Size(0, 22);
             this.lblConLai.TabIndex = 42;
-            // 
-            // lblMaMatH
-            // 
-            this.lblMaMatH.AutoSize = true;
-            this.lblMaMatH.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaMatH.ForeColor = System.Drawing.Color.Red;
-            this.lblMaMatH.Location = new System.Drawing.Point(23, 23);
-            this.lblMaMatH.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblMaMatH.Name = "lblMaMatH";
-            this.lblMaMatH.Size = new System.Drawing.Size(43, 19);
-            this.lblMaMatH.TabIndex = 0;
-            this.lblMaMatH.Text = "MSP";
             // 
             // frmXuatHang
             // 
