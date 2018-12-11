@@ -94,26 +94,26 @@ namespace QL_BanDayNit
 
         private void LoadComboboxMatHang(string maHang)
         {
-            // Load cbx Mã Mặt Hàng
             string selectMatHang = "SELECT * FROM tblMatHang WHERE SUBSTRING(MaMatH,1,3) ='" + maHang + "'" +
                                    "AND DonGia > 0  ";
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
-
+            // Load cbx Mã Mặt Hàng -----------------------------
             //Tạo Table Hiển THị
-            //DataTable tableHienThi = new DataTable();
-            //tableHienThi.Columns.Add("MaMatH");
-            //tableHienThi.Columns.Add("MaRutGon");
+            DataTable tableHienThiMa = new DataTable();
+            tableHienThiMa.Columns.Add("MaMatH");
+            tableHienThiMa.Columns.Add("MaHienThi");
 
             //Chuyển sang list để làm datasource cho combobox
-            //foreach (DataRow row in dsMatHang.Tables[0].Rows)
-            //{
-            //    string strLaySoMaSP = row["MaMatH"].ToString().Substring(3);
-            //    tableHienThi.Rows.Add(row["MaMatH"], strLaySoMaSP);
-            //}
-
-            cbxMaMatH.DataSource = dsMatHang.Tables[0];
-            cbxMaMatH.DisplayMember = "MaMatH";
+            foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            {
+                tableHienThiMa.Rows.Add(row["MaMatH"], row["MaMatH"].ToString().Substring(3));
+            }
+            cbxMaMatH.DataSource = tableHienThiMa;
+            cbxMaMatH.DisplayMember = "MaHienThi";
             cbxMaMatH.ValueMember = "MaMatH";
+            //cbxMaMatH.DataSource = dsMatHang.Tables[0];
+            //cbxMaMatH.DisplayMember = "MaMatH";
+            //cbxMaMatH.ValueMember = "MaMatH";
 
 
             if (dsMatHang.Tables[0].Rows.Count > 0)
@@ -121,10 +121,73 @@ namespace QL_BanDayNit
                 _strMaMatHang = dsMatHang.Tables[0].Rows[cbxMaMatH.SelectedIndex][0].ToString();
                 cbxTenMatHang.Text = LayTenMatHangTheoMa(cbxMaMatH.SelectedValue.ToString());
             }
-            // Load cbx Tên Mặt Hàng
-            cbxTenMatHang.DataSource = dsMatHang.Tables[0];
-            cbxTenMatHang.DisplayMember = "TenMatH";
+
+            // Load cbx Tên Mặt Hàng----------------------------------------------------------
+            //Tạo Table Hiển THị
+            DataTable tableHienThi = new DataTable();
+            tableHienThi.Columns.Add("MaMatH");
+            tableHienThi.Columns.Add("TenMH");
+
+            //Chuyển sang list để làm datasource cho combobox
+            foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            {
+                tableHienThi.Rows.Add(row["MaMatH"], row["TenMatH"] + sizeSanPham(row["MaMatH"].ToString()));
+            }
+            cbxTenMatHang.DataSource = tableHienThi;
+            cbxTenMatHang.DisplayMember = "TenMH";
             cbxTenMatHang.ValueMember = "MaMatH";
+        }
+
+        private string sizeSanPham(string strMaMH)
+        {
+            string strSize = strMaMH.Substring(3, 2);
+            switch (strSize)
+            {
+                case "20":
+                    {
+                        strSize = "  (2F)";
+                        break;
+                    }
+                case "25":
+                    {
+                        strSize = "  (2F5)";
+                        break;
+                    }
+                case "30":
+                    {
+                        strSize = "  (3F)";
+                        break;
+                    }
+                case "35":
+                    {
+                        strSize = "  (3F5)";
+                        break;
+                    }
+                case "40":
+                    {
+                        strSize = "  (4F)";
+                        break;
+                    }
+                case "45":
+                    {
+                        strSize = "  (Da)";
+                        break;
+                    }
+                case "50":
+                    {
+                        strSize = "  (Bóp)";
+                        break;
+                    }
+                case "99":
+                    {
+                        strSize = "  (PK)";
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            return strSize;
         }
 
         private string LayTenMatHangTheoMa(string strMaMH)
@@ -141,8 +204,18 @@ namespace QL_BanDayNit
             DataSet dsMatHang = DataConn.GrdSource(selectMatHang);
 
             // Load Combobox Mã Mặt Hàng
-            cbxMaMatH.DataSource = dsMatHang.Tables[0];
-            cbxMaMatH.DisplayMember = "MaMatH";
+            //Tạo Table Hiển THị
+            DataTable tableHienThiMa = new DataTable();
+            tableHienThiMa.Columns.Add("MaMatH");
+            tableHienThiMa.Columns.Add("MaHienThi");
+
+            //Chuyển sang list để làm datasource cho combobox
+            foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            {
+                tableHienThiMa.Rows.Add(row["MaMatH"], row["MaMatH"].ToString().Substring(3));
+            }
+            cbxMaMatH.DataSource = tableHienThiMa;
+            cbxMaMatH.DisplayMember = "MaHienThi";
             cbxMaMatH.ValueMember = "MaMatH";
 
             if (dsMatHang.Tables[0].Rows.Count > 0)
@@ -150,9 +223,19 @@ namespace QL_BanDayNit
                 _strMaMatHang = dsMatHang.Tables[0].Rows[cbxMaMatH.SelectedIndex][0].ToString();
                 cbxTenMatHang.Text = LayTenMatHangTheoMa(cbxMaMatH.SelectedValue.ToString());
             }
-            // Load cbx Tên Mặt Hàng
-            cbxTenMatHang.DataSource = dsMatHang.Tables[0];
-            cbxTenMatHang.DisplayMember = "TenMatH";
+            // Load cbx Tên Mặt Hàng----------------------------------------------------------
+            //Tạo Table Hiển THị
+            DataTable tableHienThi = new DataTable();
+            tableHienThi.Columns.Add("MaMatH");
+            tableHienThi.Columns.Add("TenMH");
+
+            //Chuyển sang list để làm datasource cho combobox
+            foreach (DataRow row in dsMatHang.Tables[0].Rows)
+            {
+                tableHienThi.Rows.Add(row["MaMatH"], row["TenMatH"] + sizeSanPham(row["MaMatH"].ToString()));
+            }
+            cbxTenMatHang.DataSource = tableHienThi;
+            cbxTenMatHang.DisplayMember = "TenMH";
             cbxTenMatHang.ValueMember = "MaMatH";
         }
 
@@ -227,7 +310,8 @@ namespace QL_BanDayNit
 
             if (cbxTenMatHang.ValueMember != null && !cbxKhachHang.Enabled)
             {
-                cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString();
+                _strMaMatHang = cbxTenMatHang.SelectedValue.ToString();
+                cbxMaMatH.Text = cbxTenMatHang.SelectedValue.ToString().Substring(3);
             }
             try
             {
@@ -1463,6 +1547,7 @@ namespace QL_BanDayNit
         {
             try
             {
+                cbxMaMatH.Text = grView.Rows[intHangChon].Cells[0].Value.ToString().Substring(3);
                 cbxTenMatHang.Text = grView.Rows[intHangChon].Cells[1].Value.ToString();
                 txtSoLuong.Text = grView.Rows[intHangChon].Cells[2].Value.ToString();
                 txtDonGia.Text = grView.Rows[intHangChon].Cells[3].Value.ToString();
