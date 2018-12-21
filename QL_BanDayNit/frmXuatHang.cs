@@ -53,7 +53,6 @@ namespace QL_BanDayNit
             lblTongTra.Visible = false;
 
             txtMaHD.Text = LayMaHoaDonTheoNgay(DateTime.Today.Day.ToString("00") + DateTime.Today.Month.ToString("00") + DateTime.Today.Year.ToString());
-
             cboMaNhanVien.Text = "";
             txtGhiChu.Text = lblNoCu.Text = lblAllTong.Text = "";
             lblTongTien.Text = lblTongSL.Text = "0";
