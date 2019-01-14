@@ -53,6 +53,7 @@ namespace QL_BanDayNit
             lblTongTra.Visible = false;
 
             txtMaHD.Text = LayMaHoaDonTheoNgay(DateTime.Today.Day.ToString("00") + DateTime.Today.Month.ToString("00") + DateTime.Today.Year.ToString());
+            //txtMaHD.Text = "05012019005";
             cboMaNhanVien.Text = "";
             txtGhiChu.Text = lblNoCu.Text = lblAllTong.Text = "";
             lblTongTien.Text = lblTongSL.Text = "0";
@@ -238,8 +239,22 @@ namespace QL_BanDayNit
             cbxTenMatHang.ValueMember = "MaMatH";
         }
 
+        public void XoaAllHoaDonXuatNull()
+        {
+            string sqlQuery = "SELECT MaHD FROM tblHoaDonXuat WHERE NOT EXISTS (SELECT MaHD FROM tblChiTietHDX WHERE " +
+                     "tblHoaDonXuat.MaHD = tblChiTietHDX.MaHD)";  // Có Trong Hóa Đơn Mà Không Có Chi Tiết. (HĐ Ảo)
+            DataSet dsMaHang = DataConn.GrdSource(sqlQuery);
+            foreach (DataRow row in dsMaHang.Tables[0].Rows)
+            {
+                string deleteHDX = "DELETE FROM tblHoaDonXuat WHERE MaHD ='" + row["MaHD"] + "'";
+                DataConn.ThucHienCmd(deleteHDX);
+            }
+
+        }
+
         private string LayMaHoaDonTheoNgay(string ngayText)
         {
+            XoaAllHoaDonXuatNull();
             string MaHD = "";
             int maSo = 1;
             string selectMaHoaDon = "select MaHD FROM tblHoaDonXuat";
@@ -456,7 +471,7 @@ namespace QL_BanDayNit
                     return;
                 }
 
-                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,GhiChu) values(N'" + txtMaHD.Text + "',N'" + strMaNhanVien + "',N'" + pckNgayXuat.Value.ToString("MM/dd/yyyy") + "',N'" + txtGhiChu.Text + "')";
+                string select = "insert into tblHoaDonXuat(MaHD,MaNhanVien,NgayXuat,MaKH) values(N'" + txtMaHD.Text + "',N'" + strMaNhanVien + "',N'" + pckNgayXuat.Value.ToString("MM/dd/yyyy") + "',N'" + _strMaKhachHang + "')";
                 DataConn.ThucHienCmd(select);
 
                 MessageBox.Show("Tạo Thành Công Hóa Đơn Số " + txtMaHD.Text);
@@ -628,10 +643,18 @@ namespace QL_BanDayNit
                     intSelectIntem = grdXuatHang.CurrentCell.RowIndex;
                     CapNhapMatHangDaBan(sender, e);
 
-                    //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
-                    DataConn.ThucHienCmd(query_SQL);
-
+                    // Kiểm Tra Tồn Tại Giá Bán Của Khách Hàng
+                    if (!KiemTraTonTaiGiaBan(_strMaKhachHang, cbxMaMatH.SelectedValue.ToString()))
+                    {
+                        query_SQL = "INSERT INTO tblGiaBan([MaMatH],[MaKH],[GiaBan]) VALUES (N'" + cbxMaMatH.SelectedValue.ToString() + "',N'" + _strMaKhachHang + "'," + txtDonGia.Text.Replace(",", ".") + ")";
+                        DataConn.ThucHienCmd(query_SQL);
+                    }
+                    else
+                    {
+                        //Cập nhập giá mới cho khách hàng
+                        query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
+                        DataConn.ThucHienCmd(query_SQL);
+                    }
 
                     // Update Tổng Tiền
                     strTongTienHoaDon = LayTongTienCuaMaHoaDon(txtMaHD.Text);
@@ -684,10 +707,17 @@ namespace QL_BanDayNit
                     query_SQL = "update tblMatHang set SoLuong=SoLuong-" + txtSoLuong.Text + " where MaMatH=N'" + _strMaMatHang + "'";
                     DataConn.ThucHienCmd(query_SQL);
 
-                    //Cập nhập giá mới cho khách hàng
-                    query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
-                    DataConn.ThucHienCmd(query_SQL);
-
+                    // Kiểm Tra Tồn Tại Giá Bán Của Khách Hàng
+                    if (!KiemTraTonTaiGiaBan(_strMaKhachHang, cbxMaMatH.SelectedValue.ToString()))
+                    {
+                        query_SQL = "INSERT INTO tblGiaBan([MaMatH],[MaKH],[GiaBan]) VALUES (N'" + cbxMaMatH.SelectedValue.ToString() + "',N'" + _strMaKhachHang + "'," + txtDonGia.Text.Replace(",", ".") + ")";
+                        DataConn.ThucHienCmd(query_SQL);
+                    }
+                    else
+                    {      //Cập nhập giá mới cho khách hàng
+                        query_SQL = "update [tblGiaBan] set [GiaBan]=" + txtDonGia.Text.Replace(",", ".") + " where [MaKH]=N'" + _strMaKhachHang + "' and [MaMatH] =N'" + cbxMaMatH.SelectedValue.ToString() + "'";
+                        DataConn.ThucHienCmd(query_SQL);
+                    }
                     // Lấy Tổng Số Lượng
                     //string selectSL = "SELECT SUM(SoLuong) FROM tblChiTietHDX WHERE MaHD='" + txtMaHD.Text + "'";
                     lblTongSL.Text = LaySoLuongTheoMaLoaiHang();
@@ -724,6 +754,15 @@ namespace QL_BanDayNit
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private bool KiemTraTonTaiGiaBan(string strMaKH, string strMaMH)
+        {
+            string sqlSelect = "SELECT COUNT(*) FROM tblGiaBan WHERE MaMatH ='" + strMaMH + "' AND MaKH = '" + strMaKH + "'";
+            if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(sqlSelect) > 0)
+                return true;
+            else
+                return false;
         }
 
         private void GhiTraHang(object sender, EventArgs e)
@@ -859,8 +898,8 @@ namespace QL_BanDayNit
                     string updateQuery = "";
 
                     // Cộng thêm số lượng đã trừ đi trước đó. (thêm)
-                    updateQuery = "UPDATE tblMatHang SET SoLuong=SoLuong+" + double.Parse(listMatHangOld[_strMaMatHang].ToString()) + " " +
-                                  "WHERE MaMatH=N'" + _strMaMatHang + "'";
+                    updateQuery = "UPDATE tblMatHang SET SoLuong=SoLuong+" + double.Parse(listMatHangOld[_strMaMatHang].ToString()) + ", " +
+                                  "TenMatH = N'" + cbxTenMatHang.Text + "' WHERE MaMatH=N'" + _strMaMatHang + "'";
                     DataConn.ThucHienCmd(updateQuery);
 
                     // Cập Nhập Lại Chi Tiết Hóa Đơn
@@ -1179,22 +1218,22 @@ namespace QL_BanDayNit
 
             // Create Cell Title
             PdfPCell cellTitle;
-            cellTitle = new PdfPCell(new Phrase("HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 14)));
+            cellTitle = new PdfPCell(new Phrase("HÓA ĐƠN BÁN HÀNG \n", new iTextSharp.text.Font(arialCustomer, 16)));
             cellTitle.Colspan = 3;
             cellTitle.HorizontalAlignment = 1;
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
 
-            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + " (" + LaySoDienThoaiNhanVienTheoMa(strMaNhanVien) + ")" + "\nKhách Hàng : " + cbxKhachHang.Text + "\n", new iTextSharp.text.Font(arialCustomer, 9)));
+            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + " (" + LaySoDienThoaiNhanVienTheoMa(strMaNhanVien) + ")" + "\nKhách Hàng : " + cbxKhachHang.Text + "\n", new iTextSharp.text.Font(arialCustomer, 11)));
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
             //
-            cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n" + "Mã HĐ:" + txtMaHD.Text, new iTextSharp.text.Font(arialCustomer, 9)));
+            cellTitle = new PdfPCell(new Paragraph("Ngày :  " + ngayBan + "\n" + "Mã HĐ:" + txtMaHD.Text, new iTextSharp.text.Font(arialCustomer, 11)));
             cellTitle.Border = 0;
             cellTitle.HorizontalAlignment = 2;
             pdfTableTitle.AddCell(cellTitle);
             //
-            pdfTableTitle.AddCell(new Paragraph("", new iTextSharp.text.Font(arialCustomer, 9)));
+            pdfTableTitle.AddCell(new Paragraph("", new iTextSharp.text.Font(arialCustomer, 11)));
 
             //
             //Creating iTextSharp Table from the DataTable data  Table Bán Hàng
@@ -1210,10 +1249,10 @@ namespace QL_BanDayNit
             //Adding Header row
             foreach (DataGridViewColumn column in grdXuatHang.Columns)
             {
-                PdfPCell cellHeader = new PdfPCell(new Phrase(column.HeaderText, new iTextSharp.text.Font(arialCustomer, 9)));
+                PdfPCell cellHeader = new PdfPCell(new Phrase(column.HeaderText, new iTextSharp.text.Font(arialCustomer, 11)));
                 cellHeader.BackgroundColor = new iTextSharp.text.Color(240, 240, 240);
                 cellHeader.HorizontalAlignment = 1;
-                cellHeader.FixedHeight = 13f;
+                cellHeader.FixedHeight = 20f;
                 pdfTable.AddCell(cellHeader);
             }
             int maSP = 0;
@@ -1232,8 +1271,8 @@ namespace QL_BanDayNit
                         else kieuStr = "";
                     }
 
-                    PdfPCell _cellPDF = new PdfPCell(new Phrase(maSP == 1 ? kieuStr + cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer, 9)));
-                    _cellPDF.FixedHeight = 13f;
+                    PdfPCell _cellPDF = new PdfPCell(new Phrase(maSP == 1 ? kieuStr + cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer, 16)));
+                    _cellPDF.FixedHeight = 20f;
                     _cellPDF.HorizontalAlignment = Element.ALIGN_CENTER;
                     pdfTable.AddCell(_cellPDF);
                     maSP = 0;
@@ -1244,7 +1283,7 @@ namespace QL_BanDayNit
             pdfTable.AddCell(new Phrase(""));
             pdfTable.AddCell(new Phrase("" + lblTongSL.Text, new iTextSharp.text.Font(arialCustomer, 10)));
             pdfTable.AddCell(new Phrase(""));
-            pdfTable.AddCell(new Phrase("Tổng: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 10)));
+            pdfTable.AddCell(new Phrase("Tổng: " + intTongTienBan, new iTextSharp.text.Font(arialCustomer, 15)));
 
             //
             // Add Table Trả Hàng vào PDF
@@ -1277,8 +1316,8 @@ namespace QL_BanDayNit
                     maSP_Tra = 1;
                     foreach (DataGridViewCell cell in row.Cells)
                     {
-                        PdfPCell _cellPDF = new PdfPCell(new Phrase(maSP_Tra == 1 ? cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer, 9)));
-                        _cellPDF.FixedHeight = 13f;
+                        PdfPCell _cellPDF = new PdfPCell(new Phrase(maSP_Tra == 1 ? cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer, 16)));
+                        _cellPDF.FixedHeight = 20f;
                         _cellPDF.HorizontalAlignment = Element.ALIGN_CENTER;
                         pdfTableTra.AddCell(_cellPDF);
                         maSP_Tra = 0;
@@ -1326,17 +1365,6 @@ namespace QL_BanDayNit
                 pdfTableTongTien.AddCell(_cellPDFTT);
                 pdfTableTongTien.AddCell(new Phrase("" + intTongTienBan + "\n" + dbTraTien + "\n\n" + (dbTongTienBan - dbTraTien), new iTextSharp.text.Font(arialCustomer, 10)));
             }
-
-            //dbTongTienBan = dbTongTienBan * 1000;
-            //// Create Cell Footter
-            //PdfPCell cellTongTien;
-            //cellTongTien = new PdfPCell(new Phrase("Cộng Thành Tiền (Viết bằng chữ) : " + ChuyenSoSangChu(dbTongTienBan.ToString()), new iTextSharp.text.Font(arialCustomer, 15)));
-            //cellTongTien.Colspan = 3;
-            //cellTongTien.HorizontalAlignment = 0;
-            //cellTongTien.Border = 0;
-            //pdfTableTongTien.AddCell(cellTongTien);
-
-            //Exporting to PDF
 
             string folderPath = DataConn.folderLuuHoaDon;
 
@@ -1730,7 +1758,7 @@ namespace QL_BanDayNit
                 if (!KiemTraHoaDonTonTai(txtMaHD.Text))
                 {
                     // Thêm Hóa Đơn Nhập Khi Trả Lại
-                    string sqlInsert = "insert into tblHoaDonNhap(MaHD,NgayNhap,GhiChu) values(N'" + txtMaHD.Text + "',N'" + pckNgayXuat.Value.ToString("MM/dd/yyyy") + "',N'" + txtGhiChu.Text + "')";
+                    string sqlInsert = "insert into tblHoaDonNhap(MaHD,NgayNhap,MaKH) values(N'" + txtMaHD.Text + "',N'" + pckNgayXuat.Value.ToString("MM/dd/yyyy") + "',N'" + _strMaKhachHang + "')";
                     DataConn.ThucHienCmd(sqlInsert);
                 }
 

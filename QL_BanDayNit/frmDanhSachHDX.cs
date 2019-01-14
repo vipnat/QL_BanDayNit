@@ -26,13 +26,13 @@ namespace QL_BanDayNit
             chkListBox.Items.Insert(4, "Số lượng");
             chkListBox.Items.Insert(5, "Ngày xuất");
             chkListBox.Items.Insert(6, "Đơn giá");
-            chkListBox.Items.Insert(7, "Ghi chú");
+            chkListBox.Items.Insert(7, "Mã KH");
             HienThi();
         }
 
         private void HienThi()
         {
-            string select = "SELECT tblHoaDonXuat.MaHD [Mã hóa đơn],tblNhanVien.TenNhanVien [Nhân viên],tblChiTietHDX.MaMatH [Mã hàng],tblMatHang.TenMatH [Mặt hàng],tblChiTietHDX.SoLuong [Số lượng],tblHoaDonXuat.NgayXuat [Ngày xuất],tblChiTietHDX.DonGia [Đơn giá],tblHoaDonXuat.GhiChu [Ghi chú]" +
+            string select = "SELECT tblHoaDonXuat.MaHD [Mã hóa đơn],tblNhanVien.TenNhanVien [Nhân viên],tblChiTietHDX.MaMatH [Mã hàng],tblMatHang.TenMatH [Mặt hàng],tblChiTietHDX.SoLuong [Số lượng],tblHoaDonXuat.NgayXuat [Ngày xuất],tblChiTietHDX.DonGia [Đơn giá],tblHoaDonXuat.MaKH [Mã KH]" +
                             " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                             " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
                             " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien";
@@ -44,7 +44,7 @@ namespace QL_BanDayNit
 
         private void HienThiHD()
         {
-            string select = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],hdx.GhiChu [Ghi Chú] FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,hdx.GhiChu ORDER BY hdx.NgayXuat DESC";
+            string select = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],hdx.MaKH [Mã KH] FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,hdx.MaKH ORDER BY hdx.NgayXuat DESC";
             DataSet ds = DataConn.GrdSource(select);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
@@ -128,7 +128,7 @@ namespace QL_BanDayNit
                         try
                         {
                             int hang = grdView.CurrentCell.RowIndex;
-                            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia,tblHoaDonXuat.GhiChu" +
+                            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia,tblHoaDonXuat.MaKH" +
                                 " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                                 " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
                                 " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
@@ -227,7 +227,7 @@ namespace QL_BanDayNit
 
         private void btnXemHoaDon_Click(object sender, EventArgs e)
         {
-            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia ,tblHoaDonXuat.GhiChu FROM tblHoaDonXuat  INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien Where tblChiTietHDX.MaHD ='" + txtMa.Text + "'";
+            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia ,tblHoaDonXuat.MaKH FROM tblHoaDonXuat  INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien Where tblChiTietHDX.MaHD ='" + txtMa.Text + "'";
             DataSet ds = DataConn.GrdSource(select);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();

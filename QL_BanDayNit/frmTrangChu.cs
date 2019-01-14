@@ -27,7 +27,6 @@ namespace QL_BanDayNit
 
         private void frmHoTroThongBaoDoanhThu_Load(object sender, EventArgs e)
         {
-
         }
 
         private void btnThemKH_Click(object sender, EventArgs e)

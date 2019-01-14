@@ -275,7 +275,7 @@ namespace QL_BanDayNit
                 }
 
                 string select = "";
-                select = "insert into tblHoaDonNhap(MaHD,NgayNhap,GhiChu) values(N'" + txtMaHoaDon.Text + "',N'" + pckNgayNhap.Value.ToString("MM/dd/yyyy") + "',N'" + txtGhiChu.Text + "')";
+                select = "insert into tblHoaDonNhap(MaHD,NgayNhap,MaKH) values(N'" + txtMaHoaDon.Text + "',N'" + pckNgayNhap.Value.ToString("MM/dd/yyyy") + "',N'" + "" + "')";
                 DataConn.ThucHienCmd(select);
 
 
