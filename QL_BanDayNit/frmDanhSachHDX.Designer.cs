@@ -37,7 +37,12 @@
             this.cbxChiTiet = new System.Windows.Forms.CheckBox();
             this.btnXemHoaDon = new System.Windows.Forms.Button();
             this.btnThoat = new System.Windows.Forms.Button();
+            this.grbKH = new System.Windows.Forms.GroupBox();
+            this.cbxKH = new System.Windows.Forms.CheckBox();
+            this.cbxTenKH = new System.Windows.Forms.ComboBox();
+            this.btnEdit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdView)).BeginInit();
+            this.grbKH.SuspendLayout();
             this.SuspendLayout();
             // 
             // grdView
@@ -62,7 +67,7 @@
             this.btnXoa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXoa.Image = ((System.Drawing.Image)(resources.GetObject("btnXoa.Image")));
             this.btnXoa.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnXoa.Location = new System.Drawing.Point(517, 438);
+            this.btnXoa.Location = new System.Drawing.Point(508, 438);
             this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(125, 32);
@@ -112,9 +117,9 @@
             this.cbxChiTiet.Location = new System.Drawing.Point(517, 20);
             this.cbxChiTiet.Margin = new System.Windows.Forms.Padding(4);
             this.cbxChiTiet.Name = "cbxChiTiet";
-            this.cbxChiTiet.Size = new System.Drawing.Size(125, 23);
+            this.cbxChiTiet.Size = new System.Drawing.Size(130, 23);
             this.cbxChiTiet.TabIndex = 6;
-            this.cbxChiTiet.Text = "Hiển Thị Tất Cả";
+            this.cbxChiTiet.Text = "Hiển Thị Chi Tiết";
             this.cbxChiTiet.UseVisualStyleBackColor = true;
             this.cbxChiTiet.CheckedChanged += new System.EventHandler(this.cbxChiTiet_CheckedChanged);
             // 
@@ -140,18 +145,63 @@
             this.btnThoat.UseVisualStyleBackColor = true;
             this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
+            // grbKH
+            // 
+            this.grbKH.Controls.Add(this.cbxTenKH);
+            this.grbKH.Controls.Add(this.cbxKH);
+            this.grbKH.Location = new System.Drawing.Point(698, 1);
+            this.grbKH.Name = "grbKH";
+            this.grbKH.Size = new System.Drawing.Size(227, 53);
+            this.grbKH.TabIndex = 11;
+            this.grbKH.TabStop = false;
+            this.grbKH.Text = "Xem Theo KH";
+            // 
+            // cbxKH
+            // 
+            this.cbxKH.AutoSize = true;
+            this.cbxKH.Location = new System.Drawing.Point(6, 26);
+            this.cbxKH.Name = "cbxKH";
+            this.cbxKH.Size = new System.Drawing.Size(15, 14);
+            this.cbxKH.TabIndex = 0;
+            this.cbxKH.UseVisualStyleBackColor = true;
+            this.cbxKH.CheckedChanged += new System.EventHandler(this.cbxKH_CheckedChanged);
+            // 
+            // cbxTenKH
+            // 
+            this.cbxTenKH.FormattingEnabled = true;
+            this.cbxTenKH.Location = new System.Drawing.Point(27, 19);
+            this.cbxTenKH.Name = "cbxTenKH";
+            this.cbxTenKH.Size = new System.Drawing.Size(193, 27);
+            this.cbxTenKH.TabIndex = 1;
+            this.cbxTenKH.SelectedIndexChanged += new System.EventHandler(this.cbxTenKH_SelectedIndexChanged);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnEdit.Location = new System.Drawing.Point(292, 438);
+            this.btnEdit.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(125, 32);
+            this.btnEdit.TabIndex = 1;
+            this.btnEdit.Text = "Sửa HĐ";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
             // frmDanhSachHDX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(1221, 514);
+            this.Controls.Add(this.grbKH);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnXemHoaDon);
             this.Controls.Add(this.cbxChiTiet);
             this.Controls.Add(this.btnInHD);
             this.Controls.Add(this.chkListBox);
             this.Controls.Add(this.txtMa);
+            this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnXoa);
             this.Controls.Add(this.grdView);
             this.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -163,6 +213,8 @@
             this.Text = "Danh sách hóa đơn xuất";
             this.Load += new System.EventHandler(this.frmDanhSachHDX_Load);
             ((System.ComponentModel.ISupportInitialize)(this.grdView)).EndInit();
+            this.grbKH.ResumeLayout(false);
+            this.grbKH.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,5 +230,9 @@
         private System.Windows.Forms.CheckBox cbxChiTiet;
         private System.Windows.Forms.Button btnXemHoaDon;
         private System.Windows.Forms.Button btnThoat;
+        private System.Windows.Forms.GroupBox grbKH;
+        private System.Windows.Forms.ComboBox cbxTenKH;
+        private System.Windows.Forms.CheckBox cbxKH;
+        private System.Windows.Forms.Button btnEdit;
     }
 }

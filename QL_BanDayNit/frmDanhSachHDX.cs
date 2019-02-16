@@ -17,6 +17,8 @@ namespace QL_BanDayNit
 
         int sohangChon = 0;
         bool checkHienThiChiTiet = false;
+        string _strMaKhachHang = "";
+
         private void frmDanhSachHDX_Load(object sender, EventArgs e)
         {
             chkListBox.Items.Insert(0, "Mã hóa đơn");
@@ -26,17 +28,44 @@ namespace QL_BanDayNit
             chkListBox.Items.Insert(4, "Số lượng");
             chkListBox.Items.Insert(5, "Ngày xuất");
             chkListBox.Items.Insert(6, "Đơn giá");
-            chkListBox.Items.Insert(7, "Mã KH");
+            chkListBox.Items.Insert(7, "Tên KH");
+            ThemKhachHangChoHoaDonTrong();
+            cbxKH.Checked = false;
+            cbxTenKH.Enabled = false;
+            LoadComboboxKhachHang();
             HienThi();
+        }
+
+        private void ThemKhachHangChoHoaDonTrong()
+        {
+            string sqlQuery = "SELECT MaKH,MaHD FROM tblHoaDonXuat";
+            DataSet dsMaKH = DataConn.GrdSource(sqlQuery);
+            string str = "";
+            foreach (DataRow row in dsMaKH.Tables[0].Rows)
+            {
+                if (row["MaKH"].ToString().Trim() == "")
+                {
+                    sqlQuery = "UPDATE tblHoaDonXuat SET MaKH = 'KH000' WHERE MaHD = '" + row["MaHD"].ToString() + "'";
+                    DataConn.ThucHienCmd(sqlQuery);
+                }
+            }
         }
 
         private void HienThi()
         {
-            string select = "SELECT tblHoaDonXuat.MaHD [Mã hóa đơn],tblNhanVien.TenNhanVien [Nhân viên],tblChiTietHDX.MaMatH [Mã hàng],tblMatHang.TenMatH [Mặt hàng],tblChiTietHDX.SoLuong [Số lượng],tblHoaDonXuat.NgayXuat [Ngày xuất],tblChiTietHDX.DonGia [Đơn giá],tblHoaDonXuat.MaKH [Mã KH]" +
+            string sqlQuery = "SELECT tblHoaDonXuat.MaHD [Mã hóa đơn],tblNhanVien.TenNhanVien [Nhân viên],tblChiTietHDX.MaMatH [Mã hàng],tblMatHang.TenMatH [Mặt hàng],tblChiTietHDX.SoLuong [Số lượng],tblHoaDonXuat.NgayXuat [Ngày xuất],tblChiTietHDX.DonGia [Đơn giá],tblKhachHang.TenKH [Tên KH]" +
                             " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                             " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
-                            " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien";
-            DataSet ds = DataConn.GrdSource(select);
+                            " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
+                            " INNER JOIN tblKhachHang ON tblKhachHang.MaKH=tblHoaDonXuat.MaKH";
+            if (cbxKH.Checked && _strMaKhachHang != "")
+                sqlQuery = "SELECT tblHoaDonXuat.MaHD [Mã hóa đơn],tblNhanVien.TenNhanVien [Nhân viên],tblChiTietHDX.MaMatH [Mã hàng],tblMatHang.TenMatH [Mặt hàng],tblChiTietHDX.SoLuong [Số lượng],tblHoaDonXuat.NgayXuat [Ngày xuất],tblChiTietHDX.DonGia [Đơn giá],tblKhachHang.TenKH [Tên KH]" +
+                            " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
+                            " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
+                            " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
+                            " INNER JOIN tblKhachHang ON tblKhachHang.MaKH=tblHoaDonXuat.MaKH" +
+                            " WHERE tblHoaDonXuat.MaKH = '" + _strMaKhachHang + "'";
+            DataSet ds = DataConn.GrdSource(sqlQuery);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
             checkHienThiChiTiet = true;
@@ -44,8 +73,18 @@ namespace QL_BanDayNit
 
         private void HienThiHD()
         {
-            string select = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],hdx.MaKH [Mã KH] FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,hdx.MaKH ORDER BY hdx.NgayXuat DESC";
-            DataSet ds = DataConn.GrdSource(select);
+            string sqlQuery = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],kh.TenKH [Mã KH]" +
+                            " FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD " +
+                            " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" +
+                            " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC";
+            if (cbxKH.Checked && _strMaKhachHang != "")
+                sqlQuery = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],kh.TenKH [Mã KH]" +
+                            " FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD " +
+                            " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" +
+                            " WHERE hdx.MaKH = '" + _strMaKhachHang + "'" +
+                            " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC";
+
+            DataSet ds = DataConn.GrdSource(sqlQuery);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
             checkHienThiChiTiet = false;
@@ -66,9 +105,7 @@ namespace QL_BanDayNit
                 {
                     string sqlDelete = "DELETE FROM tblChiTietHDX WHERE MaHD=N'" + strMaHD + "' AND MaMatH='" + strMaMH + "'";
                     DataConn.ThucHienCmd(sqlDelete);
-
                     UpdateTongTien(strMaHD);
-
                     btnXemHoaDon_Click(sender, e);
                 }
         }
@@ -87,7 +124,7 @@ namespace QL_BanDayNit
             float tongTien = float.Parse(LayTongTienCuaMaHoaDon(maHoaDon));
             float tongTienGoc = 0;
 
-            string sqlSelectHDX = "SELECT [MaMatH],[SoLuong] FROM [tblChiTietHDX] WHERE MaHD='"+ maHoaDon + "'";
+            string sqlSelectHDX = "SELECT [MaMatH],[SoLuong] FROM [tblChiTietHDX] WHERE MaHD='" + maHoaDon + "'";
             DataSet dsHoaDonXuat = DataConn.GrdSource(sqlSelectHDX);
             DataTable dtTableHDX = dsHoaDonXuat.Tables[0];
 
@@ -128,10 +165,11 @@ namespace QL_BanDayNit
                         try
                         {
                             int hang = grdView.CurrentCell.RowIndex;
-                            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia,tblHoaDonXuat.MaKH" +
+                            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia,tblKhachHang.TenKH" +
                                 " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                                 " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
                                 " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
+                                " INNER JOIN tblKhachHang ON tblKhachHang.MaKH= tblHoaDonXuat.MaKH" +
                                 " WHERE tblHoaDonXuat.MaHD=N'" + grdView.Rows[hang].Cells[0].Value.ToString() + "'" +
                                 " AND tblChiTietHDX.MaMatH=N'" + grdView.Rows[hang].Cells[2].Value.ToString() + "'";
                             DataSet ds = DataConn.GrdSource(select);
@@ -204,30 +242,27 @@ namespace QL_BanDayNit
 
         private void btnInHD_Click(object sender, EventArgs e)
         {
-            //if (txtMa.Text == "")
-            //{
-            //    MessageBox.Show("Hóa đơn xuất này chưa có hoặc bạn chưa chọn hóa đơn!");
-            //    return;
-            //}
-            //frmInHDX inhdx = new frmInHDX(txtMa.Text);
-            //inhdx.ShowDialog();
+            string newRotationPDF = DataConn.folderLuuHoaDon + txtMa.Text + ".pdf";
+            System.Diagnostics.Process.Start(@"" + newRotationPDF);
         }
 
         private void cbxChiTiet_CheckedChanged(object sender, EventArgs e)
         {
             if (cbxChiTiet.Checked == false)
-            {
                 HienThiHD();
-            }
             else
-            {
                 HienThi();
-            }
+
         }
 
         private void btnXemHoaDon_Click(object sender, EventArgs e)
         {
-            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia ,tblHoaDonXuat.MaKH FROM tblHoaDonXuat  INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien Where tblChiTietHDX.MaHD ='" + txtMa.Text + "'";
+            string select = "SELECT tblHoaDonXuat.MaHD,tblNhanVien.TenNhanVien,tblChiTietHDX.MaMatH,tblMatHang.TenMatH,tblChiTietHDX.SoLuong,tblHoaDonXuat.NgayXuat,tblChiTietHDX.DonGia ,tblKhachHang.TenKH" +
+                           " FROM tblHoaDonXuat  INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
+                           " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
+                           " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
+                           " INNER JOIN tblKhachHang ON tblKhachHang.MaKH= tblHoaDonXuat.MaKH" +
+                           " Where tblChiTietHDX.MaHD ='" + txtMa.Text + "'";
             DataSet ds = DataConn.GrdSource(select);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
@@ -249,6 +284,46 @@ namespace QL_BanDayNit
             {
                 return;
             }
+        }
+
+        private void cbxKH_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbxKH.Checked)
+                cbxTenKH.Enabled = true;
+            else
+                cbxTenKH.Enabled = false;
+
+            if (cbxChiTiet.Checked == false)
+                HienThiHD();
+
+            else
+                HienThi();
+        }
+
+        private void LoadComboboxKhachHang()
+        {
+            string selectMatHang = "SELECT * FROM tblKhachHang";
+            DataSet dsKH = DataConn.GrdSource(selectMatHang);
+            // Load cbx Tên KH -----------------------------
+            cbxTenKH.DataSource = dsKH.Tables[0];
+            cbxTenKH.DisplayMember = "TenKH";
+            cbxTenKH.ValueMember = "MaKH";
+        }
+
+        private void cbxTenKH_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _strMaKhachHang = cbxTenKH.SelectedValue.ToString();
+            if (cbxChiTiet.Checked == false)
+                HienThiHD();
+            else
+                HienThi();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            frmXuatHang frmXuatH = new frmXuatHang(txtMa.Text);
+            frmXuatH.MyLoadData = new frmXuatHang.LoadData(HienThi);
+            frmXuatH.ShowDialog();
         }
     }
 }
