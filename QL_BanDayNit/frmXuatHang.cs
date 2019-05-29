@@ -1263,7 +1263,9 @@ namespace QL_BanDayNit
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
 
-            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + " (" + LaySoDienThoaiNhanVienTheoMa(strMaNhanVien) + ")" + "\nKhách Hàng : " + cbxKhachHang.Text + "\n", new iTextSharp.text.Font(arialCustomer, 11)));
+            String sqlTongSoHoaDonTheoKH = "SELECT COUNT(MaKH) FROM tblHoaDonXuat WHERE MaKH='"+ _strMaKhachHang +"' AND NgayXuat > '2019-02-05'";
+            float tongSoHD = DataConn.Lay1GiaFloat_ExecuteScalar(sqlTongSoHoaDonTheoKH);
+            cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + " (" + LaySoDienThoaiNhanVienTheoMa(strMaNhanVien) + ")" + "\nKhách Hàng : " + cbxKhachHang.Text +"("+ tongSoHD+ ")\n", new iTextSharp.text.Font(arialCustomer, 11)));
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
             //
@@ -1578,7 +1580,8 @@ namespace QL_BanDayNit
         private void pckNgayXuat_ValueChanged(object sender, EventArgs e)
         {
             // DateTime.Today.Day.ToString() 
-            txtMaHD.Text = LayMaHoaDonTheoNgay(pckNgayXuat.Value.Day.ToString() + pckNgayXuat.Value.Month.ToString() + pckNgayXuat.Value.Year.ToString());
+            txtMaHD.Text = LayMaHoaDonTheoNgay(pckNgayXuat.Value.Day.ToString("00") + pckNgayXuat.Value.Month.ToString("00") + pckNgayXuat.Value.Year.ToString());
+            //txtMaHD.Text = LayMaHoaDonTheoNgay(DateTime.Today.Day.ToString("00") + DateTime.Today.Month.ToString("00") + DateTime.Today.Year.ToString());
 
         }
 
