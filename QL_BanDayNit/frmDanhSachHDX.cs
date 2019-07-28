@@ -40,7 +40,6 @@ namespace QL_BanDayNit
         {
             string sqlQuery = "SELECT MaKH,MaHD FROM tblHoaDonXuat";
             DataSet dsMaKH = DataConn.GrdSource(sqlQuery);
-            string str = "";
             foreach (DataRow row in dsMaKH.Tables[0].Rows)
             {
                 if (row["MaKH"].ToString().Trim() == "")
@@ -242,8 +241,7 @@ namespace QL_BanDayNit
 
         private void btnInHD_Click(object sender, EventArgs e)
         {
-            string newRotationPDF = DataConn.folderLuuHoaDon + txtMa.Text + ".pdf";
-            System.Diagnostics.Process.Start(@"" + newRotationPDF);
+            DataConn.XemLaiHoaDonTheoMaHD(txtMa.Text);
         }
 
         private void cbxChiTiet_CheckedChanged(object sender, EventArgs e)

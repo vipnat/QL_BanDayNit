@@ -1296,6 +1296,7 @@ namespace QL_BanDayNit
                 cellHeader.FixedHeight = 20f;
                 pdfTable.AddCell(cellHeader);
             }
+            int soTT = 0;
             int maSP = 0;
             string kieuStr = "";
             //Adding DataRow
@@ -1304,15 +1305,20 @@ namespace QL_BanDayNit
                 maSP = 1;
                 foreach (DataGridViewCell cell in row.Cells)
                 {
+                    PdfPCell _cellPDF;
                     if (maSP == 1)
                     {
                         kieuStr = cell.Value.ToString().Substring(0, 3);
                         if (kieuStr.Trim().Equals("DAY")) kieuStr = "D";
                         else if (kieuStr.Trim().Equals("DAU") || kieuStr.Trim().Equals("DAI")) kieuStr = "Đ";
                         else kieuStr = "";
+                        soTT = soTT + 1;
                     }
+                    if (cbxSTT.Checked && maSP == 1)
+                        _cellPDF = new PdfPCell(new Phrase(soTT + "", new iTextSharp.text.Font(arialCustomer, 16)));
+                    else
+                        _cellPDF = new PdfPCell(new Phrase(maSP == 1 ? kieuStr + cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer, 16)));
 
-                    PdfPCell _cellPDF = new PdfPCell(new Phrase(maSP == 1 ? kieuStr + cell.Value.ToString().Substring(3) : cell.Value.ToString(), new iTextSharp.text.Font(arialCustomer, 16)));
                     _cellPDF.FixedHeight = 20f;
                     _cellPDF.HorizontalAlignment = Element.ALIGN_CENTER;
                     pdfTable.AddCell(_cellPDF);
@@ -1457,7 +1463,10 @@ namespace QL_BanDayNit
                 pdfDoc.Close();
                 stream.Close();
             }
+            // Lưu File PDF Vao Database
+            DataConn.LuuHoaDonPDFVaoDB(namePDF);
 
+            // Xoay Ngang De In PDF
             string newRotationPDF = DataConn.folderLuuHoaDon + "print_rotation.pdf";
             XoayNgangTrangA5(namePDF, newRotationPDF); // In Khổ A4
 

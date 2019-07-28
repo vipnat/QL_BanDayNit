@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+
+using System.IO;
+
 namespace QL_BanDayNit
 {
     public partial class frmTrangChu : Form
@@ -15,18 +18,17 @@ namespace QL_BanDayNit
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnThoat_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
         private void frmHoTroThongBaoDoanhThu_Load(object sender, EventArgs e)
         {
+            string[] filePahts = System.IO.Directory.GetFiles(DataConn.folderLuuHoaDon, "*.pdf");
+            for (int i = 0; i < filePahts.Length; i++)
+            {
+                string nameFile = System.IO.Path.GetFileNameWithoutExtension(filePahts[i]);
+                if (DataConn.KiemTraFilePDFTonTai(nameFile))
+                    return;
+                DataConn.LuuHoaDonPDFVaoDB(filePahts[i]);
+            }
         }
 
         private void btnThemKH_Click(object sender, EventArgs e)
@@ -75,6 +77,12 @@ namespace QL_BanDayNit
         {
             frmDoiTenFile doiten = new frmDoiTenFile();
             doiten.ShowDialog();
+        }
+
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

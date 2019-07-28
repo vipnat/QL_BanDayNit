@@ -76,6 +76,7 @@
             this.lblTra = new System.Windows.Forms.Label();
             this.lblTongTra = new System.Windows.Forms.Label();
             this.lblConLai = new System.Windows.Forms.Label();
+            this.cbxSTT = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdXuatHang)).BeginInit();
             this.groupHoaDonXuat.SuspendLayout();
             this.groupChiTietHDX.SuspendLayout();
@@ -243,7 +244,7 @@
             this.grdXuatHang.AllowUserToResizeRows = false;
             this.grdXuatHang.BackgroundColor = System.Drawing.Color.LightCyan;
             this.grdXuatHang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdXuatHang.Location = new System.Drawing.Point(48, 233);
+            this.grdXuatHang.Location = new System.Drawing.Point(50, 233);
             this.grdXuatHang.Margin = new System.Windows.Forms.Padding(4);
             this.grdXuatHang.MultiSelect = false;
             this.grdXuatHang.Name = "grdXuatHang";
@@ -600,9 +601,10 @@
             // cbxTraHang
             // 
             this.cbxTraHang.AutoSize = true;
-            this.cbxTraHang.Location = new System.Drawing.Point(765, 232);
+            this.cbxTraHang.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxTraHang.Location = new System.Drawing.Point(767, 232);
             this.cbxTraHang.Name = "cbxTraHang";
-            this.cbxTraHang.Size = new System.Drawing.Size(84, 23);
+            this.cbxTraHang.Size = new System.Drawing.Size(76, 19);
             this.cbxTraHang.TabIndex = 43;
             this.cbxTraHang.Text = "Trả Hàng";
             this.cbxTraHang.UseVisualStyleBackColor = true;
@@ -615,7 +617,7 @@
             this.grdTraHang.AllowUserToResizeRows = false;
             this.grdTraHang.BackgroundColor = System.Drawing.Color.LightCyan;
             this.grdTraHang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdTraHang.Location = new System.Drawing.Point(48, 233);
+            this.grdTraHang.Location = new System.Drawing.Point(50, 233);
             this.grdTraHang.Margin = new System.Windows.Forms.Padding(4);
             this.grdTraHang.MultiSelect = false;
             this.grdTraHang.Name = "grdTraHang";
@@ -659,6 +661,17 @@
             this.lblConLai.Size = new System.Drawing.Size(0, 22);
             this.lblConLai.TabIndex = 42;
             // 
+            // cbxSTT
+            // 
+            this.cbxSTT.AutoSize = true;
+            this.cbxSTT.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxSTT.Location = new System.Drawing.Point(2, 233);
+            this.cbxSTT.Name = "cbxSTT";
+            this.cbxSTT.Size = new System.Drawing.Size(49, 19);
+            this.cbxSTT.TabIndex = 43;
+            this.cbxSTT.Text = "STT";
+            this.cbxSTT.UseVisualStyleBackColor = true;
+            // 
             // frmXuatHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -667,6 +680,7 @@
             this.ClientSize = new System.Drawing.Size(845, 492);
             this.ControlBox = false;
             this.Controls.Add(this.grdTraHang);
+            this.Controls.Add(this.cbxSTT);
             this.Controls.Add(this.cbxTraHang);
             this.Controls.Add(this.lblTraNo);
             this.Controls.Add(this.lblAllTong);
@@ -761,5 +775,6 @@
         private System.Windows.Forms.Label lblTongTra;
         private System.Windows.Forms.Label lblConLai;
         private System.Windows.Forms.Label lblMaMatH;
+        private System.Windows.Forms.CheckBox cbxSTT;
     }
 }

@@ -322,5 +322,88 @@ namespace QL_BanDayNit
                 MessageBox.Show("" + se.Message);
             }
         }
+
+
+        internal static void ThucHienInserPDFFile(string sqlQuery, string prName, byte[] contents)
+        {
+            cmd = new SqlCommand(sqlQuery, con);
+            SqlParameter sqlParameter = new SqlParameter();
+            sqlParameter.ParameterName = prName;
+            sqlParameter.Value = contents;
+            cmd.Parameters.Add(sqlParameter);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException se)
+            {
+                MessageBox.Show("Lỗi cơ sở dữ liệu!");
+                MessageBox.Show("" + se.Message);
+            }
+        }
+        internal static void LuuHoaDonPDFVaoDB(string localHoaDon)
+        {
+            string nameFile = System.IO.Path.GetFileNameWithoutExtension(localHoaDon);
+            if (nameFile.Equals("View") || nameFile.Equals("print_rotation")) return;
+            try
+            {
+                FileStream fStream = File.OpenRead(localHoaDon);
+                byte[] contents = new byte[fStream.Length];
+                fStream.Read(contents, 0, (int)fStream.Length);
+                fStream.Close();
+                DataConn.ThucHienInserPDFFile("INSERT INTO SavePDFTable values('" + nameFile + "',@data)", "@data", contents);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Không Lưu Được File PDF Vao Database");
+                throw;
+            }
+        }
+        internal static void XemLaiHoaDonTheoMaHD(string MaHD)
+        {
+            string ToSaveFileTo = folderLuuHoaDon + "View.pdf";
+            if (System.IO.File.Exists(ToSaveFileTo))
+            {
+                try
+                {
+                    System.IO.File.Delete(ToSaveFileTo);
+                }
+                catch
+                {
+                    MessageBox.Show("Tập Tin PDF Đã Có Và Đang Được Sử Dụng ! \nTắt Tập Tin Để Tạo Lại.");
+                    return;
+                }
+            }
+
+            using (SqlCommand cmd = new SqlCommand("Select PDFFile from SavePDFTable  where [MaHD]='" + MaHD + "' ", con))
+            {
+                using (SqlDataReader dr = cmd.ExecuteReader(System.Data.CommandBehavior.Default))
+                {
+                    if (dr.Read())
+                    {
+                        byte[] fileData = (byte[])dr.GetValue(0);
+
+                        using (System.IO.FileStream fs = new System.IO.FileStream(ToSaveFileTo, System.IO.FileMode.Create, System.IO.FileAccess.ReadWrite))
+                        {
+                            using (System.IO.BinaryWriter bw = new System.IO.BinaryWriter(fs))
+                            {
+                                bw.Write(fileData);
+                                bw.Close();
+                            }
+                        }
+                    }
+                    dr.Close();
+                }
+            }
+            System.Diagnostics.Process.Start(@"" + ToSaveFileTo);
+        }
+        public static bool KiemTraFilePDFTonTai(string strMaHoaDon)
+        {
+            // Kiểm Tra File PDF Tôm Tại
+            string selectHD = "SELECT * FROM SavePDFTable WHERE MaHD = '" + strMaHoaDon + "'";
+            DataSet dsHoaDon = DataConn.GrdSource(selectHD);
+            if (dsHoaDon.Tables[0].Rows.Count > 0) return true;
+            return false;
+        }
     }
 }
