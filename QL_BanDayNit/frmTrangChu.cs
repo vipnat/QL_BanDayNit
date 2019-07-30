@@ -21,13 +21,13 @@ namespace QL_BanDayNit
 
         private void frmHoTroThongBaoDoanhThu_Load(object sender, EventArgs e)
         {
-            string[] filePahts = System.IO.Directory.GetFiles(DataConn.folderLuuHoaDon, "*.pdf");
-            for (int i = 0; i < filePahts.Length; i++)
-            {
-                string nameFile = System.IO.Path.GetFileNameWithoutExtension(filePahts[i]);
-                if (!DataConn.KiemTraFilePDFTonTai(nameFile))
-                    DataConn.LuuHoaDonPDFVaoDB(filePahts[i]);
-            }
+            //string[] filePahts = System.IO.Directory.GetFiles(DataConn.folderLuuHoaDon, "*.pdf");
+            //for (int i = 0; i < filePahts.Length; i++)
+            //{
+            //    string nameFile = System.IO.Path.GetFileNameWithoutExtension(filePahts[i]);
+            //    if (!DataConn.KiemTraFilePDFTonTai(nameFile))
+            //        DataConn.LuuHoaDonPDFVaoDB(filePahts[i]);
+            //}
         }
 
         private void btnThemKH_Click(object sender, EventArgs e)
