@@ -25,7 +25,7 @@ namespace QL_BanDayNit
             //for (int i = 0; i < filePahts.Length; i++)
             //{
             //    string nameFile = System.IO.Path.GetFileNameWithoutExtension(filePahts[i]);
-            //    if (!DataConn.KiemTraFilePDFTonTai(nameFile))
+            //    if (!DataConn.KiemTraFilePDFTonTai(nameFile)) // && nameFile.Equals("03082019001"))
             //        DataConn.LuuHoaDonPDFVaoDB(filePahts[i]);
             //}
         }

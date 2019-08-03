@@ -38,8 +38,8 @@
             this.btnXemHoaDon = new System.Windows.Forms.Button();
             this.btnThoat = new System.Windows.Forms.Button();
             this.grbKH = new System.Windows.Forms.GroupBox();
-            this.cbxKH = new System.Windows.Forms.CheckBox();
             this.cbxTenKH = new System.Windows.Forms.ComboBox();
+            this.cbxKH = new System.Windows.Forms.CheckBox();
             this.btnEdit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdView)).BeginInit();
             this.grbKH.SuspendLayout();
@@ -100,12 +100,12 @@
             this.btnInHD.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInHD.Image = ((System.Drawing.Image)(resources.GetObject("btnInHD.Image")));
             this.btnInHD.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnInHD.Location = new System.Drawing.Point(731, 438);
+            this.btnInHD.Location = new System.Drawing.Point(715, 438);
             this.btnInHD.Margin = new System.Windows.Forms.Padding(6);
             this.btnInHD.Name = "btnInHD";
-            this.btnInHD.Size = new System.Drawing.Size(125, 32);
+            this.btnInHD.Size = new System.Drawing.Size(141, 32);
             this.btnInHD.TabIndex = 2;
-            this.btnInHD.Text = "In hóa đơn (&I)";
+            this.btnInHD.Text = "Xem Lại HĐ (&I)";
             this.btnInHD.UseVisualStyleBackColor = true;
             this.btnInHD.Click += new System.EventHandler(this.btnInHD_Click);
             // 
@@ -156,6 +156,15 @@
             this.grbKH.TabStop = false;
             this.grbKH.Text = "Xem Theo KH";
             // 
+            // cbxTenKH
+            // 
+            this.cbxTenKH.FormattingEnabled = true;
+            this.cbxTenKH.Location = new System.Drawing.Point(27, 19);
+            this.cbxTenKH.Name = "cbxTenKH";
+            this.cbxTenKH.Size = new System.Drawing.Size(193, 27);
+            this.cbxTenKH.TabIndex = 1;
+            this.cbxTenKH.SelectedIndexChanged += new System.EventHandler(this.cbxTenKH_SelectedIndexChanged);
+            // 
             // cbxKH
             // 
             this.cbxKH.AutoSize = true;
@@ -165,15 +174,6 @@
             this.cbxKH.TabIndex = 0;
             this.cbxKH.UseVisualStyleBackColor = true;
             this.cbxKH.CheckedChanged += new System.EventHandler(this.cbxKH_CheckedChanged);
-            // 
-            // cbxTenKH
-            // 
-            this.cbxTenKH.FormattingEnabled = true;
-            this.cbxTenKH.Location = new System.Drawing.Point(27, 19);
-            this.cbxTenKH.Name = "cbxTenKH";
-            this.cbxTenKH.Size = new System.Drawing.Size(193, 27);
-            this.cbxTenKH.TabIndex = 1;
-            this.cbxTenKH.SelectedIndexChanged += new System.EventHandler(this.cbxTenKH_SelectedIndexChanged);
             // 
             // btnEdit
             // 

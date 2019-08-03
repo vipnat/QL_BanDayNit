@@ -1196,6 +1196,9 @@ namespace QL_BanDayNit
                 if (MessageBox.Show("Đã Xuất Thành Công Bạn Có Muốn Chỉnh Sửa ?", "Thông Báo", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     blHoaDonSua = true;
+                    // Lưu File PDF Vao Database
+                    string namePDF = DataConn.folderLuuHoaDon + txtMaHD.Text + ".pdf";
+                    DataConn.LuuHoaDonPDFVaoDB(namePDF);
                     return;
                 }
                 else
@@ -1447,8 +1450,6 @@ namespace QL_BanDayNit
             {
                 Document pdfDoc = new Document();
                 pdfDoc = new Document(PageSize.A5, 10f, 10f, 10f, 10f);
-
-
                 //pdfDoc.SetPageSize(PageSize.LETTER);  // A5 Dọc
                 //pdfDoc.SetPageSize(PageSize.LETTER.Rotate()); A5 Ngang
                 PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
@@ -1463,8 +1464,6 @@ namespace QL_BanDayNit
                 pdfDoc.Close();
                 stream.Close();
             }
-            // Lưu File PDF Vao Database
-            DataConn.LuuHoaDonPDFVaoDB(namePDF);
 
             // Xoay Ngang De In PDF
             string newRotationPDF = DataConn.folderLuuHoaDon + "print_rotation.pdf";
