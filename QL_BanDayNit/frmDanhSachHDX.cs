@@ -33,7 +33,7 @@ namespace QL_BanDayNit
             cbxKH.Checked = false;
             cbxTenKH.Enabled = false;
             LoadComboboxKhachHang();
-            HienThi();
+            HienThiHD();
         }
 
         private void ThemKhachHangChoHoaDonTrong()
@@ -75,13 +75,13 @@ namespace QL_BanDayNit
             string sqlQuery = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],kh.TenKH [Mã KH]" +
                             " FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD " +
                             " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" +
-                            " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC";
+                            " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC,hdx.MaHD DESC";
             if (cbxKH.Checked && _strMaKhachHang != "")
                 sqlQuery = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],kh.TenKH [Mã KH]" +
                             " FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD " +
                             " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" +
                             " WHERE hdx.MaKH = '" + _strMaKhachHang + "'" +
-                            " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC";
+                            " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC,hdx.MaHD DESC";
 
             DataSet ds = DataConn.GrdSource(sqlQuery);
             grdView.DataSource = ds.Tables[0];
@@ -96,6 +96,7 @@ namespace QL_BanDayNit
             string strMaMH = grdView.Rows[sohangChon].Cells[2].Value.ToString();
 
             if (checkHienThiChiTiet)
+            {
                 if (MessageBox.Show("Xóa Sản Phẩm: " + strTenMH + " Trong HĐ ?", "Thông Báo", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
                     return;
@@ -106,7 +107,24 @@ namespace QL_BanDayNit
                     DataConn.ThucHienCmd(sqlDelete);
                     UpdateTongTien(strMaHD);
                     btnXemHoaDon_Click(sender, e);
+                    if (!KiemTraTonTaiMaHoaDon(strMaHD))
+                    {
+                        string sqlDeleteThuChi = "DELETE FROM tblThuChi WHERE MaHD= '" + strMaHD + "'";
+                        DataConn.ThucHienCmd(sqlDeleteThuChi);
+                        DataConn.XoaHoaDonPDFTrongDBTheoMa(strMaHD);
+                    }
                 }
+            }
+            
+        }
+
+        private bool KiemTraTonTaiMaHoaDon(string strMaHD)
+        {
+            string sqlSelectCount = "SELECT COUNT(MaHD) FROM tblChiTietHDX WHERE MaHD ='" + strMaHD + "'";
+            if (DataConn.Lay1GiaTriSoDung_ExecuteScalar(sqlSelectCount) == 0)
+                return false;
+            else
+                return true;
         }
 
         private string LayTongTienCuaMaHoaDon(string maHD)

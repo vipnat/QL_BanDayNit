@@ -322,8 +322,7 @@ namespace QL_BanDayNit
                 MessageBox.Show("" + se.Message);
             }
         }
-
-
+        
         internal static void ThucHienInserPDFFile(string sqlQuery, string prName, byte[] contents)
         {
             cmd = new SqlCommand(sqlQuery, con);
@@ -405,5 +404,26 @@ namespace QL_BanDayNit
             if (dsHoaDon.Tables[0].Rows.Count > 0) return true;
             return false;
         }
+        internal static void XoaHoaDonPDFTrongDBTheoMa(string strMaHD)
+        {
+            string sqlDelete = "DELETE FROM SavePDFTable WHERE MaHD = '" + strMaHD + "'";
+            ThucHienCmd(sqlDelete);
+        }
+
+
+        internal static void XoaAllHoaDonXuatNull()
+        {
+            string sqlQuery = "SELECT MaHD FROM tblHoaDonXuat WHERE NOT EXISTS (SELECT MaHD FROM tblChiTietHDX WHERE " +
+                     "tblHoaDonXuat.MaHD = tblChiTietHDX.MaHD)";  // Có Trong Hóa Đơn Mà Không Có Chi Tiết. (HĐ Ảo)
+            DataSet dsMaHang = DataConn.GrdSource(sqlQuery);
+            foreach (DataRow row in dsMaHang.Tables[0].Rows)
+            {
+                string deleteHDX = "DELETE FROM tblHoaDonXuat WHERE MaHD ='" + row["MaHD"] + "'";
+                ThucHienCmd(deleteHDX);
+                string sqlDeleteThuChi = "DELETE FROM tblThuChi WHERE MaHD= '" + row["MaHD"] + "'";
+                ThucHienCmd(sqlDeleteThuChi);
+                XoaHoaDonPDFTrongDBTheoMa(row["MaHD"].ToString());
+            }
+        }
     }
-}
+    }

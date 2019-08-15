@@ -112,8 +112,6 @@
             // cbxChiTiet
             // 
             this.cbxChiTiet.AutoSize = true;
-            this.cbxChiTiet.Checked = true;
-            this.cbxChiTiet.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbxChiTiet.Location = new System.Drawing.Point(517, 20);
             this.cbxChiTiet.Margin = new System.Windows.Forms.Padding(4);
             this.cbxChiTiet.Name = "cbxChiTiet";

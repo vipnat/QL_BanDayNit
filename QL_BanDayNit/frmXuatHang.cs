@@ -101,6 +101,7 @@ namespace QL_BanDayNit
                 LoadKhachHangTrongHoaDonXuat(_strMaHoaDonEdit);
                 LoadNhanVienTrongHoaDonXuat(_strMaHoaDonEdit);
                 txtMaHD.Text = _strMaHoaDonEdit;
+                DataConn.XoaHoaDonPDFTrongDBTheoMa(_strMaHoaDonEdit);
                 btnXuatHang_Click(sender, e);
             }
         }
@@ -267,23 +268,9 @@ namespace QL_BanDayNit
             cbxTenMatHang.DisplayMember = "TenMH";
             cbxTenMatHang.ValueMember = "MaMatH";
         }
-
-        public void XoaAllHoaDonXuatNull()
-        {
-            string sqlQuery = "SELECT MaHD FROM tblHoaDonXuat WHERE NOT EXISTS (SELECT MaHD FROM tblChiTietHDX WHERE " +
-                     "tblHoaDonXuat.MaHD = tblChiTietHDX.MaHD)";  // Có Trong Hóa Đơn Mà Không Có Chi Tiết. (HĐ Ảo)
-            DataSet dsMaHang = DataConn.GrdSource(sqlQuery);
-            foreach (DataRow row in dsMaHang.Tables[0].Rows)
-            {
-                string deleteHDX = "DELETE FROM tblHoaDonXuat WHERE MaHD ='" + row["MaHD"] + "'";
-                DataConn.ThucHienCmd(deleteHDX);
-            }
-
-        }
-
         private string LayMaHoaDonTheoNgay(string ngayText)
         {
-            XoaAllHoaDonXuatNull();
+            DataConn.XoaAllHoaDonXuatNull();
             string MaHD = "";
             int maSo = 1;
             string selectMaHoaDon = "SELECT MaHD FROM tblHoaDonXuat WHERE NgayXuat = '" + pckNgayXuat.Value + "'";
@@ -1197,8 +1184,6 @@ namespace QL_BanDayNit
                 {
                     blHoaDonSua = true;
                     // Lưu File PDF Vao Database
-                    string namePDF = DataConn.folderLuuHoaDon + txtMaHD.Text + ".pdf";
-                    DataConn.LuuHoaDonPDFVaoDB(namePDF);
                     return;
                 }
                 else
@@ -1208,7 +1193,7 @@ namespace QL_BanDayNit
                     double dbTongPhaiTra = Convert.ToDouble(strNoCu) + Convert.ToDouble(lblTongTien.Text) - Convert.ToDouble(strTongTienHoaDonTra);
                     double dbTraTien = Convert.ToDouble(txtTraTien.Text);
                     double dbNoCu = Convert.ToDouble(strNoCu);
-                    if (dbTongPhaiTra - dbTraTien > 0)
+                    if (dbTongPhaiTra - dbTraTien > 0 || dbNoCu > 0)
                     {
                         double dbTienTraHang = 0;
                         if (grdTraHang.Rows.Count > 0) // Có Hàng Trả Lại
@@ -1218,8 +1203,23 @@ namespace QL_BanDayNit
                         DataConn.ThucHienCmd(updateNoCu);
                     }
                     this.Close();
+
+                    string namePDF = DataConn.folderLuuHoaDon + txtMaHD.Text + ".pdf";
+                    DataConn.LuuHoaDonPDFVaoDB(namePDF);
+                    
+                    if(dbTraTien > 0)
+                    {
+                        LuuThuChiVaoDataBase();
+                    }
                 }
             }
+        }
+
+        private void LuuThuChiVaoDataBase()
+        {
+            string strInsert = "INSERT INTO [dbo].[tblThuChi] ([MaHD] ,[Ngay] ,[SoTien] ,[GhiChu] ,[Thu1Chi0]) " +
+                "VALUES (N'" + txtMaHD.Text + "',N'" + pckNgayXuat.Text + "','" + Convert.ToInt32(txtTraTien.Text) + "',N'"+ cbxKhachHang.Text +"',1)";
+            DataConn.ThucHienCmd(strInsert);
         }
 
         private void XuatHoaDonPDF()
