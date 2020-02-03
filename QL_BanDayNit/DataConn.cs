@@ -5,6 +5,8 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 
 namespace QL_BanDayNit
 {
@@ -396,6 +398,93 @@ namespace QL_BanDayNit
             }
             System.Diagnostics.Process.Start(@"" + ToSaveFileTo);
         }
+
+        internal static string LayNoCuTheoMaHoaDon(string MaHD)
+        {
+            string ToSaveFileTo = folderLuuHoaDon + "View.pdf";
+            if (System.IO.File.Exists(ToSaveFileTo))
+            {
+                try
+                {
+                    System.IO.File.Delete(ToSaveFileTo);
+                }
+                catch
+                {
+                    MessageBox.Show("Tập Tin PDF Đã Có Và Đang Được Sử Dụng ! \nTắt Tập Tin Để Tạo Lại.");
+                    return "";
+                }
+            }
+            using (SqlCommand cmd = new SqlCommand("Select PDFFile from SavePDFTable  where [MaHD]='" + MaHD + "' ", con))
+            {
+                using (SqlDataReader dr = cmd.ExecuteReader(System.Data.CommandBehavior.Default))
+                {
+                    if (dr.Read())
+                    {
+                        byte[] fileData = (byte[])dr.GetValue(0);
+
+                        using (System.IO.FileStream fs = new System.IO.FileStream(ToSaveFileTo, System.IO.FileMode.Create, System.IO.FileAccess.ReadWrite))
+                        {
+                            using (System.IO.BinaryWriter bw = new System.IO.BinaryWriter(fs))
+                            {
+                                bw.Write(fileData);
+                                bw.Close();
+                            }
+                        }
+                    }
+                    dr.Close();
+                }
+            }
+            return LayNoCuTuFilePDF(ToSaveFileTo);
+        }
+
+        private static string LayNoCuTuFilePDF(string strFile)
+        {
+            try
+            {
+                PdfReader reader = new PdfReader(strFile);
+                int intPageNum = reader.NumberOfPages;
+                string[] words;
+                string line;
+                string textNoCu = "";
+                int vitri;
+
+                for (int i = 1; i <= intPageNum; i++)
+                {
+                    string text = PdfTextExtractor.GetTextFromPage(reader, i, new LocationTextExtractionStrategy());
+                    words = text.Split('\n');
+                    for (int j = 0, len = words.Length; j < len; j++)
+                    {
+                        line = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(words[j]));
+                        if (line.Contains("Nợ"))
+                        {
+                            vitri = line.IndexOf(":");
+                            string strNo = line.Substring(vitri + 1).Trim();
+                            textNoCu = (strNo.Length <= 0 ? "0" : strNo.Replace(".", "")); ; 
+                        }
+                        else
+                        if (line.Contains("Trả"))
+                        {
+                            vitri = line.IndexOf(":");
+                            string strTra = line.Substring(vitri + 1).Trim();
+                            textNoCu += "-" + (strTra.Length <= 0 ? "0": strTra.Replace(".", ""));
+                        }
+                        else
+                        if (line.Contains("Còn"))
+                        {
+                            vitri = line.IndexOf(":");
+                            string strCon = line.Substring(vitri + 1).Trim();
+                            textNoCu += "-" + (strCon.Length <= 0 ? "0" : strCon.Replace(".",""));
+                        }
+                    }
+                }
+                return textNoCu;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
         public static bool KiemTraFilePDFTonTai(string strMaHoaDon)
         {
             // Kiểm Tra File PDF Tôm Tại
@@ -409,8 +498,6 @@ namespace QL_BanDayNit
             string sqlDelete = "DELETE FROM SavePDFTable WHERE MaHD = '" + strMaHD + "'";
             ThucHienCmd(sqlDelete);
         }
-
-
         internal static void XoaAllHoaDonXuatNull()
         {
             string sqlQuery = "SELECT MaHD FROM tblHoaDonXuat WHERE NOT EXISTS (SELECT MaHD FROM tblChiTietHDX WHERE " +
@@ -425,5 +512,18 @@ namespace QL_BanDayNit
                 XoaHoaDonPDFTrongDBTheoMa(row["MaHD"].ToString());
             }
         }
+
+        public static float LayTienTrongNhaMoiNhat()
+        {
+            string sqlSelect = "SELECT TOP(1) TienTrongNha FROM tblThuChi ORDER BY Ngay DESC,Id DESC";
+            return Lay1GiaFloat_ExecuteScalar(sqlSelect);
+        }
+
+        public static int LayIdThuChiMoiNhat()
+        {
+            string sqlSelect = "SELECT TOP(1) Id FROM tblThuChi ORDER BY Ngay DESC,Id DESC";
+            return Lay1GiaTriSoDung_ExecuteScalar(sqlSelect);
+        }
+
     }
     }

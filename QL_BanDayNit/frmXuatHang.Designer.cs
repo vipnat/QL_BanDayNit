@@ -77,6 +77,7 @@
             this.lblTongTra = new System.Windows.Forms.Label();
             this.lblConLai = new System.Windows.Forms.Label();
             this.cbxSTT = new System.Windows.Forms.CheckBox();
+            this.lblSLTra = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grdXuatHang)).BeginInit();
             this.groupHoaDonXuat.SuspendLayout();
             this.groupChiTietHDX.SuspendLayout();
@@ -672,6 +673,17 @@
             this.cbxSTT.Text = "STT";
             this.cbxSTT.UseVisualStyleBackColor = true;
             // 
+            // lblSLTra
+            // 
+            this.lblSLTra.AutoSize = true;
+            this.lblSLTra.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSLTra.ForeColor = System.Drawing.Color.Red;
+            this.lblSLTra.Location = new System.Drawing.Point(766, 254);
+            this.lblSLTra.Name = "lblSLTra";
+            this.lblSLTra.Size = new System.Drawing.Size(38, 15);
+            this.lblSLTra.TabIndex = 45;
+            this.lblSLTra.Text = "label6";
+            // 
             // frmXuatHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -679,6 +691,7 @@
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(845, 492);
             this.ControlBox = false;
+            this.Controls.Add(this.lblSLTra);
             this.Controls.Add(this.grdTraHang);
             this.Controls.Add(this.cbxSTT);
             this.Controls.Add(this.cbxTraHang);
@@ -776,5 +789,6 @@
         private System.Windows.Forms.Label lblConLai;
         private System.Windows.Forms.Label lblMaMatH;
         private System.Windows.Forms.CheckBox cbxSTT;
+        private System.Windows.Forms.Label lblSLTra;
     }
 }

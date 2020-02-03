@@ -92,6 +92,7 @@ namespace QL_BanDayNit
         private void btnXoa_Click(object sender, EventArgs e)
         {
             string strTenMH = grdView.Rows[sohangChon].Cells[3].Value.ToString();
+            string soLuong = grdView.Rows[sohangChon].Cells[4].Value.ToString();
             string strMaHD = grdView.Rows[sohangChon].Cells[0].Value.ToString();
             string strMaMH = grdView.Rows[sohangChon].Cells[2].Value.ToString();
 
@@ -105,6 +106,10 @@ namespace QL_BanDayNit
                 {
                     string sqlDelete = "DELETE FROM tblChiTietHDX WHERE MaHD=N'" + strMaHD + "' AND MaMatH='" + strMaMH + "'";
                     DataConn.ThucHienCmd(sqlDelete);
+                    float slGoc = DataConn.Lay1GiaFloat_ExecuteScalar("SELECT SoLuong FROM [BanHang].[dbo].[tblMatHang] WHERE MaMatH=N'" + strMaMH + "'");
+                    //Cập nhật lại Số Lượng cho bảng tblMatHang (thêm số lượng mặt hàng)
+                    string update = "UPDATE tblMatHang set SoLuong=" + (slGoc + double.Parse(soLuong)) + " WHERE MaMatH=N'" + strMaMH + "'";
+                    DataConn.ThucHienCmd(update);
                     UpdateTongTien(strMaHD);
                     btnXemHoaDon_Click(sender, e);
                     if (!KiemTraTonTaiMaHoaDon(strMaHD))

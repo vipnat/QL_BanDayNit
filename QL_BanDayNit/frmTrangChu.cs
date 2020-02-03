@@ -22,6 +22,7 @@ namespace QL_BanDayNit
         private void frmHoTroThongBaoDoanhThu_Load(object sender, EventArgs e)
         {
             DataConn.XoaAllHoaDonXuatNull();
+            //DataConn.LuuHoaDonPDFVaoDB(DataConn.folderLuuHoaDon + "07092019001.pdf");
             //string[] filePahts = System.IO.Directory.GetFiles(DataConn.folderLuuHoaDon, "*.pdf");
             //for (int i = 0; i < filePahts.Length; i++)
             //{
