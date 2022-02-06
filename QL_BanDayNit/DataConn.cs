@@ -27,7 +27,7 @@ namespace QL_BanDayNit
         private static string fileDB_bak = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default_26-10-18.bak";
         private static string fileDB_sql = System.IO.Directory.GetCurrentDirectory() + @"\DB_BanHang_Default_26-10-18.sql";
 
-        private static string strKetNoiAdmin = "Data Source=" + strPC_Name + ";Integrated Security=True;";
+        private static string strKetNoiAdmin = "Data Source=" + strPC_Name + "\\SQLEXPRESS;Integrated Security=True;";
         private static SqlConnection adConn = new SqlConnection(strKetNoiAdmin);
         private static string strBackup = "USE MASTER RESTORE DATABASE " + strTenDB + " FROM DISK=N'" + fileDB_bak + "' WITH REPLACE";
 

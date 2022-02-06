@@ -18,6 +18,8 @@ namespace QL_BanDayNit
         int sohangChon = 0;
         bool checkHienThiChiTiet = false;
         string _strMaKhachHang = "";
+        string _strTextDateALL = "' AND NgayXuat > '2021-02-16'";
+        string _strWhereDate= " WHERE NgayXuat > '2021-02-16'";
 
         private void frmDanhSachHDX_Load(object sender, EventArgs e)
         {
@@ -31,6 +33,7 @@ namespace QL_BanDayNit
             chkListBox.Items.Insert(7, "Tên KH");
             ThemKhachHangChoHoaDonTrong();
             cbxKH.Checked = false;
+            cbxALL.Checked = false;
             cbxTenKH.Enabled = false;
             LoadComboboxKhachHang();
             HienThiHD();
@@ -56,14 +59,14 @@ namespace QL_BanDayNit
                             " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                             " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
                             " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
-                            " INNER JOIN tblKhachHang ON tblKhachHang.MaKH=tblHoaDonXuat.MaKH";
+                            " INNER JOIN tblKhachHang ON tblKhachHang.MaKH=tblHoaDonXuat.MaKH" + _strWhereDate;
             if (cbxKH.Checked && _strMaKhachHang != "")
                 sqlQuery = "SELECT tblHoaDonXuat.MaHD [Mã hóa đơn],tblNhanVien.TenNhanVien [Nhân viên],tblChiTietHDX.MaMatH [Mã hàng],tblMatHang.TenMatH [Mặt hàng],tblChiTietHDX.SoLuong [Số lượng],tblHoaDonXuat.NgayXuat [Ngày xuất],tblChiTietHDX.DonGia [Đơn giá],tblKhachHang.TenKH [Tên KH]" +
                             " FROM tblHoaDonXuat INNER JOIN tblChiTietHDX ON tblHoaDonXuat.MaHD=tblChiTietHDX.MaHD" +
                             " INNER JOIN tblMatHang ON tblMatHang.MaMatH=tblChiTietHDX.MaMatH" +
                             " INNER JOIN tblNhanVien ON tblNhanVien.MaNhanVien=tblHoaDonXuat.MaNhanVien" +
                             " INNER JOIN tblKhachHang ON tblKhachHang.MaKH=tblHoaDonXuat.MaKH" +
-                            " WHERE tblHoaDonXuat.MaKH = '" + _strMaKhachHang + "'";
+                            " WHERE tblHoaDonXuat.MaKH = '" + _strMaKhachHang + _strTextDateALL + "'";
             DataSet ds = DataConn.GrdSource(sqlQuery);
             grdView.DataSource = ds.Tables[0];
             grdView.Refresh();
@@ -74,13 +77,13 @@ namespace QL_BanDayNit
         {
             string sqlQuery = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],kh.TenKH [Mã KH]" +
                             " FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD " +
-                            " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" +
+                            " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" + _strWhereDate +
                             " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC,hdx.MaHD DESC";
             if (cbxKH.Checked && _strMaKhachHang != "")
                 sqlQuery = "SELECT hdx.MaHD [Mã HĐ],hdx.MaNhanVien [Mã NV],hdx.NgayXuat [Ngày Xuất],hdx.TongTien[Tổng Tiền],SUM(ctx.SoLuong) [Tổng Số Lượng],kh.TenKH [Mã KH]" +
                             " FROM tblHoaDonXuat hdx JOIN tblChiTietHDX ctx ON hdx.MaHD = ctx.MaHD " +
                             " INNER JOIN tblKhachHang kh ON kh.MaKH = hdx.MaKH" +
-                            " WHERE hdx.MaKH = '" + _strMaKhachHang + "'" +
+                            " WHERE hdx.MaKH = '" + _strMaKhachHang + _strTextDateALL+ "'" +
                             " GROUP BY hdx.MaHD,hdx.MaNhanVien,hdx.NgayXuat,hdx.TongTien,kh.TenKH ORDER BY hdx.NgayXuat DESC,hdx.MaHD DESC";
 
             DataSet ds = DataConn.GrdSource(sqlQuery);
@@ -345,6 +348,26 @@ namespace QL_BanDayNit
             frmXuatHang frmXuatH = new frmXuatHang(txtMa.Text);
             frmXuatH.MyLoadData = new frmXuatHang.LoadData(HienThi);
             frmXuatH.ShowDialog();
+        }
+
+        private void cbxALL_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbxALL.Checked)
+            {
+                cbxALL.Text = "Năm 2021";
+                _strTextDateALL = _strWhereDate = "";
+            }
+            else
+            {
+                cbxALL.Text = "Xem Tất Cả";
+                _strTextDateALL = "' AND NgayXuat > '2021-02-16'";
+                _strWhereDate= " WHERE NgayXuat > '2021-02-16'";
+            }
+                
+            if (cbxChiTiet.Checked == false)
+                HienThiHD();
+            else
+                HienThi();
         }
     }
 }

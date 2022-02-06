@@ -41,6 +41,7 @@
             this.cbxTenKH = new System.Windows.Forms.ComboBox();
             this.cbxKH = new System.Windows.Forms.CheckBox();
             this.btnEdit = new System.Windows.Forms.Button();
+            this.cbxALL = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdView)).BeginInit();
             this.grbKH.SuspendLayout();
             this.SuspendLayout();
@@ -186,12 +187,24 @@
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
+            // cbxALL
+            // 
+            this.cbxALL.AutoSize = true;
+            this.cbxALL.Location = new System.Drawing.Point(1077, 22);
+            this.cbxALL.Name = "cbxALL";
+            this.cbxALL.Size = new System.Drawing.Size(103, 23);
+            this.cbxALL.TabIndex = 12;
+            this.cbxALL.Text = "Xem Tất Cả";
+            this.cbxALL.UseVisualStyleBackColor = true;
+            this.cbxALL.CheckedChanged += new System.EventHandler(this.cbxALL_CheckedChanged);
+            // 
             // frmDanhSachHDX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightCyan;
             this.ClientSize = new System.Drawing.Size(1221, 514);
+            this.Controls.Add(this.cbxALL);
             this.Controls.Add(this.grbKH);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnXemHoaDon);
@@ -232,5 +245,6 @@
         private System.Windows.Forms.ComboBox cbxTenKH;
         private System.Windows.Forms.CheckBox cbxKH;
         private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.CheckBox cbxALL;
     }
 }

@@ -298,7 +298,7 @@ namespace QL_BanDayNit
             DataConn.XoaAllHoaDonXuatNull();
             string MaHD = "";
             int maSo = 1;
-            string selectMaHoaDon = "SELECT MaHD FROM tblHoaDonXuat WHERE NgayXuat = '" + pckNgayXuat.Value + "'";
+            string selectMaHoaDon = "SELECT MaHD FROM tblHoaDonXuat WHERE NgayXuat = '" + pckNgayXuat.Text + "'";
 
             DataSet ds = DataConn.GrdSource(selectMaHoaDon);
             if (ds.Tables[0].Rows.Count == 0)
@@ -1321,7 +1321,7 @@ namespace QL_BanDayNit
             cellTitle.Border = 0;
             pdfTableTitle.AddCell(cellTitle);
 
-            String sqlTongSoHoaDonTheoKH = "SELECT COUNT(MaKH) FROM tblHoaDonXuat WHERE MaKH='"+ _strMaKhachHang +"' AND NgayXuat > '2020-02-02'";
+            String sqlTongSoHoaDonTheoKH = "SELECT COUNT(MaKH) FROM tblHoaDonXuat WHERE MaKH='"+ _strMaKhachHang +"' AND NgayXuat > '2022-02-01'";
             float tongSoHD = DataConn.Lay1GiaFloat_ExecuteScalar(sqlTongSoHoaDonTheoKH);
             cellTitle = new PdfPCell(new Paragraph("Người Bán  : " + cboMaNhanVien.Text + " (" + LaySoDienThoaiNhanVienTheoMa(strMaNhanVien) + ")" + "\nKhách Hàng : " + cbxKhachHang.Text +"("+ tongSoHD+ ")\n", new iTextSharp.text.Font(arialCustomer, 11)));
             cellTitle.Border = 0;
